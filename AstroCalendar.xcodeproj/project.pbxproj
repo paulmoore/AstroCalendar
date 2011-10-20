@@ -18,6 +18,7 @@
 		D139FBA8144FE003006D0797 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D139FB8F144FE003006D0797 /* Foundation.framework */; };
 		D139FBB0144FE003006D0797 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D139FBAE144FE003006D0797 /* InfoPlist.strings */; };
 		D139FBB3144FE003006D0797 /* AstroCalendarTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D139FBB2144FE003006D0797 /* AstroCalendarTests.m */; };
+		D139FBC1144FE1CB006D0797 /* libKal.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D139FBC0144FE1CB006D0797 /* libKal.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,6 +29,13 @@
 			remoteGlobalIDString = D139FB88144FE003006D0797;
 			remoteInfo = AstroCalendar;
 		};
+		D139FBC7144FEACE006D0797 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D139FBC3144FEACE006D0797 /* Kal.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D2AAC07E0554694100DB518D;
+			remoteInfo = Kal;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -35,18 +43,20 @@
 		D139FB8D144FE003006D0797 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		D139FB8F144FE003006D0797 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D139FB91144FE003006D0797 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		D139FB95144FE003006D0797 /* AstroCalendar-Info.plist */ = {isa = PBXFileReference; path = "AstroCalendar-Info.plist"; sourceTree = "<group>"; };
+		D139FB95144FE003006D0797 /* AstroCalendar-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AstroCalendar-Info.plist"; sourceTree = "<group>"; };
 		D139FB97144FE003006D0797 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D139FB99144FE003006D0797 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		D139FB9B144FE003006D0797 /* AstroCalendar-Prefix.pch */ = {isa = PBXFileReference; path = "AstroCalendar-Prefix.pch"; sourceTree = "<group>"; };
-		D139FB9C144FE003006D0797 /* AstroCalendarAppDelegate.h */ = {isa = PBXFileReference; path = AstroCalendarAppDelegate.h; sourceTree = "<group>"; };
+		D139FB9B144FE003006D0797 /* AstroCalendar-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AstroCalendar-Prefix.pch"; sourceTree = "<group>"; };
+		D139FB9C144FE003006D0797 /* AstroCalendarAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AstroCalendarAppDelegate.h; sourceTree = "<group>"; };
 		D139FB9D144FE003006D0797 /* AstroCalendarAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AstroCalendarAppDelegate.m; sourceTree = "<group>"; };
 		D139FBA4144FE003006D0797 /* AstroCalendarTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AstroCalendarTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D139FBA5144FE003006D0797 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
-		D139FBAD144FE003006D0797 /* AstroCalendarTests-Info.plist */ = {isa = PBXFileReference; path = "AstroCalendarTests-Info.plist"; sourceTree = "<group>"; };
+		D139FBAD144FE003006D0797 /* AstroCalendarTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AstroCalendarTests-Info.plist"; sourceTree = "<group>"; };
 		D139FBAF144FE003006D0797 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		D139FBB1144FE003006D0797 /* AstroCalendarTests.h */ = {isa = PBXFileReference; path = AstroCalendarTests.h; sourceTree = "<group>"; };
+		D139FBB1144FE003006D0797 /* AstroCalendarTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AstroCalendarTests.h; sourceTree = "<group>"; };
 		D139FBB2144FE003006D0797 /* AstroCalendarTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AstroCalendarTests.m; sourceTree = "<group>"; };
+		D139FBC0144FE1CB006D0797 /* libKal.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libKal.a; path = "../../../../Library/Developer/Xcode/DerivedData/COSC_310_XCode_Workspace-drsoracbgzmnaafliouveymebptj/Build/Products/Debug-iphoneos/libKal.a"; sourceTree = "<group>"; };
+		D139FBC3144FEACE006D0797 /* Kal.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Kal.xcodeproj; path = ../Kal/src/Kal.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +64,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D139FBC1144FE1CB006D0797 /* libKal.a in Frameworks */,
 				D139FB8E144FE003006D0797 /* UIKit.framework in Frameworks */,
 				D139FB90144FE003006D0797 /* Foundation.framework in Frameworks */,
 				D139FB92144FE003006D0797 /* CoreGraphics.framework in Frameworks */,
@@ -76,6 +87,8 @@
 		D139FB7E144FE003006D0797 = {
 			isa = PBXGroup;
 			children = (
+				D139FBC3144FEACE006D0797 /* Kal.xcodeproj */,
+				D139FBC0144FE1CB006D0797 /* libKal.a */,
 				D139FB93144FE003006D0797 /* AstroCalendar */,
 				D139FBAB144FE003006D0797 /* AstroCalendarTests */,
 				D139FB8C144FE003006D0797 /* Frameworks */,
@@ -143,6 +156,14 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		D139FBC4144FEACE006D0797 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D139FBC8144FEACE006D0797 /* libKal.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -201,6 +222,12 @@
 			mainGroup = D139FB7E144FE003006D0797;
 			productRefGroup = D139FB8A144FE003006D0797 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = D139FBC4144FEACE006D0797 /* Products */;
+					ProjectRef = D139FBC3144FEACE006D0797 /* Kal.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				D139FB88144FE003006D0797 /* AstroCalendar */,
@@ -208,6 +235,16 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		D139FBC8144FEACE006D0797 /* libKal.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libKal.a;
+			remoteRef = D139FBC7144FEACE006D0797 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		D139FB87144FE003006D0797 /* Resources */ = {
@@ -345,7 +382,13 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AstroCalendar/AstroCalendar-Prefix.pch";
 				INFOPLIST_FILE = "AstroCalendar/AstroCalendar-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/COSC_310_XCode_Workspace-drsoracbgzmnaafliouveymebptj/Build/Products/Debug-iphoneos\"",
+				);
+				"OTHER_LDFLAGS[arch=*]" = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				"USER_HEADER_SEARCH_PATHS[arch=*]" = "$(BUILT_PRODUCTS_DIR)/**";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -356,7 +399,13 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AstroCalendar/AstroCalendar-Prefix.pch";
 				INFOPLIST_FILE = "AstroCalendar/AstroCalendar-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/COSC_310_XCode_Workspace-drsoracbgzmnaafliouveymebptj/Build/Products/Debug-iphoneos\"",
+				);
+				"OTHER_LDFLAGS[arch=*]" = "-all_load";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				"USER_HEADER_SEARCH_PATHS[arch=*]" = "$(BUILT_PRODUCTS_DIR)/**";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -414,6 +463,7 @@
 				D139FBB8144FE003006D0797 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D139FBB9144FE003006D0797 /* Build configuration list for PBXNativeTarget "AstroCalendarTests" */ = {
 			isa = XCConfigurationList;
@@ -422,6 +472,7 @@
 				D139FBBB144FE003006D0797 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
