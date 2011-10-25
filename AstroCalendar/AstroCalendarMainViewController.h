@@ -1,8 +1,8 @@
 //
-//  main.m
+//  AstroCalendarMainViewController.h
 //  AstroCalendar
 //
-//  Created by Paul Moore on 11-10-19.
+//  Created by Paul Moore on 11-10-24.
 //  Copyright (c) 2011 University of British Columbia. All rights reserved.
 //  https://github.com/paulmoore/AstroCalendar
 /*
@@ -29,12 +29,10 @@
  */
 
 #import <UIKit/UIKit.h>
+#import <TapkuLibrary/TapkuLibrary.h>
 
-#import "AstroCalendarAppDelegate.h"
+@interface AstroCalendarMainViewController : UIViewController
 
-int main(int argc, char *argv[])
-{
-    @autoreleasepool {
-        return UIApplicationMain(argc, argv, nil, NSStringFromClass([AstroCalendarAppDelegate class]));
-    }
-}
+- (IBAction)gotoCalendar:(id)sender;
+
+@end
