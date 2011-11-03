@@ -1,8 +1,8 @@
 //
-//  AstroCalendarAppDelegate.h
+//  AstroCalendarMoonViewController.h
 //  AstroCalendar
 //
-//  Created by Paul Moore on 11-10-19.
+//  Created by Paul Moore on 11-11-01.
 //  Copyright (c) 2011 University of British Columbia. All rights reserved.
 //  https://github.com/paulmoore/AstroCalendar
 /*
@@ -31,15 +31,32 @@
 #import <UIKit/UIKit.h>
 
 /**
- * AstroCalendar Application Delegate.
- * Handles the App's main entry point and initializes the Navigation Controller and it's root View Controller.
+ * View Controller for a Moon Calendar.
+ * Displays information such as 'start time', 'tithi', and 'paksha' in a table view.
  */
-@interface AstroCalendarAppDelegate : UIResponder <UIApplicationDelegate, UINavigationControllerDelegate>
+@interface AstroCalendarMoonViewController : UITableViewController
 
-/** The main window object. */
-@property (strong, nonatomic) UIWindow *window;
+/** Parent view controller. */
+@property (nonatomic, weak) UINavigationController *navController;
 
-/** The Navigation Controller object which is the root of the view heirarchy. */
-@property (strong, nonatomic) UINavigationController *navController;
+/**
+ * Inits an AstroCalendarMoonViewController with a parent Navigation Controller.
+ *
+ * @param controller The parent Navigation Controller.
+ * @return An instance of AstroCalendarMoonViewController.
+ */
+- (id)initWithNavController:(UINavigationController *)controller;
+
+/**
+ * Selector for when the 'Sun Calendar' button is taped from the Toolbar.
+ * Transitions to the Sun Calendar view.
+ */
+- (void)didSelectSunCalendarFromToolbar;
+
+/**
+ * Selector for when the 'Option's button is taped from the Toolbar.
+ * Transitions to Options (not yet implemented).
+ */
+- (void)didSelectOptionsFromToolbar;
 
 @end

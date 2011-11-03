@@ -1,8 +1,8 @@
 //
-//  AstroCalendarMainViewController.h
+//  AstroCalendarSunViewController.h
 //  AstroCalendar
 //
-//  Created by Paul Moore on 11-10-24.
+//  Created by Paul Moore on 11-11-02.
 //  Copyright (c) 2011 University of British Columbia. All rights reserved.
 //  https://github.com/paulmoore/AstroCalendar
 /*
@@ -31,8 +31,32 @@
 #import <UIKit/UIKit.h>
 #import <TapkuLibrary/TapkuLibrary.h>
 
-@interface AstroCalendarMainViewController : UIViewController
+/**
+ * View Controller for the Sun Calendar.
+ */
+@interface AstroCalendarSunViewController : TKCalendarMonthViewController
 
-- (IBAction)gotoCalendar:(id)sender;
+/** The Navigation Controller recieved from it's parent. */
+@property (nonatomic, weak) UINavigationController *navController;
+
+/**
+ * Inits an AstroCalendarSunViewController with a given parent Navigation Controller.
+ *
+ * @param controller The Navigation Controller
+ * @return An instance of AstroCalendarSunViewController.
+ */
+- (id)initWithNavController:(UINavigationController *)controller;
+
+/**
+ * Selector for when the 'Moon Calendar' Toolbar button is taped.
+ * Transitions to the AstroCalendarMoonViewController.
+ */
+- (void)didSelectMoonCalendarFromToolbar;
+
+/**
+ * Selector for when the 'Options' Toolbar button is taped.
+ * Transitions to the the Options (not yet implemented).
+ */
+- (void)didSelectOptionsFromToolbar;
 
 @end

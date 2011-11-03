@@ -1,8 +1,8 @@
 //
-//  AstroCalendarAppDelegate.h
+//  AstroCalendarDayViewController.h
 //  AstroCalendar
 //
-//  Created by Paul Moore on 11-10-19.
+//  Created by Paul Moore on 11-11-02.
 //  Copyright (c) 2011 University of British Columbia. All rights reserved.
 //  https://github.com/paulmoore/AstroCalendar
 /*
@@ -31,15 +31,38 @@
 #import <UIKit/UIKit.h>
 
 /**
- * AstroCalendar Application Delegate.
- * Handles the App's main entry point and initializes the Navigation Controller and it's root View Controller.
+ * View Controller for a specific day view.
+ * Displays astrological sun day 'events'.
  */
-@interface AstroCalendarAppDelegate : UIResponder <UIApplicationDelegate, UINavigationControllerDelegate>
+@interface AstroCalendarDayViewController : UIViewController
 
-/** The main window object. */
-@property (strong, nonatomic) UIWindow *window;
+/** The parent Navigation Controller. */
+@property (nonatomic, weak) UINavigationController *navController;
 
-/** The Navigation Controller object which is the root of the view heirarchy. */
-@property (strong, nonatomic) UINavigationController *navController;
+/**
+ * Inits an AstroCalendarDayViewController with a given parent controller.
+ *
+ * @param controller The parent Navigation Controller.
+ * @return An instance of AstroCalendarDayViewController.
+ */
+- (id)initWithNavController:(UINavigationController *)controller;
+
+/**
+ * Selector for when the 'Sun Calendar' Toolbar button is taped.
+ * Transitions to the AstroCalendarSunViewController.
+ */
+- (void)didSelectSunCalendarFromToolbar;
+
+/**
+ * Selector for when the 'Moon Calendar' Toolbar button is taped.
+ * Transitions to the AstroCalendarMoonViewController.
+ */
+- (void)didSelectMoonCalendarFromToolbar;
+
+/**
+ * Selector for when the 'Options' Toolbar button is taped.
+ * Transitions to Options (not yet implemented).
+ */
+- (void)didSelectOptionsFromToolbar;
 
 @end

@@ -1,8 +1,8 @@
 //
-//  AstroCalendarMainViewController.m
+//  AstroCalendarSelectDateViewController.m
 //  AstroCalendar
 //
-//  Created by Paul Moore on 11-10-24.
+//  Created by Paul Moore on 11-10-28.
 //  Copyright (c) 2011 University of British Columbia. All rights reserved.
 //  https://github.com/paulmoore/AstroCalendar
 /*
@@ -28,19 +28,37 @@
  OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#import "AstroCalendarMainViewController.h"
+#import "AstroCalendarSelectDateViewController.h"
+#import "AstroCalendarMoonViewController.h"
 
-@implementation AstroCalendarMainViewController
+@implementation AstroCalendarSelectDateViewController
 
-- (id)init
+@synthesize navController;
+
+- (id)initWithNavController:(UINavigationController *)controller andIsEndDate:(BOOL)isEndDate
 {
     if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
     {
-        self = [super initWithNibName:@"AstroCalendarMainViewController_iPhone" bundle:nil];
+        self = [super initWithNibName:@"AstroCalendarSelectDateViewController_iPhone" bundle:nil];
     }
     else
     {
-        self = [super initWithNibName:@"AstroCalendarMainViewController_iPad" bundle:nil];
+        self = [super initWithNibName:@"AstroCalendarSelectDateViewController_iPad" bundle:nil];
+    }
+    if (self)
+    {
+        isSelectEnd = isEndDate;
+        if (isEndDate)
+        {
+            self.title = @"Select End Date";
+            [nextButton setTitle:@"View Calendar" forState:UIControlStateNormal];
+        }
+        else
+        {
+            self.title = @"Select Start Date";
+            [nextButton setTitle:@"Next" forState:UIControlStateNormal];
+        }
+        self.navController = controller;
     }
     return self;
 }
@@ -55,9 +73,18 @@
 
 #pragma mark - IBAction listeners
 
-- (IBAction)gotoCalendar:(id)sender
+- (IBAction)didSelectNext:(id)sender
 {
-    NSLog(@"Hello IBAction world!");
+    if (isSelectEnd)
+    {
+        UIViewController *showResults = [[AstroCalendarMoonViewController alloc] init];
+        [self.navController pushViewController:showResults animated:YES];
+    }
+    else
+    {
+        UIViewController *selectEndDate = [[AstroCalendarSelectDateViewController alloc] initWithNavController:self.navController andIsEndDate:YES];
+        [self.navController pushViewController:selectEndDate animated:YES];
+    }
 }
 
 #pragma mark - View lifecycle
@@ -73,6 +100,9 @@
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
+    self.navController = nil;
+    datePicker = nil;
+    yearField = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

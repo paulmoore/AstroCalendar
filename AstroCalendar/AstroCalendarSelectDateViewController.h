@@ -1,8 +1,8 @@
 //
-//  AstroCalendarAppDelegate.h
+//  AstroCalendarSelectDateViewController.h
 //  AstroCalendar
 //
-//  Created by Paul Moore on 11-10-19.
+//  Created by Paul Moore on 11-10-28.
 //  Copyright (c) 2011 University of British Columbia. All rights reserved.
 //  https://github.com/paulmoore/AstroCalendar
 /*
@@ -31,15 +31,38 @@
 #import <UIKit/UIKit.h>
 
 /**
- * AstroCalendar Application Delegate.
- * Handles the App's main entry point and initializes the Navigation Controller and it's root View Controller.
+ * View Controller for selecting a day.
+ * Has functionality for selecting either a 'start date' or 'end date' to obtain a date range.
  */
-@interface AstroCalendarAppDelegate : UIResponder <UIApplicationDelegate, UINavigationControllerDelegate>
+@interface AstroCalendarSelectDateViewController : UIViewController
+{
+    IBOutlet UIDatePicker *datePicker;
+    
+    IBOutlet UITextField *yearField;
+    
+    IBOutlet UIButton *nextButton;
+    
+    BOOL isSelectEnd;
+}
 
-/** The main window object. */
-@property (strong, nonatomic) UIWindow *window;
+/** Parent Navigation Controller. */
+@property (nonatomic, weak) UINavigationController *navController;
 
-/** The Navigation Controller object which is the root of the view heirarchy. */
-@property (strong, nonatomic) UINavigationController *navController;
+/**
+ * Inits an AstroCalendarSelectDateViewController with a parent Navigation Controller.
+ *
+ * @param controller The parent Navigation Controller.
+ * @param isEndDate Wether or not this view represents selecting an 'end date'.
+ * @return An instance of AstroCalendarSelectDateViewController.
+ */
+- (id)initWithNavController:(UINavigationController *)controller andIsEndDate:(BOOL)isEndDate;
+
+/**
+ * Selector for when the user selects the the 'Next' button.
+ * Depending on if this is an 'end date' controller, either transitions to another date selector, or a moon calendar.
+ * @param sender The sender of the event.
+ * @return nil.
+ */
+- (IBAction)didSelectNext:(id)sender;
 
 @end

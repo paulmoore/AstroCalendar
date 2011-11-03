@@ -29,17 +29,28 @@
  */
 
 #import "AstroCalendarAppDelegate.h"
+#import "AstroCalendarMoonViewController.h"
 
 @implementation AstroCalendarAppDelegate
 
-@synthesize window;
-@synthesize mainController;
+@synthesize window, navController;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    // Init main window.
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    self.mainController = [[AstroCalendarMainViewController alloc] init];
-    self.window.rootViewController = self.mainController;
+    
+    // Setup root View Controller.
+    self.navController = [[UINavigationController alloc] init];
+    AstroCalendarMoonViewController *rootController = [[AstroCalendarMoonViewController alloc] initWithNavController:self.navController];
+    self.navController.delegate = self;
+    [self.navController pushViewController:rootController animated:NO];
+    
+    // Show the Navigation Controller's Toolbar.
+    [self.navController setToolbarHidden:NO animated:NO];
+    
+    // Add primary View Controller (A UINavigationController instance) to window and make visible.
+    [self.window addSubview:self.navController.view];
     [self.window makeKeyAndVisible];
     return YES;
 }
@@ -81,6 +92,18 @@
      Save data if appropriate.
      See also applicationDidEnterBackground:.
      */
+}
+
+#pragma mark - UINavigationControllerDelegate methods
+
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    // TODO
+}
+
+- (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    // TODO
 }
 
 @end

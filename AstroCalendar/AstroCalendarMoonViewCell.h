@@ -1,8 +1,8 @@
 //
-//  AstroCalendarAppDelegate.h
+//  AstroCalendarMoonViewCell.h
 //  AstroCalendar
 //
-//  Created by Paul Moore on 11-10-19.
+//  Created by Paul Moore on 11-11-01.
 //  Copyright (c) 2011 University of British Columbia. All rights reserved.
 //  https://github.com/paulmoore/AstroCalendar
 /*
@@ -31,15 +31,28 @@
 #import <UIKit/UIKit.h>
 
 /**
- * AstroCalendar Application Delegate.
- * Handles the App's main entry point and initializes the Navigation Controller and it's root View Controller.
+ * View for a table cell in an AstroCalendarMoonViewController (the moon calendar).
  */
-@interface AstroCalendarAppDelegate : UIResponder <UIApplicationDelegate, UINavigationControllerDelegate>
+@interface AstroCalendarMoonViewCell : UITableViewCell
+{
+    IBOutlet UILabel *dateLabel, *tithiLabel, *fortnightLabel;
+}
 
-/** The main window object. */
-@property (strong, nonatomic) UIWindow *window;
+/** The Activity Indicator which spins when waiting for data from the server. */
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *activityIndicator;
 
-/** The Navigation Controller object which is the root of the view heirarchy. */
-@property (strong, nonatomic) UINavigationController *navController;
+/**
+ * @return The cell height for each AstroCalendarMoonViewCell.
+ */
++ (CGFloat)cellHeight;
+
+/**
+ * Configure's this cell with the appropriate data to be displayed.
+ *
+ * @param date The start date of the tithi.
+ * @param tithi The name of the tithi.
+ * @param fortnight The lunar fortnight (paksha).
+ */
+- (void)configureWithDate:(NSDate *)date tithi:(NSString *)tithi fortnight:(NSString *)fortnight;
 
 @end
