@@ -54,7 +54,7 @@ static double longitude, latitude;
     return NSUIntegerMax;  //denotes an object that cannot be released
 }
  
-- (void)release
+- (oneway void)release
 {
 	[super release];
     //do nothing
