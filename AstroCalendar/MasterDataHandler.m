@@ -27,7 +27,7 @@ static double longitude, latitude;
         sharedSingleton = [[super allocWithZone:NULL] init];
         
         //TODO: This should get loaded from a config file - NOT hardcoded.
-        sharedSingleton.apiEndpoint =  @"http://localhost/apitest/api.php";
+        sharedSingleton.apiEndpoint =  @"http://smithymbp.no-ip.org/apitest/api.php";
     }
     
     return sharedSingleton;
@@ -54,7 +54,7 @@ static double longitude, latitude;
     return NSUIntegerMax;  //denotes an object that cannot be released
 }
  
-- (void)release
+- (oneway void)release
 {
     //do nothing
 }
@@ -88,7 +88,7 @@ static double longitude, latitude;
     {
     	NSLog(@"Success!");
         
-        NSArray *decoded = [MasterDataHandler parseJSONDateRange: JSON];
+        NSArray *decoded = [self parseJSONDateRange: JSON];
         
         for(DayContainer *container in decoded) 
         {

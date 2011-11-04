@@ -30,8 +30,7 @@
 
 #import "AstroCalendarAppDelegate.h"
 #import "AstroCalendarMoonViewController.h"
-#import "AFNetworking.h"
-#import "JSONKit.h"
+#import "MasterDataHandler.h"
 
 @implementation AstroCalendarAppDelegate
 
@@ -55,13 +54,8 @@
     [self.window addSubview:self.navController.view];
     [self.window makeKeyAndVisible];
     
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"https://gowalla.com/users/mattt.json"]];
-    AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-        NSLog(@"Name: %@ %@", [JSON valueForKeyPath:@"first_name"], [JSON valueForKeyPath:@"last_name"]);
-    } failure:nil];
-    
-    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
-    [queue addOperation:operation];
+    MasterDataHandler *dataManager = [MasterDataHandler allocWithZone:nil];
+    [dataManager askApiForDates:[NSDate date] :[NSDate date]];
     
     return YES;
 }

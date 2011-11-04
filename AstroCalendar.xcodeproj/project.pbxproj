@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7AE6BC4D1464768000C09B4D /* DayContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AE6BC4A1464768000C09B4D /* DayContainer.m */; };
-		7AE6BC4E1464768000C09B4D /* MasterDataHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AE6BC4C1464768000C09B4D /* MasterDataHandler.m */; };
+		7AE6BC4D1464768000C09B4D /* DayContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AE6BC4A1464768000C09B4D /* DayContainer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		7AE6BC4E1464768000C09B4D /* MasterDataHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AE6BC4C1464768000C09B4D /* MasterDataHandler.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		D1049A5A14527C07002FD429 /* libTapkuLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D1049A5714527BD6002FD429 /* libTapkuLibrary.a */; };
 		D1049A5C14527CF3002FD429 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1049A5B14527CF3002FD429 /* QuartzCore.framework */; };
 		D1049A6014527D16002FD429 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1049A5F14527D16002FD429 /* MapKit.framework */; };
