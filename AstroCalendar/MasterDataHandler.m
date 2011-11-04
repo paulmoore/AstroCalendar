@@ -56,6 +56,7 @@ static double longitude, latitude;
  
 - (void)release
 {
+	[super release];
     //do nothing
 }
  
@@ -88,7 +89,7 @@ static double longitude, latitude;
     {
     	NSLog(@"Success!");
         
-        NSArray *decoded = [MasterDataHandler parseJSONDateRange: JSON];
+        NSArray *decoded = [self parseJSONDateRange: JSON];
         
         for(DayContainer *container in decoded) 
         {
@@ -196,7 +197,7 @@ static double longitude, latitude;
 
 -(void) saveSettings
 {
-	
+	[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)
 }
 
 -(void) loadSettings
