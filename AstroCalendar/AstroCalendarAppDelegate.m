@@ -30,6 +30,8 @@
 
 #import "AstroCalendarAppDelegate.h"
 #import "AstroCalendarMoonViewController.h"
+#import "AFNetworking.h"
+#import "JSONKit.h"
 
 @implementation AstroCalendarAppDelegate
 
@@ -52,6 +54,15 @@
     // Add primary View Controller (A UINavigationController instance) to window and make visible.
     [self.window addSubview:self.navController.view];
     [self.window makeKeyAndVisible];
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"https://gowalla.com/users/mattt.json"]];
+    AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+        NSLog(@"Name: %@ %@", [JSON valueForKeyPath:@"first_name"], [JSON valueForKeyPath:@"last_name"]);
+    } failure:nil];
+    
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    [queue addOperation:operation];
+    
     return YES;
 }
 

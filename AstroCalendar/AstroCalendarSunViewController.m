@@ -48,7 +48,7 @@
     return self;
 }
 
-- (void) calendarMonthView:(TKCalendarMonthView*)monthView didSelectDate:(NSDate*)date
+- (void)calendarMonthView:(TKCalendarMonthView*)monthView didSelectDate:(NSDate*)date
 {
     // Avoid the View Controller being 'double pushed' if this event fires more than once.
     if (self.navController.visibleViewController == self)

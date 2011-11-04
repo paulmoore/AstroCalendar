@@ -17,6 +17,17 @@
 		D10D64FE1461C4A70053B016 /* AstroCalendarDayViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = D10D64FC1461C4A70053B016 /* AstroCalendarDayViewController_iPhone.xib */; };
 		D10D65021461CDC20053B016 /* AstroCalendarSunViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D10D65001461CDC10053B016 /* AstroCalendarSunViewController.m */; };
 		D10D65051461FD8C0053B016 /* AstroCalendarDayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D10D65041461FD8C0053B016 /* AstroCalendarDayViewController.m */; };
+		D10D651D146474180053B016 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = D10D651C146474180053B016 /* JSONKit.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		D10D6528146474650053B016 /* AFHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = D10D651E146474630053B016 /* AFHTTPClient.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		D10D6529146474660053B016 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = D10D651F146474630053B016 /* AFHTTPRequestOperation.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		D10D652A146474660053B016 /* AFImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = D10D6520146474640053B016 /* AFImageCache.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		D10D652B146474660053B016 /* AFImageRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = D10D6521146474640053B016 /* AFImageRequestOperation.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		D10D652C146474660053B016 /* AFJSONRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = D10D6522146474640053B016 /* AFJSONRequestOperation.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		D10D652D146474660053B016 /* AFNetworkActivityIndicatorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D10D6523146474640053B016 /* AFNetworkActivityIndicatorManager.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		D10D652E146474660053B016 /* AFPropertyListRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = D10D6524146474640053B016 /* AFPropertyListRequestOperation.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		D10D652F146474660053B016 /* AFURLConnectionOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = D10D6525146474650053B016 /* AFURLConnectionOperation.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		D10D6530146474660053B016 /* AFXMLRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = D10D6526146474650053B016 /* AFXMLRequestOperation.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		D10D6531146474660053B016 /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = D10D6527146474650053B016 /* UIImageView+AFNetworking.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		D139FB8E144FE003006D0797 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D139FB8D144FE003006D0797 /* UIKit.framework */; };
 		D139FB90144FE003006D0797 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D139FB8F144FE003006D0797 /* Foundation.framework */; };
 		D139FB92144FE003006D0797 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D139FB91144FE003006D0797 /* CoreGraphics.framework */; };
@@ -78,6 +89,17 @@
 		D10D64FF1461CDC10053B016 /* AstroCalendarSunViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AstroCalendarSunViewController.h; sourceTree = "<group>"; };
 		D10D65001461CDC10053B016 /* AstroCalendarSunViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AstroCalendarSunViewController.m; sourceTree = "<group>"; };
 		D10D65041461FD8C0053B016 /* AstroCalendarDayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AstroCalendarDayViewController.m; sourceTree = "<group>"; };
+		D10D651C146474180053B016 /* JSONKit.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = JSONKit.m; path = ../JSONKit/JSONKit.m; sourceTree = "<group>"; };
+		D10D651E146474630053B016 /* AFHTTPClient.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AFHTTPClient.m; path = ../AFNetworking/AFNetworking/AFHTTPClient.m; sourceTree = "<group>"; };
+		D10D651F146474630053B016 /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AFHTTPRequestOperation.m; path = ../AFNetworking/AFNetworking/AFHTTPRequestOperation.m; sourceTree = "<group>"; };
+		D10D6520146474640053B016 /* AFImageCache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AFImageCache.m; path = ../AFNetworking/AFNetworking/AFImageCache.m; sourceTree = "<group>"; };
+		D10D6521146474640053B016 /* AFImageRequestOperation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AFImageRequestOperation.m; path = ../AFNetworking/AFNetworking/AFImageRequestOperation.m; sourceTree = "<group>"; };
+		D10D6522146474640053B016 /* AFJSONRequestOperation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AFJSONRequestOperation.m; path = ../AFNetworking/AFNetworking/AFJSONRequestOperation.m; sourceTree = "<group>"; };
+		D10D6523146474640053B016 /* AFNetworkActivityIndicatorManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AFNetworkActivityIndicatorManager.m; path = ../AFNetworking/AFNetworking/AFNetworkActivityIndicatorManager.m; sourceTree = "<group>"; };
+		D10D6524146474640053B016 /* AFPropertyListRequestOperation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AFPropertyListRequestOperation.m; path = ../AFNetworking/AFNetworking/AFPropertyListRequestOperation.m; sourceTree = "<group>"; };
+		D10D6525146474650053B016 /* AFURLConnectionOperation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AFURLConnectionOperation.m; path = ../AFNetworking/AFNetworking/AFURLConnectionOperation.m; sourceTree = "<group>"; };
+		D10D6526146474650053B016 /* AFXMLRequestOperation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AFXMLRequestOperation.m; path = ../AFNetworking/AFNetworking/AFXMLRequestOperation.m; sourceTree = "<group>"; };
+		D10D6527146474650053B016 /* UIImageView+AFNetworking.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "UIImageView+AFNetworking.m"; path = "../AFNetworking/AFNetworking/UIImageView+AFNetworking.m"; sourceTree = "<group>"; };
 		D139FB89144FE003006D0797 /* AstroCalendar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AstroCalendar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D139FB8D144FE003006D0797 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		D139FB8F144FE003006D0797 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -176,9 +198,36 @@
 			name = NIBs;
 			sourceTree = "<group>";
 		};
+		D10D65321464748E0053B016 /* JSONKit */ = {
+			isa = PBXGroup;
+			children = (
+				D10D651C146474180053B016 /* JSONKit.m */,
+			);
+			name = JSONKit;
+			sourceTree = "<group>";
+		};
+		D10D65331464749C0053B016 /* AFNetworking */ = {
+			isa = PBXGroup;
+			children = (
+				D10D651E146474630053B016 /* AFHTTPClient.m */,
+				D10D651F146474630053B016 /* AFHTTPRequestOperation.m */,
+				D10D6520146474640053B016 /* AFImageCache.m */,
+				D10D6521146474640053B016 /* AFImageRequestOperation.m */,
+				D10D6522146474640053B016 /* AFJSONRequestOperation.m */,
+				D10D6523146474640053B016 /* AFNetworkActivityIndicatorManager.m */,
+				D10D6524146474640053B016 /* AFPropertyListRequestOperation.m */,
+				D10D6525146474650053B016 /* AFURLConnectionOperation.m */,
+				D10D6526146474650053B016 /* AFXMLRequestOperation.m */,
+				D10D6527146474650053B016 /* UIImageView+AFNetworking.m */,
+			);
+			name = AFNetworking;
+			sourceTree = "<group>";
+		};
 		D139FB7E144FE003006D0797 = {
 			isa = PBXGroup;
 			children = (
+				D10D65331464749C0053B016 /* AFNetworking */,
+				D10D65321464748E0053B016 /* JSONKit */,
 				D1049A6C14528437002FD429 /* TapkuLibrary.bundle */,
 				D1049A5F14527D16002FD429 /* MapKit.framework */,
 				D1049A5B14527CF3002FD429 /* QuartzCore.framework */,
@@ -388,6 +437,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D10D651D146474180053B016 /* JSONKit.m in Sources */,
+				D10D6528146474650053B016 /* AFHTTPClient.m in Sources */,
+				D10D6529146474660053B016 /* AFHTTPRequestOperation.m in Sources */,
+				D10D652A146474660053B016 /* AFImageCache.m in Sources */,
+				D10D652B146474660053B016 /* AFImageRequestOperation.m in Sources */,
+				D10D652C146474660053B016 /* AFJSONRequestOperation.m in Sources */,
+				D10D652D146474660053B016 /* AFNetworkActivityIndicatorManager.m in Sources */,
+				D10D652E146474660053B016 /* AFPropertyListRequestOperation.m in Sources */,
+				D10D652F146474660053B016 /* AFURLConnectionOperation.m in Sources */,
+				D10D6530146474660053B016 /* AFXMLRequestOperation.m in Sources */,
+				D10D6531146474660053B016 /* UIImageView+AFNetworking.m in Sources */,
 				D139FB9A144FE003006D0797 /* main.m in Sources */,
 				D139FB9E144FE003006D0797 /* AstroCalendarAppDelegate.m in Sources */,
 				D13ED634145B656300E0731F /* AstroCalendarSelectDateViewController.m in Sources */,
@@ -493,7 +553,11 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AstroCalendar/AstroCalendar-Prefix.pch";
-				HEADER_SEARCH_PATHS = ../Tapku/src;
+				HEADER_SEARCH_PATHS = (
+					../JSONKit,
+					../AFNetworking/AFNetworking,
+					../Tapku/src,
+				);
 				INFOPLIST_FILE = "AstroCalendar/AstroCalendar-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -514,7 +578,11 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AstroCalendar/AstroCalendar-Prefix.pch";
-				HEADER_SEARCH_PATHS = ../Tapku/src;
+				HEADER_SEARCH_PATHS = (
+					../JSONKit,
+					../AFNetworking/AFNetworking,
+					../Tapku/src,
+				);
 				INFOPLIST_FILE = "AstroCalendar/AstroCalendar-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
