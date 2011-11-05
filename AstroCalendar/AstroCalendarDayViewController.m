@@ -31,6 +31,7 @@
 #import "AstroCalendarDayViewController.h"
 #import "AstroCalendarMoonViewController.h"
 #import "AstroCalendarSunViewController.h"
+#import "UINavigationController+UniqueStack.h"
 
 @implementation AstroCalendarDayViewController
 
@@ -65,14 +66,20 @@
 
 - (void)didSelectSunCalendarFromToolbar
 {
-    UIViewController *sunController = [[AstroCalendarSunViewController alloc] initWithNavController:self.navController];
-    [self.navController pushViewController:sunController animated:YES];
+    if (! [self.navController pushUniqueControllerOfType:[AstroCalendarSunViewController class] animated:YES])
+    {
+        UIViewController *sunController = [[AstroCalendarSunViewController alloc] initWithNavController:self.navController];
+        [self.navController pushViewController:sunController animated:YES];
+    }
 }
 
 - (void)didSelectMoonCalendarFromToolbar
 {
-    UIViewController *moonController = [[AstroCalendarMoonViewController alloc] initWithNavController:self.navController];
-    [self.navController pushViewController:moonController animated:YES];
+    if (! [self.navController pushUniqueControllerOfType:[AstroCalendarMoonViewController class] animated:YES])
+    {
+        UIViewController *moonController = [[AstroCalendarMoonViewController alloc] initWithNavController:self.navController];
+        [self.navController pushViewController:moonController animated:YES];
+    }
 }
 
 - (void)didSelectOptionsFromToolbar

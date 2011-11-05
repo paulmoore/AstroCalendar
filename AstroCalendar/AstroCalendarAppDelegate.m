@@ -31,6 +31,7 @@
 #import "AstroCalendarAppDelegate.h"
 #import "AstroCalendarMoonViewController.h"
 #import "MasterDataHandler.h"
+#import "UINavigationController+UniqueStack.h"
 
 @implementation AstroCalendarAppDelegate
 
@@ -41,7 +42,7 @@
     // Init main window.
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     
-    // Setup root View Controller.
+    // Setup root View Controller.  Note it uses the UniqueStack category.
     self.navController = [[UINavigationController alloc] init];
     AstroCalendarMoonViewController *rootController = [[AstroCalendarMoonViewController alloc] initWithNavController:self.navController];
     self.navController.delegate = self;

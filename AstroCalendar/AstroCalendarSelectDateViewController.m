@@ -30,6 +30,7 @@
 
 #import "AstroCalendarSelectDateViewController.h"
 #import "AstroCalendarMoonViewController.h"
+#import "UINavigationController+UniqueStack.h"
 
 @implementation AstroCalendarSelectDateViewController
 
@@ -51,12 +52,10 @@
         if (isEndDate)
         {
             self.title = @"Select End Date";
-            [nextButton setTitle:@"View Calendar" forState:UIControlStateNormal];
         }
         else
         {
             self.title = @"Select Start Date";
-            [nextButton setTitle:@"Next" forState:UIControlStateNormal];
         }
         self.navController = controller;
     }
@@ -77,11 +76,15 @@
 {
     if (isSelectEnd)
     {
-        UIViewController *showResults = [[AstroCalendarMoonViewController alloc] init];
-        [self.navController pushViewController:showResults animated:YES];
+        if (! [self.navController pushUniqueControllerOfType:[AstroCalendarMoonViewController class] animated:YES])
+        {
+            UIViewController *showResults = [[AstroCalendarMoonViewController alloc] init];
+            [self.navController pushViewController:showResults animated:YES];
+        }
     }
     else
     {
+        // We don't want to check if a select date controller is already in the nav stack, because there should be one for each date in the interval.
         UIViewController *selectEndDate = [[AstroCalendarSelectDateViewController alloc] initWithNavController:self.navController andIsEndDate:YES];
         [self.navController pushViewController:selectEndDate animated:YES];
     }
@@ -93,6 +96,15 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    
+    if (isSelectEnd)
+    {
+        [nextButton setTitle:@"View Calendar" forState:UIControlStateNormal];
+    }
+    else
+    {
+        [nextButton setTitle:@"Next" forState:UIControlStateNormal];
+    }
 }
 
 - (void)viewDidUnload
@@ -103,6 +115,7 @@
     self.navController = nil;
     datePicker = nil;
     yearField = nil;
+    nextButton = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

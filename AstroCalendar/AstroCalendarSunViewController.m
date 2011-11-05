@@ -31,6 +31,7 @@
 #import "AstroCalendarSunViewController.h"
 #import "AstroCalendarDayViewController.h"
 #import "AstroCalendarMoonViewController.h"
+#import "UINavigationController+UniqueStack.h"
 
 @implementation AstroCalendarSunViewController
 
@@ -53,8 +54,11 @@
     // Avoid the View Controller being 'double pushed' if this event fires more than once.
     if (self.navController.visibleViewController == self)
     {
-        UIViewController *dayController = [[AstroCalendarDayViewController alloc] initWithNavController:self.navController];
-        [self.navController pushViewController:dayController animated:YES];
+        if (! [self.navController pushUniqueControllerOfType:[AstroCalendarDayViewController class] animated:YES])
+        {
+            UIViewController *dayController = [[AstroCalendarDayViewController alloc] initWithNavController:self.navController];
+            [self.navController pushViewController:dayController animated:YES];
+        }
     }
 }
 
@@ -70,8 +74,11 @@
 
 - (void)didSelectMoonCalendarFromToolbar
 {
-    UIViewController *moonController = [[AstroCalendarMoonViewController alloc] initWithNavController:self.navController];
-    [self.navController pushViewController:moonController animated:YES];
+    if (! [self.navController pushUniqueControllerOfType:[AstroCalendarMoonViewController class] animated:YES])
+    {
+        UIViewController *moonController = [[AstroCalendarMoonViewController alloc] initWithNavController:self.navController];
+        [self.navController pushViewController:moonController animated:YES];
+    }
 }
 
 - (void)didSelectOptionsFromToolbar

@@ -43,6 +43,7 @@
 		D139FBB3144FE003006D0797 /* AstroCalendarTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D139FBB2144FE003006D0797 /* AstroCalendarTests.m */; };
 		D13ED634145B656300E0731F /* AstroCalendarSelectDateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D13ED632145B656300E0731F /* AstroCalendarSelectDateViewController.m */; };
 		D13ED635145B656300E0731F /* AstroCalendarSelectDateViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = D13ED633145B656300E0731F /* AstroCalendarSelectDateViewController_iPhone.xib */; };
+		D1AD7A171464ABE100B45C94 /* UINavigationController+UniqueStack.m in Sources */ = {isa = PBXBuildFile; fileRef = D1AD7A161464ABE100B45C94 /* UINavigationController+UniqueStack.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -125,6 +126,8 @@
 		D13ED631145B656300E0731F /* AstroCalendarSelectDateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AstroCalendarSelectDateViewController.h; sourceTree = "<group>"; };
 		D13ED632145B656300E0731F /* AstroCalendarSelectDateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AstroCalendarSelectDateViewController.m; sourceTree = "<group>"; };
 		D13ED633145B656300E0731F /* AstroCalendarSelectDateViewController_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AstroCalendarSelectDateViewController_iPhone.xib; path = en.lproj/AstroCalendarSelectDateViewController_iPhone.xib; sourceTree = "<group>"; };
+		D1AD7A151464ABE100B45C94 /* UINavigationController+UniqueStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+UniqueStack.h"; sourceTree = "<group>"; };
+		D1AD7A161464ABE100B45C94 /* UINavigationController+UniqueStack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+UniqueStack.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -166,6 +169,8 @@
 		D10D64E21460A1460053B016 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				D1AD7A151464ABE100B45C94 /* UINavigationController+UniqueStack.h */,
+				D1AD7A161464ABE100B45C94 /* UINavigationController+UniqueStack.m */,
 				D10D65041461FD8C0053B016 /* AstroCalendarDayViewController.m */,
 				D10D65001461CDC10053B016 /* AstroCalendarSunViewController.m */,
 				D10D64FF1461CDC10053B016 /* AstroCalendarSunViewController.h */,
@@ -467,6 +472,7 @@
 				D10D65051461FD8C0053B016 /* AstroCalendarDayViewController.m in Sources */,
 				7AE6BC4D1464768000C09B4D /* DayContainer.m in Sources */,
 				7AE6BC4E1464768000C09B4D /* MasterDataHandler.m in Sources */,
+				D1AD7A171464ABE100B45C94 /* UINavigationController+UniqueStack.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
