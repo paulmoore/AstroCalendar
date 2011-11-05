@@ -56,6 +56,7 @@ static double longitude, latitude;
  
 - (oneway void)release
 {
+	[super release];
     //do nothing
 }
  
@@ -196,7 +197,7 @@ static double longitude, latitude;
 
 -(void) saveSettings
 {
-	
+	[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)
 }
 
 -(void) loadSettings
