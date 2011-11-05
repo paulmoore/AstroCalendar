@@ -197,7 +197,7 @@ static double longitude, latitude;
 
 -(void) saveSettings
 {
-	[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)
+	//[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)
 }
 
 -(void) loadSettings
