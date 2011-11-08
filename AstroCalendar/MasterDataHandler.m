@@ -12,9 +12,8 @@
 
 static MasterDataHandler *sharedSingleton = nil;
 
-@synthesize apiEndpoint;
+double longitude, latitude;
 
-static double longitude, latitude;
 
 
 // Singleton pattern initializer. There should only ever be ONE instance of MasterDataHandler
@@ -26,8 +25,15 @@ static double longitude, latitude;
     {
         sharedSingleton = [[super allocWithZone:NULL] init];
         
+        //settingsDictionary = [[[NSMutableDictionary alloc]init]autorelease];
+        
+        [sharedSingleton loadSettings];
         //TODO: This should get loaded from a config file - NOT hardcoded.
+<<<<<<< HEAD
         sharedSingleton.apiEndpoint =  @"http://smithymbp.no-ip.org/apitest/api.php";
+=======
+        //sharedSingleton.apiEndpoint =  @"http://smithymbp.no-ip.org/apitest/api.php";
+>>>>>>> + Adding testing support for saving/loading to plist (serializing the data).
     }
     
     return sharedSingleton;
@@ -76,7 +82,7 @@ static double longitude, latitude;
     [dateFormatter setDateFormat:@"MM-dd-yyyy"];
 	
 	//Builds up our URL request string.
-	NSString *urlString = [NSString stringWithFormat:@"%@?requestType=all,startDate=%@,endDate=%@,latitude=%d,longitude=%d", sharedSingleton.apiEndpoint, [dateFormatter stringFromDate:startDate], [dateFormatter stringFromDate:endDate], latitude, longitude];
+	NSString *urlString = [NSString stringWithFormat:@"%@?requestType=all,startDate=%@,endDate=%@,latitude=%d,longitude=%d", [settingsDictionary valueForKey:@"APIEndpoint"], [dateFormatter stringFromDate:startDate], [dateFormatter stringFromDate:endDate], latitude, longitude];
     
     NSLog(urlString);
     
@@ -89,7 +95,7 @@ static double longitude, latitude;
     {
     	NSLog(@"Success!");
         
-        NSArray *decoded = [self parseJSONDateRange: JSON];
+        NSArray *decoded = [sharedSingleton parseJSONDateRange: JSON];
         
         for(DayContainer *container in decoded) 
         {
@@ -197,11 +203,59 @@ static double longitude, latitude;
 
 -(void) saveSettings
 {
+<<<<<<< HEAD
 	//[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)
+=======
+	NSString *plistPath;
+    NSString *rootPath;
+    NSString *errorDesc = nil;
+
+	rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    
+    plistPath = [rootPath stringByAppendingFormat:@"Settings.plist"]; 
+    
+    NSData *plistData = [NSPropertyListSerialization dataFromPropertyList:settingsDictionary format:NSPropertyListXMLFormat_v1_0 errorDescription:&errorDesc];
+    
+    if(plistData) 
+    {
+        [plistData writeToFile:plistPath atomically:YES];
+	} 
+    else 
+    {
+    	NSLog(@"Error saving application state to plist: %@", errorDesc);
+    	[errorDesc release];
+    }
+>>>>>>> + Adding testing support for saving/loading to plist (serializing the data).
 }
 
 -(void) loadSettings
 {
+	NSString *plistPath;
+    NSString *rootPath;
+    NSString *errorDesc = nil;
+    NSPropertyListFormat format;
+
+	rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    
+    plistPath = [rootPath stringByAppendingFormat:@"Settings.plist"]; 
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:plistPath]) 
+    	plistPath = [[NSBundle mainBundle] pathForResource:@"Settings"ofType:@"plist"];
+    
+    NSData *plistXML = [[NSFileManager defaultManager] contentsAtPath:plistPath];
+    
+    NSDictionary *tempData = (NSDictionary*)[NSPropertyListSerialization propertyListFromData:plistXML mutabilityOption:NSPropertyListMutableContainersAndLeaves format:&format errorDescription:&errorDesc];
+    
+    if (!tempData) 
+    	NSLog(@"Error reading Settings plist: %@, format: %d", errorDesc, format);
+        
+    //Load settings.
+    if (settingsDictionary != nil)
+    	[settingsDictionary release];
+        
+    settingsDictionary = [[NSMutableDictionary alloc]initWithDictionary:tempData];
+    
+    NSLog(@"Settings: SnapshotSunviewDate: %@", [[settingsDictionary objectForKey:@"Snapshot"] objectForKey:@"SunviewDate"]);
 }
 
 

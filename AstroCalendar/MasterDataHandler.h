@@ -11,6 +11,8 @@
 #import "AFJSONRequestOperation.h"
 #import "DayContainer.h"
 
+NSMutableDictionary *settingsDictionary;
+
 @interface MasterDataHandler : NSObject
 
 	//////////////////////////////////////////////////////////////
@@ -20,6 +22,7 @@
     // Target URL that API GET requests are sent to. Parameters will
     // be tagged on to the end of this before converting to an NSUrl.
 	@property(copy) NSString *apiEndpoint;
+    @property(copy) NSDate *snapshot_sunviewDate;
 
 
 
@@ -55,4 +58,6 @@
     -(void)saveSettings;
     -(void)loadSettings;
     
+    
 @end
+
