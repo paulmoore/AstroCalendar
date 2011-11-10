@@ -128,6 +128,7 @@
 		D13ED633145B656300E0731F /* AstroCalendarSelectDateViewController_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AstroCalendarSelectDateViewController_iPhone.xib; path = en.lproj/AstroCalendarSelectDateViewController_iPhone.xib; sourceTree = "<group>"; };
 		D1AD7A151464ABE100B45C94 /* UINavigationController+UniqueStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+UniqueStack.h"; sourceTree = "<group>"; };
 		D1AD7A161464ABE100B45C94 /* UINavigationController+UniqueStack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+UniqueStack.m"; sourceTree = "<group>"; };
+		D1CE0FD0146B53EF0031D83F /* MasterDataHandlerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterDataHandlerDelegate.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -199,6 +200,7 @@
 				7AE6BC4A1464768000C09B4D /* DayContainer.m */,
 				7AE6BC4B1464768000C09B4D /* MasterDataHandler.h */,
 				7AE6BC4C1464768000C09B4D /* MasterDataHandler.m */,
+				D1CE0FD0146B53EF0031D83F /* MasterDataHandlerDelegate.h */,
 			);
 			name = "Model Classes";
 			sourceTree = "<group>";
