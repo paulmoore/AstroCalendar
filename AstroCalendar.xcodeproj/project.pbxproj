@@ -7,8 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7AE6BC4D1464768000C09B4D /* DayContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AE6BC4A1464768000C09B4D /* DayContainer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		7AE6BC4E1464768000C09B4D /* MasterDataHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AE6BC4C1464768000C09B4D /* MasterDataHandler.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		7ABABF901475C29F000EEA7B /* DayContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ABABF881475C29F000EEA7B /* DayContainer.m */; };
+		7ABABF911475C29F000EEA7B /* MasterDataHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ABABF8A1475C29F000EEA7B /* MasterDataHandler.m */; };
+		7ABABF921475C29F000EEA7B /* MonthDataIndexer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ABABF8D1475C29F000EEA7B /* MonthDataIndexer.m */; };
+		7ABABF931475C29F000EEA7B /* RingBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ABABF8F1475C29F000EEA7B /* RingBuffer.m */; };
 		D1049A5A14527C07002FD429 /* libTapkuLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D1049A5714527BD6002FD429 /* libTapkuLibrary.a */; };
 		D1049A5C14527CF3002FD429 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1049A5B14527CF3002FD429 /* QuartzCore.framework */; };
 		D1049A6014527D16002FD429 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1049A5F14527D16002FD429 /* MapKit.framework */; };
@@ -78,10 +80,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		7AE6BC491464768000C09B4D /* DayContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DayContainer.h; sourceTree = "<group>"; };
-		7AE6BC4A1464768000C09B4D /* DayContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DayContainer.m; sourceTree = "<group>"; };
-		7AE6BC4B1464768000C09B4D /* MasterDataHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterDataHandler.h; sourceTree = "<group>"; };
-		7AE6BC4C1464768000C09B4D /* MasterDataHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MasterDataHandler.m; sourceTree = "<group>"; };
+		7ABABF871475C29F000EEA7B /* DayContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DayContainer.h; sourceTree = "<group>"; };
+		7ABABF881475C29F000EEA7B /* DayContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DayContainer.m; sourceTree = "<group>"; };
+		7ABABF891475C29F000EEA7B /* MasterDataHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterDataHandler.h; sourceTree = "<group>"; };
+		7ABABF8A1475C29F000EEA7B /* MasterDataHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MasterDataHandler.m; sourceTree = "<group>"; };
+		7ABABF8B1475C29F000EEA7B /* MasterDataHandlerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterDataHandlerDelegate.h; sourceTree = "<group>"; };
+		7ABABF8C1475C29F000EEA7B /* MonthDataIndexer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonthDataIndexer.h; sourceTree = "<group>"; };
+		7ABABF8D1475C29F000EEA7B /* MonthDataIndexer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MonthDataIndexer.m; sourceTree = "<group>"; };
+		7ABABF8E1475C29F000EEA7B /* RingBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RingBuffer.h; sourceTree = "<group>"; };
+		7ABABF8F1475C29F000EEA7B /* RingBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RingBuffer.m; sourceTree = "<group>"; };
 		D1049A4E14527BD6002FD429 /* TapkuLibrary.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = TapkuLibrary.xcodeproj; path = ../Tapku/src/TapkuLibrary.xcodeproj; sourceTree = "<group>"; };
 		D1049A5B14527CF3002FD429 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		D1049A5F14527D16002FD429 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -128,7 +135,6 @@
 		D13ED633145B656300E0731F /* AstroCalendarSelectDateViewController_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AstroCalendarSelectDateViewController_iPhone.xib; path = en.lproj/AstroCalendarSelectDateViewController_iPhone.xib; sourceTree = "<group>"; };
 		D1AD7A151464ABE100B45C94 /* UINavigationController+UniqueStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+UniqueStack.h"; sourceTree = "<group>"; };
 		D1AD7A161464ABE100B45C94 /* UINavigationController+UniqueStack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+UniqueStack.m"; sourceTree = "<group>"; };
-		D1CE0FD0146B53EF0031D83F /* MasterDataHandlerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterDataHandlerDelegate.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -196,11 +202,15 @@
 		D10D64E41460A1A70053B016 /* Model Classes */ = {
 			isa = PBXGroup;
 			children = (
-				7AE6BC491464768000C09B4D /* DayContainer.h */,
-				7AE6BC4A1464768000C09B4D /* DayContainer.m */,
-				7AE6BC4B1464768000C09B4D /* MasterDataHandler.h */,
-				7AE6BC4C1464768000C09B4D /* MasterDataHandler.m */,
-				D1CE0FD0146B53EF0031D83F /* MasterDataHandlerDelegate.h */,
+				7ABABF871475C29F000EEA7B /* DayContainer.h */,
+				7ABABF881475C29F000EEA7B /* DayContainer.m */,
+				7ABABF891475C29F000EEA7B /* MasterDataHandler.h */,
+				7ABABF8A1475C29F000EEA7B /* MasterDataHandler.m */,
+				7ABABF8B1475C29F000EEA7B /* MasterDataHandlerDelegate.h */,
+				7ABABF8C1475C29F000EEA7B /* MonthDataIndexer.h */,
+				7ABABF8D1475C29F000EEA7B /* MonthDataIndexer.m */,
+				7ABABF8E1475C29F000EEA7B /* RingBuffer.h */,
+				7ABABF8F1475C29F000EEA7B /* RingBuffer.m */,
 			);
 			name = "Model Classes";
 			sourceTree = "<group>";
@@ -472,9 +482,11 @@
 				D10D64DF146074B20053B016 /* AstroCalendarMoonViewCell.m in Sources */,
 				D10D65021461CDC20053B016 /* AstroCalendarSunViewController.m in Sources */,
 				D10D65051461FD8C0053B016 /* AstroCalendarDayViewController.m in Sources */,
-				7AE6BC4D1464768000C09B4D /* DayContainer.m in Sources */,
-				7AE6BC4E1464768000C09B4D /* MasterDataHandler.m in Sources */,
 				D1AD7A171464ABE100B45C94 /* UINavigationController+UniqueStack.m in Sources */,
+				7ABABF901475C29F000EEA7B /* DayContainer.m in Sources */,
+				7ABABF911475C29F000EEA7B /* MasterDataHandler.m in Sources */,
+				7ABABF921475C29F000EEA7B /* MonthDataIndexer.m in Sources */,
+				7ABABF931475C29F000EEA7B /* RingBuffer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
