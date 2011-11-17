@@ -1,8 +1,8 @@
 //
-//  AstroCalendarMoonViewController.h
+//  SectionData.m
 //  AstroCalendar
 //
-//  Created by Paul Moore on 11-11-01.
+//  Created by Paul Moore on 11-11-16.
 //  Copyright (c) 2011 University of British Columbia. All rights reserved.
 //  https://github.com/paulmoore/AstroCalendar
 /*
@@ -28,39 +28,39 @@
  OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#import <UIKit/UIKit.h>
+#import "SectionData.h"
 
-#import "MasterDataHandlerDelegate.h"
+static NSDateFormatter *formatter = nil;
 
-/**
- * View Controller for a Moon Calendar.
- * Displays information such as 'start time', 'tithi', and 'paksha' in a table view.
- */
-@interface AstroCalendarMoonViewController : UITableViewController <MasterDataHandlerDelegate>
+@implementation SectionData
 
-/** Parent view controller. */
-@property (nonatomic, weak) UINavigationController *navController;
+@synthesize numRows, sectionNum, sectionName;
 
-@property (strong) NSArray *lunarData, *sectionsArray;
++ (void) initialize
+{
+    if (!formatter)
+    {
+        formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"YYYY"];
+    }
+}
 
-/**
- * Inits an AstroCalendarMoonViewController with a parent Navigation Controller.
- *
- * @param controller The parent Navigation Controller.
- * @return An instance of AstroCalendarMoonViewController.
- */
-- (id)initWithNavController:(UINavigationController *)controller;
-
-/**
- * Selector for when the 'Sun Calendar' button is taped from the Toolbar.
- * Transitions to the Sun Calendar view.
- */
-- (void)didSelectSunCalendarFromToolbar;
-
-/**
- * Selector for when the 'Option's button is taped from the Toolbar.
- * Transitions to Options (not yet implemented).
- */
-- (void)didSelectOptionsFromToolbar;
+- (id)initWithSectionNum:(int)index monthName:(NSString *)name monthYear:(NSDate *)year rowCount:(int)rows
+{
+    self = [super init];
+    if (self)
+    {
+        sectionNum = index;
+        numRows = rows;
+        
+        NSMutableString *tmpName = [NSMutableString stringWithCapacity:15];
+        [tmpName appendString:name];
+        [tmpName appendString:@" "];
+        [tmpName appendString:[formatter stringFromDate:year]];
+        
+        sectionName = tmpName;
+    }
+    return self;
+}
 
 @end

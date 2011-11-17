@@ -33,10 +33,12 @@
 #import "AstroCalendarDayViewController.h"
 #import "AstroCalendarSunViewController.h"
 #import "UINavigationController+UniqueStack.h"
+#import "DayContainer.h"
+#import "SectionData.h"
 
 @implementation AstroCalendarMoonViewController
 
-@synthesize navController;
+@synthesize navController, lunarData, sectionsArray;
 
 - (id)initWithNavController:(UINavigationController *)controller
 {
@@ -56,6 +58,40 @@
     [super didReceiveMemoryWarning];
     
     // Release any cached data, images, etc that aren't in use.
+}
+
+- (void)didRecieveData:(NSArray *)data
+{
+    // Set the data we recieved from the data handler.
+    self.lunarData = data;
+    
+    NSMutableArray *sections = [NSMutableArray arrayWithCapacity:2];
+    
+    // Insert the appropriate sections based on the lunar months.
+    int index = 0, numRows = 0;
+    NSString *currentMonth = nil;
+    for (DayContainer *day in data)
+    {
+        numRows++;
+        NSString *nextMonth = day.lunarMonth;
+        if (!currentMonth || ![currentMonth isEqualToString:nextMonth])
+        {
+            NSIndexSet *set = [[NSIndexSet alloc] initWithIndex:index];
+            [self.tableView insertSections:set withRowAnimation:UITableViewRowAnimationAutomatic];
+            // Cache the number of rows for each section.
+            SectionData *newSection = [[SectionData alloc] initWithSectionNum:[sections count] monthName:day.lunarMonth monthYear:day.date rowCount:numRows];
+            [sections addObject:newSection];
+            numRows = 0;
+        }
+        // Configure the cell if it is visible.
+        AstroCalendarMoonViewCell *cell = (AstroCalendarMoonViewCell *)[self.tableView cellForRowAtIndexPath:[[NSIndexPath alloc] initWithIndex:index]];
+        if (cell)
+        {
+            [cell configureWithDate:day.date tithi:day.tithi fortnight:day.fortnight];
+        }
+        index++;
+    }
+    self.sectionsArray = sections;
 }
 
 #pragma mark - Toolbar Button Actions
@@ -132,14 +168,26 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    // Return the number of sections.
-    return 2;
+    NSArray *sections = self.sectionsArray;
+    if (sections)
+    {
+        [sections count];
+    }
+    // Return 0, the sections are added dynamically when the data is loaded.
+    return 0;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return 15;
+    NSArray *sections = self.sectionsArray;
+    if (sections)
+    {
+        SectionData *sectionData = [sections objectAtIndex:section];
+        return sectionData.numRows;
+    }
+    // TODO Return the expected amount of days.
+    return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -147,7 +195,7 @@
     static NSString *CellIdentifier = @"AstroCalendarMoonViewCell";
     
     AstroCalendarMoonViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil)
+    if (!cell)
     {
         NSString *nibName;
         if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
@@ -156,20 +204,18 @@
         }
         else
         {
-            nibName = @"AstroCalendarMoonViewCell_iPad"; 
+            nibName = @"AstroCalendarMoonViewCell_iPad";
         }
         NSArray *nibObjects = [[NSBundle mainBundle] loadNibNamed:nibName owner:self options:nil];
         cell = [nibObjects objectAtIndex:0];
     }
     
     // Configure the cell...
-    if ([indexPath section] == 0)
+    NSArray *data = self.lunarData;
+    if (data)
     {
-        [cell configureWithDate:[NSDate date] tithi:@"8. Ashtami" fortnight:@"Shukla"];
-    }
-    else
-    {
-        [cell configureWithDate:[NSDate date] tithi:@"10. Dashami" fortnight:@"Krishna"];
+        DayContainer *day = (DayContainer *)[data objectAtIndex:indexPath.row];
+        [cell configureWithDate:day.date tithi:day.tithi fortnight:day.fortnight];
     }
     
     return cell;
@@ -235,12 +281,13 @@
 
 - (NSString *)tableView:(UITableView *)aTableView titleForHeaderInSection:(NSInteger)section
 {
-	// Section title is the region name
-    if (section == 0)
+    NSArray *sections = self.sectionsArray;
+    if (sections)
     {
-        return @"Kartik 2011";
+        SectionData *sectionData = [sections objectAtIndex:section];
+        return sectionData.sectionName;
     }
-    return @"Margashirsh 2011";
+    return @"";
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

@@ -29,11 +29,7 @@ double longitude, latitude;
         
         [sharedSingleton loadSettings];
         //TODO: This should get loaded from a config file - NOT hardcoded.
-<<<<<<< HEAD
-        sharedSingleton.apiEndpoint =  @"http://smithymbp.no-ip.org/apitest/api.php";
-=======
         //sharedSingleton.apiEndpoint =  @"http://smithymbp.no-ip.org/apitest/api.php";
->>>>>>> + Adding testing support for saving/loading to plist (serializing the data).
     }
     
     return sharedSingleton;
@@ -203,9 +199,6 @@ double longitude, latitude;
 
 -(void) saveSettings
 {
-<<<<<<< HEAD
-	//[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)
-=======
 	NSString *plistPath;
     NSString *rootPath;
     NSString *errorDesc = nil;
@@ -225,7 +218,6 @@ double longitude, latitude;
     	NSLog(@"Error saving application state to plist: %@", errorDesc);
     	[errorDesc release];
     }
->>>>>>> + Adding testing support for saving/loading to plist (serializing the data).
 }
 
 -(void) loadSettings

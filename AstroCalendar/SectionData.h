@@ -1,8 +1,8 @@
 //
-//  AstroCalendarMoonViewController.h
+//  SectionData.h
 //  AstroCalendar
 //
-//  Created by Paul Moore on 11-11-01.
+//  Created by Paul Moore on 11-11-16.
 //  Copyright (c) 2011 University of British Columbia. All rights reserved.
 //  https://github.com/paulmoore/AstroCalendar
 /*
@@ -28,39 +28,33 @@
  OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#import <UIKit/UIKit.h>
-
-#import "MasterDataHandlerDelegate.h"
+#import <Foundation/Foundation.h>
 
 /**
- * View Controller for a Moon Calendar.
- * Displays information such as 'start time', 'tithi', and 'paksha' in a table view.
- */
-@interface AstroCalendarMoonViewController : UITableViewController <MasterDataHandlerDelegate>
-
-/** Parent view controller. */
-@property (nonatomic, weak) UINavigationController *navController;
-
-@property (strong) NSArray *lunarData, *sectionsArray;
-
-/**
- * Inits an AstroCalendarMoonViewController with a parent Navigation Controller.
+ * A SectionData object is a simple data container for cached section data.
  *
- * @param controller The parent Navigation Controller.
- * @return An instance of AstroCalendarMoonViewController.
+ * @see AstroCalendarMoonViewController
  */
-- (id)initWithNavController:(UINavigationController *)controller;
+@interface SectionData : NSObject
+
+/** The number of rows (lunar days) in this section. */
+@property (readonly) int numRows;
+
+/** The section number (lunar month). */
+@property (readonly) int sectionNum;
+
+/** The section name (lunar month name + year). */
+@property (readonly, copy) NSString *sectionName;
 
 /**
- * Selector for when the 'Sun Calendar' button is taped from the Toolbar.
- * Transitions to the Sun Calendar view.
+ * Inits this SectionData instance with the given section information.
+ *
+ * @param index The section number.
+ * @param monthName The name of the lunar month.
+ * @param monthYear The year (as an NSDate) of the lunar month.
+ * @param rows The number of rows in this section.
+ * @return An instance of SectionData initialized with the given information.
  */
-- (void)didSelectSunCalendarFromToolbar;
-
-/**
- * Selector for when the 'Option's button is taped from the Toolbar.
- * Transitions to Options (not yet implemented).
- */
-- (void)didSelectOptionsFromToolbar;
+- (id)initWithSectionNum:(int)index monthName:(NSString *)name monthYear:(NSDate *)year rowCount:(int)rows;
 
 @end
