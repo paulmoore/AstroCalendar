@@ -1,0 +1,82 @@
+//
+//  RingBuffer.h
+//  HTTPRequestTest
+//
+//  Created by Stephen Smithbower on 11-11-09.
+//  Copyright (c) 2011 University of British Columbia. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+
+@interface RingBuffer : NSObject
+{
+
+	@private
+    int _capacity; //The total fixed capacity of the ringbuffer.
+    int _count; //The number of elements currently in the ringbuffer.
+    int _indexLast; //The index to the last element in the ringbuffer.
+    
+    NSMutableArray *_elements; //Array containing the elements of the ring buffer.
+}
+
+//////////////////////////////////////////////////////////
+// Constructor											//
+//														//
+// Initalizes the ringbuffer with a fixed size			//
+// capacity.											//
+//////////////////////////////////////////////////////////
+-(RingBuffer*) set:(int) capacity;
+
+//////////////////////////////////////////////////////////
+// Constructor											//
+//														//
+// Initializes a new ringbuffer with the contents and	//
+// state of a ringbuffer that was serialized to a pfile.//
+//////////////////////////////////////////////////////////
+-(RingBuffer*) load:(NSString*) pFile;
+
+
+//Properties.
+//////////////////////////////////////////////////////////
+// Returns the total fixed capacity of the ringbuffer.	//
+//////////////////////////////////////////////////////////
+-(int) capacity;
+
+//////////////////////////////////////////////////////////
+// Returns the number of elements currently in the		//
+// ringbuffer.											//
+//////////////////////////////////////////////////////////
+-(int) count;
+
+
+//Methods.
+//////////////////////////////////////////////////////////
+// Adds the given element to the ringbuffer. This will	//
+// overwrite the oldest element in the buffer, if the 	//
+// buffer is at capacity.								//
+//////////////////////////////////////////////////////////
+-(int) add:(id) element;
+
+//////////////////////////////////////////////////////////
+// Returns an array containing the elements in the 		//
+// ringbuffer.											//
+//////////////////////////////////////////////////////////
+-(NSArray*) elements;
+
+//////////////////////////////////////////////////////////
+// Serializes the ringbuffer into the given pfile.		//
+//////////////////////////////////////////////////////////
+-(void) writeToPFile:(NSString*) filename;
+
+//////////////////////////////////////////////////////////
+// Deserializes and populates this ringbuffer from the	//
+// given pfile.											//
+//////////////////////////////////////////////////////////
+-(void) loadFromPFile:(NSString*) filename;
+
+//////////////////////////////////////////////////////////
+//Removes all elements from the buffer and resets index	//
+//pointers.												//
+//////////////////////////////////////////////////////////
+-(void) clear;
+@end

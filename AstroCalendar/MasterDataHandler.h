@@ -10,6 +10,8 @@
 #import "AFNetworking.h"
 #import "AFJSONRequestOperation.h"
 #import "DayContainer.h"
+#import "RingBuffer.h"
+#import "MonthDataIndexer.h"
 
 NSMutableDictionary *settingsDictionary;
 
@@ -18,13 +20,8 @@ NSMutableDictionary *settingsDictionary;
 	//////////////////////////////////////////////////////////////
     // Properties												//
     //////////////////////////////////////////////////////////////
-    
-    // Target URL that API GET requests are sent to. Parameters will
-    // be tagged on to the end of this before converting to an NSUrl.
-	@property(copy) NSString *apiEndpoint;
-    @property(copy) NSDate *snapshot_sunviewDate;
-
-
+    @property(assign) NSMutableDictionary *dataCache;
+    @property(assign) RingBuffer *dataCacheIndexer;
 
 	
     //////////////////////////////////////////////////////////////
@@ -58,6 +55,14 @@ NSMutableDictionary *settingsDictionary;
     -(void)saveSettings;
     -(void)loadSettings;
     
+	-(int)addDayToCache: (DayContainer*) data;
+    -(NSMutableDictionary*)retrieveMonthSetFromCache: (NSDate*) date;
+    -(DayContainer*)retrieveDayFromCache: (NSDate*) date;
+    -(int)retrieveMonthIndexFromCache:(NSDate*)date;
+    -(void)clearCache;
+    
+    -(void)writeCache: (NSDate*)date;
+    -(void)loadCache;
     
 @end
 
