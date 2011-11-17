@@ -38,8 +38,6 @@
 {
     IBOutlet UIDatePicker *datePicker;
     
-    IBOutlet UITextField *yearField;
-    
     IBOutlet UIButton *nextButton;
     
     BOOL isSelectEnd;
@@ -64,5 +62,23 @@
  * @return nil.
  */
 - (IBAction)didSelectNext:(id)sender;
+
+/**
+ * Selector for when the 'Sun Calendar' Toolbar button is tapped.
+ * Transitions to the AstroCalendarSunViewController.
+ */
+- (void)didSelectSunCalendarFromToolbar;
+
+/**
+ * Selector for when the 'Moon Calendar' Toolbar button is tapped.
+ * Transitions to the AstroCalendarMoonViewController.
+ */
+- (void)didSelectMoonCalendarFromToolbar;
+
+/**
+ * Selector for when the 'Options' Toolbar button is tapped.
+ * Transitions to Options (not yet implemented).
+ */
+- (void)didSelectOptionsFromToolbar;
 
 @end

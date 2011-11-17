@@ -48,13 +48,18 @@
 - (id)initWithNavController:(UINavigationController *)controller;
 
 /**
- * Selector for when the 'Moon Calendar' Toolbar button is taped.
+ * Selector for when the 'Moon Calendar' Toolbar button is tapped.
  * Transitions to the AstroCalendarMoonViewController.
  */
 - (void)didSelectMoonCalendarFromToolbar;
 
 /**
- * Selector for when the 'Options' Toolbar button is taped.
+ * Selector for when the 'Select Dates' Toolbar button is tapped.
+ */
+- (void)didSelectSelectDatesFromToolbar;
+
+/**
+ * Selector for when the 'Options' Toolbar button is tapped.
  * Transitions to the the Options (not yet implemented).
  */
 - (void)didSelectOptionsFromToolbar;

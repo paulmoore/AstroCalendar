@@ -52,10 +52,15 @@
 - (id)initWithNavController:(UINavigationController *)controller;
 
 /**
- * Selector for when the 'Sun Calendar' button is taped from the Toolbar.
+ * Selector for when the 'Sun Calendar' button is tapped from the Toolbar.
  * Transitions to the Sun Calendar view.
  */
 - (void)didSelectSunCalendarFromToolbar;
+
+/**
+ * Selector for when the 'Select Dates' button is tapped from the Toolbar.
+ */
+- (void)didSelectSelectDatesFromToolbar;
 
 /**
  * Selector for when the 'Option's button is taped from the Toolbar.

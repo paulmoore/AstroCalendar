@@ -32,6 +32,7 @@
 #import "AstroCalendarMoonViewCell.h"
 #import "AstroCalendarDayViewController.h"
 #import "AstroCalendarSunViewController.h"
+#import "AstroCalendarSelectDateViewController.h"
 #import "UINavigationController+UniqueStack.h"
 #import "DayContainer.h"
 #import "SectionData.h"
@@ -105,6 +106,15 @@
     }
 }
 
+- (void)didSelectSelectDatesFromToolbar
+{
+    if (! [self.navController pushUniqueControllerOfType:[AstroCalendarSelectDateViewController class] animated:YES])
+    {
+        UIViewController *selectController = [[AstroCalendarSelectDateViewController alloc] initWithNavController:self.navController andIsEndDate:NO];
+        [self.navController pushViewController:selectController animated:YES];
+    }
+}
+
 - (void)didSelectOptionsFromToolbar
 {
     // TODO Go to Options View Controller.
@@ -125,7 +135,8 @@
     // Setup this View Controller's Toolbar.
     UIBarButtonItem *sunButton = [[UIBarButtonItem alloc] initWithTitle:@"Sun Calendar" style:UIBarButtonItemStyleBordered target:self action:@selector(didSelectSunCalendarFromToolbar)];
     UIBarButtonItem *optionsButton = [[UIBarButtonItem alloc] initWithTitle:@"Options" style:UIBarButtonItemStyleBordered target:self action:@selector(didSelectOptionsFromToolbar)];
-    NSArray *barButtons = [NSArray arrayWithObjects:sunButton, optionsButton, nil];
+    UIBarButtonItem *selectDatesButton = [[UIBarButtonItem alloc] initWithTitle:@"Select Dates" style:UIBarButtonItemStyleBordered target:self action:@selector(didSelectSelectDatesFromToolbar)];
+    NSArray *barButtons = [NSArray arrayWithObjects:sunButton, selectDatesButton, optionsButton, nil];
     [self setToolbarItems:barButtons animated:YES];
 }
 
@@ -136,6 +147,8 @@
     // e.g. self.myOutlet = nil;
     
     self.navController = nil;
+    self.lunarData = nil;
+    self.sectionsArray = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -194,6 +207,7 @@
 {
     static NSString *CellIdentifier = @"AstroCalendarMoonViewCell";
     
+    // Reuse, or create, a new cell.
     AstroCalendarMoonViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (!cell)
     {

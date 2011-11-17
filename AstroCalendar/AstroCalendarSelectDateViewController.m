@@ -30,6 +30,7 @@
 
 #import "AstroCalendarSelectDateViewController.h"
 #import "AstroCalendarMoonViewController.h"
+#import "AstroCalendarSunViewController.h"
 #import "UINavigationController+UniqueStack.h"
 
 @implementation AstroCalendarSelectDateViewController
@@ -90,6 +91,31 @@
     }
 }
 
+#pragma mark - Toolbar Button Actions
+
+- (void)didSelectSunCalendarFromToolbar
+{
+    if (! [self.navController pushUniqueControllerOfType:[AstroCalendarSunViewController class] animated:YES])
+    {
+        UIViewController *sunController = [[AstroCalendarSunViewController alloc] initWithNavController:self.navController];
+        [self.navController pushViewController:sunController animated:YES];
+    }
+}
+
+- (void)didSelectMoonCalendarFromToolbar
+{
+    if (! [self.navController pushUniqueControllerOfType:[AstroCalendarMoonViewController class] animated:YES])
+    {
+        UIViewController *moonController = [[AstroCalendarMoonViewController alloc] initWithNavController:self.navController];
+        [self.navController pushViewController:moonController animated:YES];
+    }
+}
+
+- (void)didSelectOptionsFromToolbar
+{
+    // TODO Go to options menu.
+}
+
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad
@@ -105,6 +131,12 @@
     {
         [nextButton setTitle:@"Next" forState:UIControlStateNormal];
     }
+    
+    UIBarButtonItem *moonButton = [[UIBarButtonItem alloc] initWithTitle:@"Moon Calendar" style:UIBarButtonItemStyleBordered target:self action:@selector(didSelectMoonCalendarFromToolbar)];
+    UIBarButtonItem *sunButton = [[UIBarButtonItem alloc] initWithTitle:@"Sun Calendar" style:UIBarButtonItemStyleBordered target:self action:@selector(didSelectSunCalendarFromToolbar)];
+    UIBarButtonItem *optionsButton = [[UIBarButtonItem alloc] initWithTitle:@"Options" style:UIBarButtonItemStyleBordered target:self action:@selector(didSelectOptionsFromToolbar)];
+    NSArray *barButtons = [NSArray arrayWithObjects:moonButton, sunButton, optionsButton, nil];
+    [self setToolbarItems:barButtons animated:YES];
 }
 
 - (void)viewDidUnload
@@ -114,7 +146,6 @@
     // e.g. self.myOutlet = nil;
     self.navController = nil;
     datePicker = nil;
-    yearField = nil;
     nextButton = nil;
 }
 
