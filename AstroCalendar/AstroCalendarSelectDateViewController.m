@@ -31,11 +31,12 @@
 #import "AstroCalendarSelectDateViewController.h"
 #import "AstroCalendarMoonViewController.h"
 #import "AstroCalendarSunViewController.h"
+#import "MasterDataHandler.h"
 #import "UINavigationController+UniqueStack.h"
 
 @implementation AstroCalendarSelectDateViewController
 
-@synthesize navController;
+@synthesize navController, startDate;
 
 - (id)initWithNavController:(UINavigationController *)controller andIsEndDate:(BOOL)isEndDate
 {
@@ -77,17 +78,24 @@
 {
     if (isSelectEnd)
     {
-        if (! [self.navController pushUniqueControllerOfType:[AstroCalendarMoonViewController class] animated:YES])
+        // Display the Moon Calendar, and make a request for the selected data.
+        AstroCalendarMoonViewController *moonController = (AstroCalendarMoonViewController *)[self.navController pushUniqueControllerOfType:[AstroCalendarMoonViewController class] animated:YES];
+        if (!moonController)
         {
-            UIViewController *showResults = [[AstroCalendarMoonViewController alloc] init];
-            [self.navController pushViewController:showResults animated:YES];
+            moonController = [[AstroCalendarMoonViewController alloc] init];
+            [self.navController pushViewController:moonController animated:YES];
         }
+        // Make the Date request: start date -> end date.
+        MasterDataHandler *dataManager = [MasterDataHandler allocWithZone:nil];
+        [dataManager askApiForDates:self.startDate :[datePicker date]];
     }
     else
     {
         // We don't want to check if a select date controller is already in the nav stack, because there should be one for each date in the interval.
-        UIViewController *selectEndDate = [[AstroCalendarSelectDateViewController alloc] initWithNavController:self.navController andIsEndDate:YES];
+        AstroCalendarSelectDateViewController *selectEndDate = [[AstroCalendarSelectDateViewController alloc] initWithNavController:self.navController andIsEndDate:YES];
         [self.navController pushViewController:selectEndDate animated:YES];
+        // Let the end date selector know what start date was selected.
+        selectEndDate.startDate = [datePicker date];
     }
 }
 
@@ -129,7 +137,7 @@
     }
     else
     {
-        [nextButton setTitle:@"Next" forState:UIControlStateNormal];
+        [nextButton setTitle:@"Select End Date" forState:UIControlStateNormal];
     }
     
     UIBarButtonItem *moonButton = [[UIBarButtonItem alloc] initWithTitle:@"Moon Calendar" style:UIBarButtonItemStyleBordered target:self action:@selector(didSelectMoonCalendarFromToolbar)];

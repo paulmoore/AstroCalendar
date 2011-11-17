@@ -55,8 +55,10 @@
     [self.window addSubview:self.navController.view];
     [self.window makeKeyAndVisible];
     
+    NSDate *today = [NSDate date];
+    NSDate *oneMonthFromToday = [NSDate dateWithTimeInterval:(31*24*60*60) sinceDate:today];
     MasterDataHandler *dataManager = [MasterDataHandler allocWithZone:nil];
-    [dataManager askApiForDates:[NSDate date] :[NSDate date]];
+    [dataManager askApiForDates:today :oneMonthFromToday];
     
     return YES;
 }

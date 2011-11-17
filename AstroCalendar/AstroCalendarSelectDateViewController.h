@@ -46,6 +46,8 @@
 /** Parent Navigation Controller. */
 @property (nonatomic, weak) UINavigationController *navController;
 
+@property (nonatomic, weak) NSDate *startDate;
+
 /**
  * Inits an AstroCalendarSelectDateViewController with a parent Navigation Controller.
  *
