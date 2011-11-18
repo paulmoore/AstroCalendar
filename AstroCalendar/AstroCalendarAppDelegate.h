@@ -30,6 +30,8 @@
 
 #import <UIKit/UIKit.h>
 
+@class MasterDataHandler;
+
 /**
  * AstroCalendar Application Delegate.
  * Handles the App's main entry point and initializes the Navigation Controller and it's root View Controller.

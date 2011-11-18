@@ -57,8 +57,7 @@
     
     NSDate *today = [NSDate date];
     NSDate *oneMonthFromToday = [NSDate dateWithTimeInterval:(31*24*60*60) sinceDate:today];
-    MasterDataHandler *dataManager = [MasterDataHandler allocWithZone:nil];
-    [dataManager askApiForDates:today :oneMonthFromToday];
+    [[MasterDataHandler sharedManager] askApiForDates:today :oneMonthFromToday];
     
     return YES;
 }

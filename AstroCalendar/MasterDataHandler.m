@@ -4,43 +4,56 @@
 //
 //  Created by Stephen Smithbower on 11-11-01.
 //  Copyright (c) 2011 University of British Columbia. All rights reserved.
-//
+//  https://github.com/paulmoore/AstroCalendar
+/*
+ Permission is hereby granted, free of charge, to any person
+ obtaining a copy of this software and associated documentation
+ files (the "Software"), to deal in the Software without
+ restriction, including without limitation the rights to use,
+ copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the
+ Software is furnished to do so, subject to the following
+ conditions:
+ 
+ The above copyright notice and this permission notice shall be
+ included in all copies or substantial portions of the Software.
+ 
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ OTHER DEALINGS IN THE SOFTWARE.
+ */
 
 #import "MasterDataHandler.h"
 
-//
 @interface NSURLRequest (DummyInterface)
 	+ (BOOL)allowsAnyHTTPSCertificateForHost:(NSString*)host;
 	+ (void)setAllowsAnyHTTPSCertificate:(BOOL)allow forHost:(NSString*)host;
 @end
-//
-
-@implementation MasterDataHandler
 
 static MasterDataHandler *sharedSingleton = nil;
 
-double longitude, latitude;
+@implementation MasterDataHandler
 
 @synthesize dataCacheIndexer;
 @synthesize dataCache;
 
-
-
-// Singleton pattern initializer. There should only ever be ONE instance of MasterDataHandler
-// available to the application, so that only a single entry point to the data is visible.
-// @see: https://developer.apple.com/library/ios/#documentation/Cocoa/Conceptual/CocoaFundamentals/CocoaObjects/CocoaObjects.html#//apple_ref/doc/uid/TP40002974-CH4-SW32
 + (MasterDataHandler*)sharedManager
 {
     if (sharedSingleton == nil) 
     {
-        sharedSingleton = [[super allocWithZone:NULL] init];
+        sharedSingleton = [[super alloc] init];
         
         [sharedSingleton loadSettings];
         
         //Attempt to load the data cache from device - if it doesn't exist, then we start anew!
         @try 
         {
-    		sharedSingleton.dataCacheIndexer = [[RingBuffer alloc] load:@"dataCacheIndex.plist"];
+    		sharedSingleton.dataCacheIndexer = [[RingBuffer alloc] initFromPList:@"dataCacheIndex.plist"];
             NSLog(@"Loading cached data index from dataCacheIndex.plist: %i months available, of %i months.", [sharedSingleton.dataCacheIndexer count], [sharedSingleton.dataCacheIndexer capacity]);
             
             //Set up in-memory cache.
@@ -49,7 +62,7 @@ double longitude, latitude;
 		@catch (NSException *exception) 
         {
     		//Errored out - probably means that there isn't a data cache in existence.
-            sharedSingleton.dataCacheIndexer = [[RingBuffer alloc] set: 24]; //Store 24 months worth of data.
+            sharedSingleton.dataCacheIndexer = [[RingBuffer alloc] initWithCapacity: 24]; //Store 24 months worth of data.
             NSLog(@"Could not load data cache index, starting fresh!");
             
             //Create new in-memory cache.
@@ -60,44 +73,9 @@ double longitude, latitude;
     return sharedSingleton;
 }
 
- 
-+ (id)allocWithZone:(NSZone *)zone
+-(void)askApiForDates:(NSDate*)startDate endDate:(NSDate*)endDate
 {
-    return [[self sharedManager] retain];
-}
- 
-- (id)copyWithZone:(NSZone *)zone
-{
-    return self;
-}
- 
-- (id)retain
-{
-    return self;
-}
- 
-- (NSUInteger)retainCount
-{
-    return NSUIntegerMax;  //denotes an object that cannot be released
-}
- 
-- (oneway void)release
-{
-	[super release];
-    //do nothing
-}
- 
-- (id)autorelease
-{
-    return self;
-}
-
-
-//////////////////////////////////////////////////////////////
-//															//
-//////////////////////////////////////////////////////////////
--(void)askApiForDates:(NSDate*) startDate: (NSDate*) endDate
-{
+    NSLog(@"Heard message askApiForDates");
 	//NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat: @"%@
 	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"dd-MM-yyyy"];
@@ -117,7 +95,7 @@ double longitude, latitude;
     {
     	NSLog(@"Success!");
         
-        NSArray *decoded = [sharedSingleton parseJSONDateRange: JSON];
+        NSArray *decoded = [self parseJSONDateRange: JSON];
         
         for(DayContainer *container in decoded) 
         {
@@ -141,24 +119,19 @@ double longitude, latitude;
     
     
     //Actually send that bitch out there.
-    NSOperationQueue *queue = [[[NSOperationQueue alloc] init] autorelease];
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     [queue addOperation:operation];
 }
 
-
-///////////////////////////////////////////////////////////
-//Parses a JSON response from the API server to create a new
-//Day dataset. Returns an array containing all the days in
-//the JSON response.
 -(NSArray*)parseJSONDateRange: (id)json
 {
 	int dayCount = [[json valueForKeyPath:@"count"] intValue];
     
     //Helps us out for conversion to NSDates.
-    NSCalendar *helperCalendar = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] autorelease];
+    NSCalendar *helperCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
     
     //Formatting for storing times.
-    NSDateFormatter *helperFormatter = [[[NSDateFormatter alloc] init] autorelease];
+    NSDateFormatter *helperFormatter = [[NSDateFormatter alloc] init];
     [helperFormatter setDateFormat:@"dd-MM-yyyyHH-mm-ss"];
     
     NSMutableArray *dayContainers = [[NSMutableArray alloc] initWithCapacity:dayCount];
@@ -166,11 +139,12 @@ double longitude, latitude;
     for (int i = 0; i < dayCount; i++)
     {
     	DayContainer *newDay = [[DayContainer alloc] init];
+        NSDateComponents *buildDate = nil;
     
     	@try 
         {
     		//Parse and build the date for this container.
-    		NSDateComponents *buildDate = [[[NSDateComponents alloc] init] autorelease];
+    		buildDate = [[NSDateComponents alloc] init];
         	[buildDate setDay:[[json valueForKeyPath:[NSString stringWithFormat:@"%i.dayNumerical", i]] intValue]];
         	[buildDate setMonth:[[json valueForKeyPath:[NSString stringWithFormat:@"%i.month", i]] intValue]];
         	[buildDate setYear:[[json valueForKeyPath:[NSString stringWithFormat:@"%i.year", i]] intValue]];
@@ -199,16 +173,13 @@ double longitude, latitude;
 		}
 		@finally 
         {
-    		//Don't have to do anything here yet.
+            // Nothing to do yet...
 		}
     }
     
     return dayContainers;
 }
 
-///////////////////////////////////////////////////////////
-//Registers a customer alert (displaying the message) on the given
-//date (includes time).
 -(void)registerAlertOnDate: (NSDate*) date: (NSString*) message
 {
 	/* Here we cancel all previously scheduled notifications */
@@ -231,8 +202,6 @@ double longitude, latitude;
 	[[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
 }
 
-///////////////////////////////////////////////////////////
-//Saves applications settings to a Settings.plist file.
 -(void) saveSettings
 {
 	NSString *plistPath;
@@ -252,12 +221,9 @@ double longitude, latitude;
     else 
     {
     	NSLog(@"Error saving application state to plist: %@", errorDesc);
-    	[errorDesc release];
     }
 }
 
-///////////////////////////////////////////////////////////
-//Loads application settings from a Settings.plist file.
 -(void) loadSettings
 {
 	NSString *plistPath;
@@ -280,20 +246,12 @@ double longitude, latitude;
     	NSLog(@"Error reading Settings plist: %@, format: %d", errorDesc, format);
         
     //Load settings.
-    if (settingsDictionary != nil)
-    	[settingsDictionary release];
-        
     settingsDictionary = [[NSMutableDictionary alloc]initWithDictionary:tempData];
     
     NSLog(@"Settings: RemoteAPIEndpoint: %@", [settingsDictionary objectForKey:@"APIEndpoint"]);
     NSLog(@"Settings: SnapshotSunviewDate: %@", [[settingsDictionary objectForKey:@"Snapshot"] objectForKey:@"SunviewDate"]);
 }
 
-
-///////////////////////////////////////////////////////////
-//Adds a given day dataset to the cache. If the specified
-//month isn't already cached, it overrides the oldest cached
-//month.
 -(int)addDayToCache:(DayContainer *)data
 {
 	int addedKey = -1;
@@ -325,14 +283,11 @@ double longitude, latitude;
     return addedKey;
 }
 
-///////////////////////////////////////////////////////////
-//Retrieves a dictionary of cached days for a given month if
-//it exists, otherwise returns nil.
 -(NSMutableDictionary*)retrieveMonthSetFromCache:(NSDate *)date
 {
 	int monthIndex = -1;
     
-    NSDateComponents *dateComponents = [[[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] components:NSMonthCalendarUnit | NSYearCalendarUnit fromDate:date] autorelease];
+    NSDateComponents *dateComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] components:NSMonthCalendarUnit | NSYearCalendarUnit fromDate:date];
 
 	//Scan ringbuffer for matching month and year.
     NSArray *cachedMonthIndices = [sharedSingleton.dataCacheIndexer elements];
@@ -340,7 +295,7 @@ double longitude, latitude;
     {
     	MonthDataIndexer *monthIndexC = (MonthDataIndexer*)[cachedMonthIndices objectAtIndex:i];
     	
-        NSDateComponents *indexComponents = [[[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] components:NSMonthCalendarUnit | NSYearCalendarUnit fromDate:[monthIndexC date]] autorelease];
+        NSDateComponents *indexComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] components:NSMonthCalendarUnit | NSYearCalendarUnit fromDate:[monthIndexC date]];
         
         if ([indexComponents year] == [dateComponents year] && [indexComponents month] == [dateComponents month])
         {
@@ -348,6 +303,8 @@ double longitude, latitude;
             break;
         }
     }
+    
+    //[dateComponents release];
     
     if (monthIndex == -1)
     {
@@ -363,7 +320,7 @@ double longitude, latitude;
 
 -(int)retrieveMonthIndexFromCache:(NSDate *)date
 {
-    NSDateComponents *dateComponents = [[[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] components:NSMonthCalendarUnit | NSYearCalendarUnit fromDate:date] autorelease];
+    NSDateComponents *dateComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] components:NSMonthCalendarUnit | NSYearCalendarUnit fromDate:date];
 
 	//Scan ringbuffer for matching month and year.
     NSArray *cachedMonthIndices = [sharedSingleton.dataCacheIndexer elements];
@@ -371,7 +328,7 @@ double longitude, latitude;
     {
     	MonthDataIndexer *monthIndexC = (MonthDataIndexer*)[cachedMonthIndices objectAtIndex:i];
     	
-        NSDateComponents *indexComponents = [[[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] components:NSMonthCalendarUnit | NSYearCalendarUnit fromDate:[monthIndexC date]] autorelease];
+        NSDateComponents *indexComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] components:NSMonthCalendarUnit | NSYearCalendarUnit fromDate:[monthIndexC date]];
         
         if ([indexComponents year] == [dateComponents year] && [indexComponents month] == [dateComponents month])
         {
@@ -382,9 +339,6 @@ double longitude, latitude;
    	return -1;
 }
 
-///////////////////////////////////////////////////////////
-//Returns the cached information for a given date if it exists,
-//otherwise returns nil.
 -(DayContainer*)retrieveDayFromCache:(NSDate *)date
 {
 	NSMutableDictionary *monthSet;
@@ -396,16 +350,12 @@ double longitude, latitude;
     	return nil;
     else
     {
-    	NSDateComponents *dateComponents = [[[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] components: NSDayCalendarUnit fromDate:date] autorelease];
+    	NSDateComponents *dateComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] components: NSDayCalendarUnit fromDate:date];
     
     	return [monthSet objectForKey:[[NSNumber numberWithInt:[dateComponents day]] description]];
     }
 }
 
-
-///////////////////////////////////////////////////////////
-//Nuke the entire cash - we can leave plists, they'll get
-//overridden anyway.
 -(void)clearCache
 {    
     //Clear out the actual cache.
@@ -416,10 +366,6 @@ double longitude, latitude;
 	[dataCacheIndexer clear];
 }
 
-
-///////////////////////////////////////////////////////////
-//Writes the month set of data for the given index to a
-//plist on the device.
 -(void) writeCache: (NSDate*) date
 {
 	NSString *plistPath;
@@ -447,15 +393,10 @@ double longitude, latitude;
     else 
     {
     	NSLog(@"Error writing cache for month at index %i: %@", monthIndex, errorDesc);
-    	[errorDesc release];
     }
 
 }
 
-
-///////////////////////////////////////////////////////////
-//Reads in the entire cache from plists on disk, and puts
-//them in to the in-memory cache.
 -(void) loadCache
 {
 	NSString *plistPath;
