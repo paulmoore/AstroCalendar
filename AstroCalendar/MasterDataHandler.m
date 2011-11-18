@@ -107,7 +107,18 @@ static MasterDataHandler *sharedSingleton = nil;
             
             container.tithi = @"LUNAR DAY";
             container.lunarMonth = @"LUNAR MONTH";
-            container.fortnight = @"FORTNIGHT";
+            //container.fortnight = @"FORTNIGHT";
+            
+            //TODO: Remove faked data. This is only done for demonstration
+            //		purposes while we wait for the API endpoint to
+            //		implement calculating this data.
+            NSDateComponents *dateComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] components: NSDayCalendarUnit | NSMonthCalendarUnit fromDate:container.date];
+            
+            if (([dateComponents month] == 11 && [dateComponents day] >= 24) || ([dateComponents month] == 12 &&[dateComponents day] <= 9))
+            	container.fortnight = @"Shukla";
+            else
+            	container.fortnight = @"Krishna";
+            	
             
             [self addDayToCache:container];
 		}

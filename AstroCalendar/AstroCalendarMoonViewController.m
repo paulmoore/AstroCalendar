@@ -256,7 +256,7 @@
     NSArray *data = self.lunarData;
     if (data)
     {
-        DayContainer *day = (DayContainer *)[data objectAtIndex:indexPath.row];
+        DayContainer *day = (DayContainer *)[data objectAtIndex:indexPath.section];
         [cell configureWithDate:day.date tithi:day.tithi fortnight:day.fortnight];
     }
     
