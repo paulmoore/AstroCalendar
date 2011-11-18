@@ -34,6 +34,7 @@
 #import "DayContainer.h"
 #import "RingBuffer.h"
 #import "MonthDataIndexer.h"
+#import "MasterDataHandlerDelegate.h"
 
 NSMutableDictionary *settingsDictionary;
 
@@ -69,7 +70,7 @@ NSMutableDictionary *settingsDictionary;
      * @param startDate The (inclusive) start date to begin polling information.
      * @param endDate The (inclusive) end date to stop polling information.
      */
-	-(void)askApiForDates:(NSDate*)startDate endDate:(NSDate*) endDate;
+    -(void)askApiForDates:(NSDate *)startDate endDate:(NSDate *)endDate delegate:(id<MasterDataHandlerDelegate>)delegate;
 	
     /**
      * Parses a JSON response from the API server to create a new

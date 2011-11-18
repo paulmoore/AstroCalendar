@@ -31,6 +31,7 @@
 #import "AstroCalendarAppDelegate.h"
 #import "AstroCalendarMoonViewController.h"
 #import "MasterDataHandler.h"
+#import "DateRangeRequest.h"
 #import "UINavigationController+UniqueStack.h"
 
 @implementation AstroCalendarAppDelegate
@@ -55,9 +56,11 @@
     [self.window addSubview:self.navController.view];
     [self.window makeKeyAndVisible];
     
+    // Make the initial month request.
     NSDate *today = [NSDate date];
     NSDate *oneMonthFromToday = [NSDate dateWithTimeInterval:(31*24*60*60) sinceDate:today];
-    [[MasterDataHandler sharedManager] askApiForDates:today :oneMonthFromToday];
+    DateRangeRequest *request = [[DateRangeRequest alloc] initWithStartDate:today endDate:oneMonthFromToday];
+    [rootController loadDates:request];
     
     return YES;
 }

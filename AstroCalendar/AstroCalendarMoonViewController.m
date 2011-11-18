@@ -34,12 +34,14 @@
 #import "AstroCalendarSunViewController.h"
 #import "AstroCalendarSelectDateViewController.h"
 #import "UINavigationController+UniqueStack.h"
+#import "DateRangeRequest.h"
+#import "MasterDataHandler.h"
 #import "DayContainer.h"
 #import "SectionData.h"
 
 @implementation AstroCalendarMoonViewController
 
-@synthesize navController, lunarData, sectionsArray;
+@synthesize navController, lunarData, sectionsData, dateRequest;
 
 - (id)initWithNavController:(UINavigationController *)controller
 {
@@ -61,15 +63,32 @@
     // Release any cached data, images, etc that aren't in use.
 }
 
+- (void)loadDates:(DateRangeRequest *)request
+{
+    self.dateRequest = request;
+    
+    // If the view has been loaded, make the request.
+    if ([self isViewLoaded])
+    {
+        [[MasterDataHandler sharedManager] askApiForDates:request.startDate endDate:request.endDate delegate:self];
+    }
+}
+
 - (void)didRecieveData:(NSArray *)data
 {
+    // Delegate was called after this view was unloaded, return.
+    if (![self isViewLoaded])
+    {
+        return;
+    }
+    
     // Set the data we recieved from the data handler.
     self.lunarData = data;
     
     NSMutableArray *sections = [NSMutableArray arrayWithCapacity:2];
     
     // Insert the appropriate sections based on the lunar months.
-    int index = 0, numRows = 0;
+    int numRows = 0;
     NSString *currentMonth = nil;
     for (DayContainer *day in data)
     {
@@ -77,22 +96,15 @@
         NSString *nextMonth = day.lunarMonth;
         if (!currentMonth || ![currentMonth isEqualToString:nextMonth])
         {
-            NSIndexSet *set = [[NSIndexSet alloc] initWithIndex:index];
-            [self.tableView insertSections:set withRowAnimation:UITableViewRowAnimationAutomatic];
             // Cache the number of rows for each section.
             SectionData *newSection = [[SectionData alloc] initWithSectionNum:[sections count] monthName:day.lunarMonth monthYear:day.date rowCount:numRows];
             [sections addObject:newSection];
             numRows = 0;
         }
-        // Configure the cell if it is visible.
-        AstroCalendarMoonViewCell *cell = (AstroCalendarMoonViewCell *)[self.tableView cellForRowAtIndexPath:[[NSIndexPath alloc] initWithIndex:index]];
-        if (cell)
-        {
-            [cell configureWithDate:day.date tithi:day.tithi fortnight:day.fortnight];
-        }
-        index++;
     }
-    self.sectionsArray = sections;
+    self.sectionsData = sections;
+    
+    [self.tableView reloadData];
 }
 
 #pragma mark - Toolbar Button Actions
@@ -138,6 +150,11 @@
     UIBarButtonItem *selectDatesButton = [[UIBarButtonItem alloc] initWithTitle:@"Select Dates" style:UIBarButtonItemStyleBordered target:self action:@selector(didSelectSelectDatesFromToolbar)];
     NSArray *barButtons = [NSArray arrayWithObjects:sunButton, selectDatesButton, optionsButton, nil];
     [self setToolbarItems:barButtons animated:YES];
+    
+    if (self.dateRequest)
+    {
+        [[MasterDataHandler sharedManager] askApiForDates:self.dateRequest.startDate endDate:self.dateRequest.endDate delegate:self];
+    }
 }
 
 - (void)viewDidUnload
@@ -148,7 +165,12 @@
     
     self.navController = nil;
     self.lunarData = nil;
-    self.sectionsArray = nil;
+    self.sectionsData = nil;
+    if (self.dateRequest)
+    {
+        [self.dateRequest clear];
+        self.dateRequest = nil;
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -181,10 +203,11 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    NSArray *sections = self.sectionsArray;
+    NSArray *sections = self.sectionsData;
     if (sections)
     {
-        [sections count];
+        NSLog(@"SectionData count: %d", [sections count]);
+        return [sections count];
     }
     // Return 0, the sections are added dynamically when the data is loaded.
     return 0;
@@ -193,13 +216,18 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    NSArray *sections = self.sectionsArray;
+    NSArray *sections = self.sectionsData;
     if (sections)
     {
         SectionData *sectionData = [sections objectAtIndex:section];
+        NSLog(@"SectionData numRows: %d", sectionData.numRows);
         return sectionData.numRows;
     }
-    // TODO Return the expected amount of days.
+    // Approximate the number of days if a request has been been made.
+    if (self.dateRequest)
+    {
+        return [self.dateRequest numDays];
+    }
     return 0;
 }
 
@@ -295,10 +323,11 @@
 
 - (NSString *)tableView:(UITableView *)aTableView titleForHeaderInSection:(NSInteger)section
 {
-    NSArray *sections = self.sectionsArray;
+    NSArray *sections = self.sectionsData;
     if (sections)
     {
         SectionData *sectionData = [sections objectAtIndex:section];
+        NSLog(@"SectionData sectionName: %@", sectionData.sectionName);
         return sectionData.sectionName;
     }
     return @"";

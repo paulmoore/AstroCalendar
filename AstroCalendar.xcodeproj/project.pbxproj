@@ -45,6 +45,8 @@
 		D139FBB3144FE003006D0797 /* AstroCalendarTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D139FBB2144FE003006D0797 /* AstroCalendarTests.m */; };
 		D13ED634145B656300E0731F /* AstroCalendarSelectDateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D13ED632145B656300E0731F /* AstroCalendarSelectDateViewController.m */; };
 		D13ED635145B656300E0731F /* AstroCalendarSelectDateViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = D13ED633145B656300E0731F /* AstroCalendarSelectDateViewController_iPhone.xib */; };
+		D14137FC14770DE600019F8A /* DateRangeRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = D14137FB14770DE600019F8A /* DateRangeRequest.m */; };
+		D14137FD14770DE600019F8A /* DateRangeRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = D14137FB14770DE600019F8A /* DateRangeRequest.m */; };
 		D142F6141475C84900852C07 /* SectionData.m in Sources */ = {isa = PBXBuildFile; fileRef = D142F6131475C84900852C07 /* SectionData.m */; };
 		D142F6151475C84900852C07 /* SectionData.m in Sources */ = {isa = PBXBuildFile; fileRef = D142F6131475C84900852C07 /* SectionData.m */; };
 		D151845A1475C94100AA0A41 /* Settings.plist in Resources */ = {isa = PBXBuildFile; fileRef = D15184591475C94100AA0A41 /* Settings.plist */; };
@@ -138,6 +140,8 @@
 		D13ED631145B656300E0731F /* AstroCalendarSelectDateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AstroCalendarSelectDateViewController.h; sourceTree = "<group>"; };
 		D13ED632145B656300E0731F /* AstroCalendarSelectDateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AstroCalendarSelectDateViewController.m; sourceTree = "<group>"; };
 		D13ED633145B656300E0731F /* AstroCalendarSelectDateViewController_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AstroCalendarSelectDateViewController_iPhone.xib; path = en.lproj/AstroCalendarSelectDateViewController_iPhone.xib; sourceTree = "<group>"; };
+		D14137FA14770DE600019F8A /* DateRangeRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateRangeRequest.h; sourceTree = "<group>"; };
+		D14137FB14770DE600019F8A /* DateRangeRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DateRangeRequest.m; sourceTree = "<group>"; };
 		D142F6121475C84800852C07 /* SectionData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SectionData.h; sourceTree = "<group>"; };
 		D142F6131475C84900852C07 /* SectionData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SectionData.m; sourceTree = "<group>"; };
 		D15184591475C94100AA0A41 /* Settings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Settings.plist; sourceTree = "<group>"; };
@@ -222,6 +226,8 @@
 				7ABABF8D1475C29F000EEA7B /* MonthDataIndexer.m */,
 				7ABABF8E1475C29F000EEA7B /* RingBuffer.h */,
 				7ABABF8F1475C29F000EEA7B /* RingBuffer.m */,
+				D14137FA14770DE600019F8A /* DateRangeRequest.h */,
+				D14137FB14770DE600019F8A /* DateRangeRequest.m */,
 			);
 			name = "Model Classes";
 			sourceTree = "<group>";
@@ -511,6 +517,7 @@
 				7ABABF921475C29F000EEA7B /* MonthDataIndexer.m in Sources */,
 				7ABABF931475C29F000EEA7B /* RingBuffer.m in Sources */,
 				D142F6141475C84900852C07 /* SectionData.m in Sources */,
+				D14137FC14770DE600019F8A /* DateRangeRequest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -521,6 +528,7 @@
 				D139FBB3144FE003006D0797 /* AstroCalendarTests.m in Sources */,
 				D1EE5B421474DD1D00EB3B59 /* SectionData.m in Sources */,
 				D142F6151475C84900852C07 /* SectionData.m in Sources */,
+				D14137FD14770DE600019F8A /* DateRangeRequest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

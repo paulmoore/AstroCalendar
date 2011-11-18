@@ -32,6 +32,7 @@
 #import "AstroCalendarMoonViewController.h"
 #import "AstroCalendarSunViewController.h"
 #import "MasterDataHandler.h"
+#import "DateRangeRequest.h"
 #import "UINavigationController+UniqueStack.h"
 
 @implementation AstroCalendarSelectDateViewController
@@ -86,8 +87,12 @@
             [self.navController pushViewController:moonController animated:YES];
         }
         // Make the Date request: start date -> end date.
-        MasterDataHandler *dataManager = [MasterDataHandler allocWithZone:nil];
-        [dataManager askApiForDates:self.startDate :[datePicker date]];
+        DateRangeRequest *request = [[DateRangeRequest alloc] initWithStartDate:self.startDate endDate:[datePicker date]];
+        // Don't attempt to load a 'backwards' time interval.
+        if ([request numDays] > 0)
+        {
+            [moonController loadDates:request];
+        }
     }
     else
     {

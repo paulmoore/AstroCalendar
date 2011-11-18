@@ -32,6 +32,8 @@
 
 #import "MasterDataHandlerDelegate.h"
 
+@class DateRangeRequest;
+
 /**
  * View Controller for a Moon Calendar.
  * Displays information such as 'start time', 'tithi', and 'paksha' in a table view.
@@ -41,7 +43,9 @@
 /** Parent view controller. */
 @property (nonatomic, weak) UINavigationController *navController;
 
-@property (strong) NSArray *lunarData, *sectionsArray;
+@property (strong) NSArray *lunarData, *sectionsData;
+
+@property (strong) DateRangeRequest *dateRequest;
 
 /**
  * Inits an AstroCalendarMoonViewController with a parent Navigation Controller.
@@ -50,6 +54,8 @@
  * @return An instance of AstroCalendarMoonViewController.
  */
 - (id)initWithNavController:(UINavigationController *)controller;
+
+- (void)loadDates:(DateRangeRequest *)request;
 
 /**
  * Selector for when the 'Sun Calendar' button is tapped from the Toolbar.

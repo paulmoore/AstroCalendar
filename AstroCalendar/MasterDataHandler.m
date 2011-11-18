@@ -73,7 +73,7 @@ static MasterDataHandler *sharedSingleton = nil;
     return sharedSingleton;
 }
 
--(void)askApiForDates:(NSDate*)startDate endDate:(NSDate*)endDate
+-(void)askApiForDates:(NSDate*)startDate endDate:(NSDate*)endDate delegate:(id<MasterDataHandlerDelegate>)delegate
 {
     NSLog(@"Heard message askApiForDates");
 	//NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat: @"%@
@@ -87,8 +87,6 @@ static MasterDataHandler *sharedSingleton = nil;
     
     [NSURLRequest setAllowsAnyHTTPSCertificate:YES forHost:@"cisxserver1.okanagan.bc.ca"];
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
-    
-    
     
     //Build the async request.
     AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) 
@@ -107,8 +105,14 @@ static MasterDataHandler *sharedSingleton = nil;
             NSLog(@"Fortnight: %@", container.fortnight);
             NSLog(@"LunarMonth: %@\n", container.lunarMonth);
             
+            container.tithi = @"LUNAR DAY";
+            container.lunarMonth = @"LUNAR MONTH";
+            container.fortnight = @"FORTNIGHT";
+            
             [self addDayToCache:container];
 		}
+        
+        [delegate didRecieveData:decoded];
         
         //return decoded;
     } 
