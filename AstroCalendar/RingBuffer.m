@@ -58,7 +58,7 @@
     
     if (self)
     {
-    	[self loadFromPFile: pFile];
+    	[self loadFromPList: pFile];
     }
     return self;
 }
@@ -123,7 +123,7 @@
 
 ///////////////////////////////////////////////////////////
 //Serializes the contents of the ring buffer to a plist in the app's root directory, with the given filename.
--(void) writeToPFile:(NSString *)filename
+-(void) writeToPList:(NSString *)filename
 {
     NSString *rootPath, *plistPath;
     NSString *errorDesc = nil;
@@ -156,7 +156,7 @@
 
 ///////////////////////////////////////////////////////////
 //Deserializes the contents of the ring buffer from a plist in the app's root directory.
--(void) loadFromPFile:(NSString *)filename
+-(void) loadFromPList:(NSString *)filename
 {
 	NSString *plistPath;
     NSString *rootPath;
