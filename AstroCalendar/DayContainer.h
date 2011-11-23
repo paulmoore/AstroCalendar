@@ -51,5 +51,24 @@
     @property(copy) NSString *fortnight;
     /** The lunar month (nakshatra) of this day. */
     @property(copy) NSString *lunarMonth;
-
+    
+    
+    /**
+     * Encodes the properties of this instance as a NSDictionary,
+     * where the keys are the string names of the properties.
+     *
+     * @return An NSDictionary containing all the properties of
+     *		   this instance of DayContainer.
+     */
+    -(NSDictionary *)encodeAsDictionary;
+    
+    /**
+     * Populates this instance's properties with values from an
+     * NSDictionary. Each property name is a key in the dictionary.
+     *
+     * @param dictionary The NSDictionary containing the key-value
+     *					 representation of the DayContainer instance.
+     */
+    -(void)decodeFromDictionary: (NSDictionary *)dictionary;
+    
 @end
