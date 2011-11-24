@@ -52,7 +52,6 @@
 		D151845A1475C94100AA0A41 /* Settings.plist in Resources */ = {isa = PBXBuildFile; fileRef = D15184591475C94100AA0A41 /* Settings.plist */; };
 		D151845B1475C94100AA0A41 /* Settings.plist in Resources */ = {isa = PBXBuildFile; fileRef = D15184591475C94100AA0A41 /* Settings.plist */; };
 		D1AD7A171464ABE100B45C94 /* UINavigationController+UniqueStack.m in Sources */ = {isa = PBXBuildFile; fileRef = D1AD7A161464ABE100B45C94 /* UINavigationController+UniqueStack.m */; };
-		D1EE5B421474DD1D00EB3B59 /* SectionData.m in Sources */ = {isa = PBXBuildFile; fileRef = D1EE5B401474DD1D00EB3B59 /* SectionData.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -147,7 +146,6 @@
 		D15184591475C94100AA0A41 /* Settings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Settings.plist; sourceTree = "<group>"; };
 		D1AD7A151464ABE100B45C94 /* UINavigationController+UniqueStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+UniqueStack.h"; sourceTree = "<group>"; };
 		D1AD7A161464ABE100B45C94 /* UINavigationController+UniqueStack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+UniqueStack.m"; sourceTree = "<group>"; };
-		D1EE5B401474DD1D00EB3B59 /* SectionData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SectionData.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -526,7 +524,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D139FBB3144FE003006D0797 /* AstroCalendarTests.m in Sources */,
-				D1EE5B421474DD1D00EB3B59 /* SectionData.m in Sources */,
 				D142F6151475C84900852C07 /* SectionData.m in Sources */,
 				D14137FD14770DE600019F8A /* DateRangeRequest.m in Sources */,
 			);
