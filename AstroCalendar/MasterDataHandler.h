@@ -29,8 +29,8 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "AFNetworking.h"
-#import "AFJSONRequestOperation.h"
+#import "../../AFNetworking/AFNetworking/AFNetworking.h"
+#import "../../AFNetworking/AFNetworking/AFJSONRequestOperation.h"
 #import "DayContainer.h"
 #import "RingBuffer.h"
 #import "MonthDataIndexer.h"
@@ -46,9 +46,8 @@ NSMutableDictionary *settingsDictionary;
 
     #pragma mark -
     #pragma mark Properties
-
-    @property(strong) NSMutableDictionary *dataCache;
-    @property(strong) RingBuffer *dataCacheIndexer;
+    
+    //@property(strong) NSMutableDictionary *dataCache;
 
     #pragma mark -
     #pragma mark Class Methods
@@ -63,6 +62,12 @@ NSMutableDictionary *settingsDictionary;
 
     #pragma mark -
     #pragma mark Instance Methods
+
+	+(RingBuffer*) getDataCacheIndexer;
+    +(void) setDataCacheIndexer:(RingBuffer *)dataCacheIndexer;
+    
+    +(NSMutableDictionary*) getDataCache;
+    +(void) setDataCache:(NSMutableDictionary *)dictionary;
 
     /**
      * Queries the data handler for the specified date range.

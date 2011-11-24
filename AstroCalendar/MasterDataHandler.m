@@ -37,10 +37,12 @@
 
 static MasterDataHandler *sharedSingleton = nil;
 
+static RingBuffer *dataCacheIndexer;
+static NSMutableDictionary *dataCache;
+
 @implementation MasterDataHandler
 
-@synthesize dataCacheIndexer;
-@synthesize dataCache;
+//@synthesize dataCache;
 
 + (MasterDataHandler*)sharedManager
 {
@@ -53,24 +55,48 @@ static MasterDataHandler *sharedSingleton = nil;
         //Attempt to load the data cache from device - if it doesn't exist, then we start anew!
         @try 
         {
-    		sharedSingleton.dataCacheIndexer = [[RingBuffer alloc] initFromPList:@"dataCacheIndex.plist"];
-            NSLog(@"Loading cached data index from dataCacheIndex.plist: %i months available, of %i months.", [sharedSingleton.dataCacheIndexer count], [sharedSingleton.dataCacheIndexer capacity]);
+    		[MasterDataHandler setDataCacheIndexer: [[RingBuffer alloc] initFromPList:@"cache_index.plist"]];
+            NSLog(@"Loading cached data index from dataCacheIndex.plist: %i months available, of %i months.", [dataCacheIndexer count], [dataCacheIndexer capacity]);
             
             //Set up in-memory cache.
-            sharedSingleton.dataCache = [[NSMutableDictionary alloc]initWithCapacity:[sharedSingleton.dataCacheIndexer capacity]];
+            //sharedSingleton.dataCache = [[NSMutableDictionary alloc]initWithCapacity:[dataCacheIndexer capacity]];
+            [MasterDataHandler setDataCache: [[NSMutableDictionary alloc]initWithCapacity:[dataCacheIndexer capacity]]];
+            
+            [sharedSingleton loadCache];
 		}
 		@catch (NSException *exception) 
         {
     		//Errored out - probably means that there isn't a data cache in existence.
-            sharedSingleton.dataCacheIndexer = [[RingBuffer alloc] initWithCapacity: 24]; //Store 24 months worth of data.
+            [MasterDataHandler setDataCacheIndexer: [[RingBuffer alloc] initWithCapacity: 24]]; //Store 24 months worth of data.
             NSLog(@"Could not load data cache index, starting fresh!");
             
             //Create new in-memory cache.
-            sharedSingleton.dataCache = [[NSMutableDictionary alloc]initWithCapacity:24];
+            //sharedSingleton.dataCache = [[NSMutableDictionary alloc]initWithCapacity:24];
+            [MasterDataHandler setDataCache: [[NSMutableDictionary alloc]initWithCapacity:24]];
 		}
     }
     
     return sharedSingleton;
+}
+
++(RingBuffer*) getDataCacheIndexer
+{
+	return dataCacheIndexer;
+}
+
++(void) setDataCacheIndexer:(RingBuffer *)ringBuffer
+{
+	dataCacheIndexer = ringBuffer;
+}
+
++(NSMutableDictionary*) getDataCache
+{
+	return dataCache;
+}
+
++(void) setDataCache:(NSMutableDictionary*) dictionary
+{
+	dataCache = dictionary;
 }
 
 -(void)askApiForDates:(NSDate*)startDate endDate:(NSDate*)endDate delegate:(id<MasterDataHandlerDelegate>)delegate
@@ -269,7 +295,7 @@ static MasterDataHandler *sharedSingleton = nil;
 
 -(int)addDayToCache:(DayContainer *)data
 {
-	int addedKey = -1;
+    int addedKey = -1;
 
 	NSDateComponents *dateComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] components:NSDayCalendarUnit fromDate:[data date]];
     
@@ -278,22 +304,31 @@ static MasterDataHandler *sharedSingleton = nil;
     if (monthSet == nil) //Haven't cached this month yet - time to add it!
     {
     	//Create a new month index container.
-        MonthDataIndexer *newIndex = [MonthDataIndexer alloc];
-    	newIndex.date = [data date];
-        newIndex.dayCount = 1;
+        //MonthDataIndexer *newIndex = [MonthDataIndexer alloc];
+    	//newIndex.date = [data date];
+        //newIndex.dayCount = 1;
     
-    	newIndex.index = [dataCacheIndexer add:newIndex];
+    	//newIndex.index = [dataCacheIndexer add:newIndex];
         
-        addedKey = newIndex.index;
+        NSMutableDictionary *newIndex = [[NSMutableDictionary alloc]init];
+        [newIndex setObject:[data date] forKey:@"date"];
+        [newIndex setObject:[[NSNumber numberWithInt:[dataCacheIndexer add:newIndex]] description] forKey:@"index"];
+        
+        addedKey = [[newIndex objectForKey:@"index"] intValue];
         
         NSMutableDictionary *newMonthSet = [[NSMutableDictionary alloc]init];
-        [dataCache setObject:newMonthSet forKey:[[NSNumber numberWithInt:newIndex.index] description]];
+        //[sharedSingleton.dataCache setObject:newMonthSet forKey:[newIndex objectForKey:@"index"]];
+        [dataCache setObject:newMonthSet forKey:[newIndex objectForKey:@"index"]];
+
         
         monthSet = newMonthSet;
     }
     
     //Add the day to the month set.
     [monthSet setObject:data forKey:[[NSNumber numberWithInt:[dateComponents day]] description]];
+    
+    //Update disk cache.
+    [dataCacheIndexer writeToPList:@"cache_index.plist"];
     
     return addedKey;
 }
@@ -305,12 +340,13 @@ static MasterDataHandler *sharedSingleton = nil;
     NSDateComponents *dateComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] components:NSMonthCalendarUnit | NSYearCalendarUnit fromDate:date];
 
 	//Scan ringbuffer for matching month and year.
-    NSArray *cachedMonthIndices = [sharedSingleton.dataCacheIndexer elements];
+    NSArray *cachedMonthIndices = [dataCacheIndexer elements];
     for (int i = 0; i < [dataCacheIndexer count]; i++)
     {
-    	MonthDataIndexer *monthIndexC = (MonthDataIndexer*)[cachedMonthIndices objectAtIndex:i];
+    	//MonthDataIndexer *monthIndexC = (MonthDataIndexer*)[cachedMonthIndices objectAtIndex:i];
+        NSDictionary *monthIndexC = (NSDictionary*)[cachedMonthIndices objectAtIndex:i];
     	
-        NSDateComponents *indexComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] components:NSMonthCalendarUnit | NSYearCalendarUnit fromDate:[monthIndexC date]];
+        NSDateComponents *indexComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] components:NSMonthCalendarUnit | NSYearCalendarUnit fromDate:[monthIndexC objectForKey:@"date"]];
         
         if ([indexComponents year] == [dateComponents year] && [indexComponents month] == [dateComponents month])
         {
@@ -318,8 +354,6 @@ static MasterDataHandler *sharedSingleton = nil;
             break;
         }
     }
-    
-    //[dateComponents release];
     
     if (monthIndex == -1)
     {
@@ -338,12 +372,13 @@ static MasterDataHandler *sharedSingleton = nil;
     NSDateComponents *dateComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] components:NSMonthCalendarUnit | NSYearCalendarUnit fromDate:date];
 
 	//Scan ringbuffer for matching month and year.
-    NSArray *cachedMonthIndices = [sharedSingleton.dataCacheIndexer elements];
+    NSArray *cachedMonthIndices = [dataCacheIndexer elements];
     for (int i = 0; i < [dataCacheIndexer count]; i++)
     {
-    	MonthDataIndexer *monthIndexC = (MonthDataIndexer*)[cachedMonthIndices objectAtIndex:i];
+    	//MonthDataIndexer *monthIndexC = (MonthDataIndexer*)[cachedMonthIndices objectAtIndex:i];
+        NSDictionary *monthIndexC = (NSDictionary*)[cachedMonthIndices objectAtIndex:i];
     	
-        NSDateComponents *indexComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] components:NSMonthCalendarUnit | NSYearCalendarUnit fromDate:[monthIndexC date]];
+        NSDateComponents *indexComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] components:NSMonthCalendarUnit | NSYearCalendarUnit fromDate:[monthIndexC objectForKey:@"date"]];
         
         if ([indexComponents year] == [dateComponents year] && [indexComponents month] == [dateComponents month])
         {
@@ -398,8 +433,25 @@ static MasterDataHandler *sharedSingleton = nil;
     plistPath = [rootPath stringByAppendingFormat:@"dataCache_%i.plist", monthIndex]; 
     
     NSDictionary *monthSet = [self retrieveMonthSetFromCache:date];
+    NSMutableDictionary *encodedMonthSet = [[NSMutableDictionary alloc] init];
     
-    NSData *plistData = [NSPropertyListSerialization dataFromPropertyList:monthSet format:NSPropertyListXMLFormat_v1_0 errorDescription:&errorDesc];
+    NSArray *keys = [monthSet allKeys];
+    
+    //Can't directly serialize the DayContainer object, so we iterate over all the entires
+    //in our monthSet, encode them as dictionaries using a helper method in DayContainer,
+    //stick this in a new dictionary (so as not to destroy the one we're using as an
+    //in-memory cache) and write that out.
+    for (int i = 0; i < [keys count]; i++)
+    {
+        if ([[monthSet objectForKey:[keys objectAtIndex:i]] isKindOfClass:[DayContainer class]])
+        {
+        	DayContainer *container = [monthSet objectForKey:[keys objectAtIndex:i]];
+    		NSDictionary *encodedDay = [container encodeAsDictionary];
+    		[encodedMonthSet setObject:encodedDay forKey:[keys objectAtIndex: i]];
+        }
+    }
+    
+    NSData *plistData = [NSPropertyListSerialization dataFromPropertyList:encodedMonthSet format:NSPropertyListXMLFormat_v1_0 errorDescription:&errorDesc];
     
     if(plistData) 
     {
@@ -409,7 +461,6 @@ static MasterDataHandler *sharedSingleton = nil;
     {
     	NSLog(@"Error writing cache for month at index %i: %@", monthIndex, errorDesc);
     }
-
 }
 
 -(void) loadCache
@@ -418,6 +469,12 @@ static MasterDataHandler *sharedSingleton = nil;
     NSString *rootPath;
     NSString *errorDesc = nil;
     NSPropertyListFormat format;
+
+	//Clear out old data.
+    [self clearCache];
+	//Load index table first.
+    [dataCacheIndexer loadFromPList:@"cache_index.plist"];
+    
 
 	rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     
@@ -439,7 +496,23 @@ static MasterDataHandler *sharedSingleton = nil;
     	if (!tempData) 
     		NSLog(@"Unable to load cache data for month index %i: %@, format: %d",i, errorDesc, format);
         else
-        	[dataCache setObject:tempData forKey:[[NSNumber numberWithInt:i] description]];
+        {
+        	//Create a new dictionary, decode all the items in tempData using the DayContainer helper method,
+            //store it in the new dictionary and set it as our in-memory cache.
+            
+            NSArray *keys = [tempData allKeys];
+            NSMutableDictionary *decodedMonthSet = [[NSMutableDictionary alloc]init];
+            
+            for (int j = 0; j < [keys count]; j++)
+            {
+            	DayContainer *newDay = [[DayContainer alloc]init];
+                [newDay decodeFromDictionary:[tempData objectForKey:[keys objectAtIndex:j]]];
+            
+            	[decodedMonthSet setObject:newDay forKey:[keys objectAtIndex:j]];
+            }
+        
+        	[dataCache setObject:decodedMonthSet forKey:[[NSNumber numberWithInt:i] description]];
+        }
     }
 }
 @end
