@@ -45,7 +45,7 @@ static __strong MasterDataHandler *sharedSingleton = nil;
 
 @implementation MasterDataHandler
 
-@synthesize dataCache, dataCacheIndexer, locationController;
+@synthesize settingsDictionary, dataCache, dataCacheIndexer, locationController;
 
 + (MasterDataHandler *)sharedManager
 {
@@ -290,7 +290,7 @@ static __strong MasterDataHandler *sharedSingleton = nil;
     
     plistPath = [rootPath stringByAppendingFormat:@"Settings.plist"]; 
     
-    NSData *plistData = [NSPropertyListSerialization dataFromPropertyList:settingsDictionary format:NSPropertyListXMLFormat_v1_0 errorDescription:&errorDesc];
+    NSData *plistData = [NSPropertyListSerialization dataFromPropertyList:sharedSingleton.settingsDictionary format:NSPropertyListXMLFormat_v1_0 errorDescription:&errorDesc];
     
     if(plistData) 
     {
@@ -324,15 +324,15 @@ static __strong MasterDataHandler *sharedSingleton = nil;
     	NSLog(@"Error reading Settings plist: %@, format: %d", errorDesc, format);
         
     //Load settings.
-    settingsDictionary = [[NSMutableDictionary alloc]initWithDictionary:tempData];
+    sharedSingleton.settingsDictionary = [[NSMutableDictionary alloc]initWithDictionary:tempData];
     
-    NSLog(@"Settings: RemoteAPIEndpoint: %@", [settingsDictionary objectForKey:@"APIEndpoint"]);
-    NSLog(@"Settings: SnapshotSunviewDate: %@", [[settingsDictionary objectForKey:@"Snapshot"] objectForKey:@"SunviewDate"]);
+    NSLog(@"Settings: RemoteAPIEndpoint: %@", [sharedSingleton.settingsDictionary objectForKey:@"APIEndpoint"]);
+    NSLog(@"Settings: SnapshotSunviewDate: %@", [[sharedSingleton.settingsDictionary objectForKey:@"Snapshot"] objectForKey:@"SunviewDate"]);
     
     //Log location data.
-    NSLog(@"Settings: Latitude: %@", [[settingsDictionary objectForKey:@"Location"] objectForKey:@"Latitude"]);
-    NSLog(@"Settings: Longitude: %@", [[settingsDictionary objectForKey:@"Location"] objectForKey:@"Longitude"]);
-    NSLog(@"Settings: Altitude: %@", [[settingsDictionary objectForKey:@"Location"] objectForKey:@"Altitude"]);
+    NSLog(@"Settings: Latitude: %@", [[sharedSingleton.settingsDictionary objectForKey:@"Location"] objectForKey:@"Latitude"]);
+    NSLog(@"Settings: Longitude: %@", [[sharedSingleton.settingsDictionary objectForKey:@"Location"] objectForKey:@"Longitude"]);
+    NSLog(@"Settings: Altitude: %@", [[sharedSingleton.settingsDictionary objectForKey:@"Location"] objectForKey:@"Altitude"]);
 }
 
 - (int)addDayToCache:(DayContainer *)data
@@ -566,7 +566,7 @@ static __strong MasterDataHandler *sharedSingleton = nil;
     //longitude = [location coordinate].longitude;
     //altitude = [location altitude];
     
-    NSMutableDictionary *locationDictionary = [settingsDictionary objectForKey:@"Location"];
+    NSMutableDictionary *locationDictionary = [sharedSingleton.settingsDictionary objectForKey:@"Location"];
     
     [locationDictionary setValue:[NSNumber numberWithDouble:[location coordinate].latitude] forKey:@"Latitude"];
     [locationDictionary setValue:[NSNumber numberWithDouble:[location coordinate].longitude] forKey:@"Longitude"];

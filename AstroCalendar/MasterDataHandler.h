@@ -36,8 +36,6 @@
 #import "MasterDataHandlerDelegate.h"
 #import "CoreLocationControllerDelegate.h"
 
-NSMutableDictionary *settingsDictionary;
-
 @interface MasterDataHandler : NSObject <CoreLocationControllerDelegate>
 
 #pragma mark -
@@ -48,6 +46,8 @@ NSMutableDictionary *settingsDictionary;
 @property(strong) RingBuffer *dataCacheIndexer;
 
 @property(strong) CoreLocationController *locationController;
+
+@property(strong) NSMutableDictionary *settingsDictionary;
 
 #pragma mark -
 #pragma mark Class Methods
