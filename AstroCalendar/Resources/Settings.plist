@@ -9,5 +9,14 @@
 		<key>SunviewDate</key>
 		<date>2011-11-04T21:46:45Z</date>
 	</dict>
+	<key>Location</key>
+	<dict>
+		<key>Latitude</key>
+		<string>0</string>
+		<key>Longitude</key>
+		<string>0</string>
+		<key>Altitude</key>
+		<string>0</string>
+	</dict>
 </dict>
 </plist>

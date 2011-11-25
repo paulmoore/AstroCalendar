@@ -94,12 +94,12 @@ NSMutableDictionary *settingsDictionary;
     /**
      * Saves applications settings to a Settings.plist file.
      */
-    -(void)saveSettings;
+    +(void)saveSettings;
 
     /** 
      * Loads application settings from a Settings.plist file.
      */
-    -(void)loadSettings;
+	+(void)loadSettings;
     
     /**
      * Adds a given day dataset to the cache. If the specified

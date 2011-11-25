@@ -41,8 +41,6 @@ static RingBuffer *dataCacheIndexer;
 static NSMutableDictionary *dataCache;
 static CoreLocationController *locationController;
 
-static float longitude, latitude, altitude;
-
 @implementation MasterDataHandler
 
 //@synthesize dataCache;
@@ -61,7 +59,7 @@ static float longitude, latitude, altitude;
 		locationController.delegate = self;
 		[locationController.locationManager startUpdatingLocation];
         
-        [sharedSingleton loadSettings];
+        [MasterDataHandler loadSettings];
         
         //Attempt to load the data cache from device - if it doesn't exist, then we start anew!
         @try 
@@ -117,8 +115,11 @@ static float longitude, latitude, altitude;
 	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"dd-MM-yyyy"];
 	
+    //Grab location info.
+    NSDictionary *locationSettings = [settingsDictionary objectForKey:@"Location"];
+    
 	//Builds up our URL request string.
-	NSString *urlString = [NSString stringWithFormat:@"%@?requestType=all&startDate=%@&endDate=%@&latitude=%f&longitude=%f&GMTOffset=-8", [settingsDictionary valueForKey:@"APIEndpoint"], [dateFormatter stringFromDate:startDate], [dateFormatter stringFromDate:endDate], latitude, longitude];
+	NSString *urlString = [NSString stringWithFormat:@"%@?requestType=all&startDate=%@&endDate=%@&latitude=%@&longitude=%@altitude=%@&&GMTOffset=-8", [settingsDictionary valueForKey:@"APIEndpoint"], [dateFormatter stringFromDate:startDate], [dateFormatter stringFromDate:endDate], [locationSettings valueForKey:@"Latitude"], [locationSettings valueForKey:@"Longitude"], [locationSettings valueForKey:@"Altitude"]];
     
     NSLog(urlString);
     
@@ -239,7 +240,7 @@ static float longitude, latitude, altitude;
 	[[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
 }
 
--(void) saveSettings
++(void) saveSettings
 {
 	NSString *plistPath;
     NSString *rootPath;
@@ -261,7 +262,7 @@ static float longitude, latitude, altitude;
     }
 }
 
--(void) loadSettings
++(void) loadSettings
 {
 	NSString *plistPath;
     NSString *rootPath;
@@ -287,6 +288,11 @@ static float longitude, latitude, altitude;
     
     NSLog(@"Settings: RemoteAPIEndpoint: %@", [settingsDictionary objectForKey:@"APIEndpoint"]);
     NSLog(@"Settings: SnapshotSunviewDate: %@", [[settingsDictionary objectForKey:@"Snapshot"] objectForKey:@"SunviewDate"]);
+    
+    //Log location data.
+    NSLog(@"Settings: Latitude: %@", [[settingsDictionary objectForKey:@"Location"] objectForKey:@"Latitude"]);
+    NSLog(@"Settings: Longitude: %@", [[settingsDictionary objectForKey:@"Location"] objectForKey:@"Longitude"]);
+    NSLog(@"Settings: Altitude: %@", [[settingsDictionary objectForKey:@"Location"] objectForKey:@"Altitude"]);
 }
 
 -(int)addDayToCache:(DayContainer *)data
@@ -516,15 +522,26 @@ static float longitude, latitude, altitude;
 
 + (void)locationUpdate:(CLLocation *)location
 {
-    latitude = [location coordinate].latitude;
-    longitude = [location coordinate].longitude;
-    altitude = [location altitude];
+    //latitude = [location coordinate].latitude;
+    //longitude = [location coordinate].longitude;
+    //altitude = [location altitude];
     
-    NSLog([NSString stringWithFormat: @"Location update [Latitude: %f, Longitude: %f, Altitude: %f]", latitude, longitude, altitude]);
+    NSMutableDictionary *locationDictionary = [settingsDictionary objectForKey:@"Location"];
+    
+    [locationDictionary setValue:[NSNumber numberWithDouble:[location coordinate].latitude] forKey:@"Latitude"];
+    [locationDictionary setValue:[NSNumber numberWithDouble:[location coordinate].longitude] forKey:@"Longitude"];
+    [locationDictionary setValue:[NSNumber numberWithDouble:[location altitude]] forKey:@"Altitude"];
+    
+    [MasterDataHandler saveSettings];
+    
+    NSLog(@"Location update [Latitude: %@, Longitude: %@, Altitude: %@]", 
+    	[locationDictionary objectForKey:@"Latitude"],
+        [locationDictionary objectForKey:@"Longitude"],
+        [locationDictionary objectForKey:@"Altitude"]);
 }
  
 + (void)locationError:(NSError *)error 
 {
-	NSLog([NSString stringWithFormat: @"Location error: %@", [error description]]);
+	NSLog(@"Location error: %@", [error description]);
 }
 @end
