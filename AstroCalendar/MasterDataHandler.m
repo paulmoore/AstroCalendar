@@ -51,7 +51,7 @@ static __strong MasterDataHandler *sharedSingleton = nil;
 {
     if (sharedSingleton == nil) 
     {
-        sharedSingleton = [[super alloc] init];
+        sharedSingleton = [[MasterDataHandler alloc] init];
         
         //Begin getting location info!
         //Do this first to try and give the device time to get back

@@ -149,7 +149,7 @@
 	//Helps us out for conversion to NSDates.
     NSCalendar *helperCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
 
-	MasterDataHandler *dataHandler = [[MasterDataHandler alloc]init];
+	MasterDataHandler *dataHandler = [MasterDataHandler sharedManager];
     [dataHandler clearCache];
     
     //Create dummy day.
@@ -177,16 +177,16 @@
     [dataHandler addDayToCache:dummyDay];
     
     //Now, let's see if it's in the ring buffer.
-    NSArray *indexBufferElement = [[MasterDataHandler getDataCacheIndexer] elements];
+    NSArray *indexBufferElement = [dataHandler.dataCacheIndexer elements];
     
-    STAssertTrue([[MasterDataHandler getDataCacheIndexer] count] == 1 , [NSString stringWithFormat: @"Actual value: %i", [[MasterDataHandler getDataCacheIndexer] count]]);
+    STAssertTrue([dataHandler.dataCacheIndexer count] == 1 , [NSString stringWithFormat: @"Actual value: %i", [dataHandler.dataCacheIndexer count]]);
     
     NSDate *indexedDate = [[indexBufferElement objectAtIndex:0] objectForKey:@"date"]; //((DayContainer*)[indexBufferElement objectAtIndex:0]).date;
     
     STAssertTrue([indexedDate isEqual: dummyDay.date], @"Failed to store an index to the month containing the dummy day in the cache index buffer. Expected: %@, Actual: %@", dummyDay.date, indexedDate);
     
     //Now check to see if it's been stored in the appropriate dictionary.
-    NSDictionary *monthSet = (NSDictionary*)[[MasterDataHandler getDataCache] objectForKey:[[NSNumber numberWithInt:0] description]];
+    NSDictionary *monthSet = (NSDictionary*)[[dataHandler dataCache] objectForKey:[[NSNumber numberWithInt:0] description]];
     
     indexedDate = ((DayContainer*)[monthSet objectForKey:[[NSNumber numberWithInt:14] description]]).date;
     
@@ -196,7 +196,7 @@
     //Clear out previous test. Need to start fresh to make sure our assumptions about indices hold.
     [dataHandler clearCache];
     
-    STAssertTrue([[MasterDataHandler getDataCacheIndexer] count] == 0, @"The cache should be empty, but it is not");
+    STAssertTrue([[dataHandler dataCacheIndexer] count] == 0, @"The cache should be empty, but it is not");
     
     //Add a day for every month (24 of 'em)!
     [dummyBuildDate setDay:2];
@@ -208,20 +208,20 @@
         tDate.date = [helperCalendar dateFromComponents:dummyBuildDate];
         int newIndex = [dataHandler addDayToCache:tDate];
         
-        STAssertTrue([[MasterDataHandler getDataCacheIndexer] count] == i, [NSString stringWithFormat: @"Indexer size was wrong. Expected: %i, Actual: %i", i, [[MasterDataHandler getDataCacheIndexer] count]]);
+        STAssertTrue([[dataHandler dataCacheIndexer] count] == i, [NSString stringWithFormat: @"Indexer size was wrong. Expected: %i, Actual: %i", i, [[dataHandler dataCacheIndexer] count]]);
         
         STAssertTrue(newIndex == (i - 1), [NSString stringWithFormat: @"Index of new month is wrong. Expected: %i, Actual: %i", (i - 1), newIndex]);
         
-        STAssertTrue([[MasterDataHandler getDataCache] count] == i, [NSString stringWithFormat:@"In-memory dictionary does not have the corrent number of months. Expected: %i, Actual: %i", i, [[MasterDataHandler getDataCache] count]]);
+        STAssertTrue([[dataHandler dataCache] count] == i, [NSString stringWithFormat:@"In-memory dictionary does not have the corrent number of months. Expected: %i, Actual: %i", i, [[dataHandler dataCache] count]]);
     }
     
     //Now, check to make sure they're in there.
-    STAssertTrue([[MasterDataHandler getDataCacheIndexer] count] == 24, @"Cache indexer element count wrong. Expected: 24, Actual: %i", [[MasterDataHandler getDataCacheIndexer] count]);
+    STAssertTrue([[dataHandler dataCacheIndexer] count] == 24, @"Cache indexer element count wrong. Expected: 24, Actual: %i", [[dataHandler dataCacheIndexer] count]);
     
     //Ok, let's check the date on every element.
     for (int i = 1; i <= 24; i++)
     {
-    	NSDictionary *cachedMonthSet = (NSDictionary*)[[MasterDataHandler getDataCache] objectForKey:[[NSNumber numberWithInt:(i-1)] description]];
+    	NSDictionary *cachedMonthSet = (NSDictionary*)[[dataHandler dataCache] objectForKey:[[NSNumber numberWithInt:(i-1)] description]];
         
         STAssertFalse(cachedMonthSet == nil, [NSString stringWithFormat: @"The month set for month %i could not be retrieved.", i - 1]);
         
@@ -241,7 +241,7 @@
 
 - (void)testCacheRetrieveDayFromCache
 {
-	MasterDataHandler *dataHandler = [[MasterDataHandler alloc]init];
+	MasterDataHandler *dataHandler = [MasterDataHandler sharedManager];
     
     //Helps us out for conversion to NSDates.
     NSCalendar *helperCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
@@ -290,7 +290,7 @@
 
 - (void)testCacheWriteLoad
 {
-	MasterDataHandler *dataHandler = [[MasterDataHandler alloc]init];
+	MasterDataHandler *dataHandler = [MasterDataHandler sharedManager];
     [dataHandler clearCache];
     
     //Helps us out for conversion to NSDates.
