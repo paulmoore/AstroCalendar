@@ -110,7 +110,6 @@ static CoreLocationController *locationController;
 
 -(void)askApiForDates:(NSDate*)startDate endDate:(NSDate*)endDate delegate:(id<MasterDataHandlerDelegate>)delegate
 {
-    NSLog(@"Heard message askApiForDates");
 	//NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat: @"%@
 	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"dd-MM-yyyy"];
@@ -128,7 +127,7 @@ static CoreLocationController *locationController;
     
     NSLog(urlString);
     
-    [NSURLRequest setAllowsAnyHTTPSCertificate:YES forHost:@"cisxserver1.okanagan.bc.ca"];
+	[NSURLRequest setAllowsAnyHTTPSCertificate:YES forHost:@"cisxserver1.okanagan.bc.ca"];
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
     
     //Build the async request.
@@ -243,6 +242,38 @@ static CoreLocationController *locationController;
 	//localNotification.applicationIconBadgeNumber = -1;
 
 	[[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
+}
+
+-(NSArray*)getAlertsOnDate: (NSDate*) date
+{
+	NSMutableArray *alerts = [[NSMutableArray alloc]init];
+    
+    NSDateComponents *dateComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] components:NSMonthCalendarUnit | NSYearCalendarUnit | NSDayCalendarUnit fromDate:date];
+    
+    //Get ALL exisiting alerts.
+    NSArray *existingAlerts = [[UIApplication sharedApplication]scheduledLocalNotifications];
+    
+    //Scan through, match day/month/year, if pass add to returned array.
+    for (int i = 0; i < [existingAlerts count]; i++)
+    {
+    	UILocalNotification *notification = (UILocalNotification*)[existingAlerts objectAtIndex:i];
+        
+        NSDateComponents *alertComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] components:NSMonthCalendarUnit | NSYearCalendarUnit | NSDayCalendarUnit fromDate:notification.fireDate];
+        
+		if ([alertComponents year] == [dateComponents year] && 
+            [alertComponents month] == [dateComponents month] &&
+            [alertComponents day] == [dateComponents day])
+        {
+            [alerts addObject:notification];
+        }
+    }
+    
+    return alerts;
+}
+
+-(void) unregisterAlert: (UILocalNotification*) alert
+{
+	[[UIApplication sharedApplication] cancelLocalNotification:alert];
 }
 
 +(void) saveSettings

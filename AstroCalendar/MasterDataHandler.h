@@ -169,4 +169,22 @@ NSMutableDictionary *settingsDictionary;
      */
     +(void)locationError:(NSError *)error;
     
+    /**
+     * Lists all the alerts that this application has registered
+     * on a particular date (unique Day, Month, Year).
+     *
+     * @param date The day/month/year on which to get the list of
+     *			   registered alerts.
+     * @return An array of alerts scheduled on the given date.
+     *		   This array might be empty if no alerts are scheduled.
+     */
+    -(NSArray*) getAlertsOnDate:(NSDate*) date;
+    
+    /**
+     * Unregisters the given alert.
+     *
+     * @param alert The local notification to unregister.
+     */
+    -(void) deregisterAlert: (UILocalNotification*) alert;
+    
 @end
