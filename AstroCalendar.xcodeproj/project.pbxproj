@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7AA736E8147EF6E900527AB0 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AA736E7147EF6E800527AB0 /* CoreLocation.framework */; };
+		7AA736EB147EFC5F00527AB0 /* CoreLocationControllerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA736EA147EFC5F00527AB0 /* CoreLocationControllerDelegate.m */; };
 		7ABABF901475C29F000EEA7B /* DayContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ABABF881475C29F000EEA7B /* DayContainer.m */; };
 		7ABABF911475C29F000EEA7B /* MasterDataHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ABABF8A1475C29F000EEA7B /* MasterDataHandler.m */; };
 		7ABABF931475C29F000EEA7B /* RingBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ABABF8F1475C29F000EEA7B /* RingBuffer.m */; };
@@ -87,6 +88,8 @@
 
 /* Begin PBXFileReference section */
 		7AA736E7147EF6E800527AB0 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		7AA736E9147EFC5F00527AB0 /* CoreLocationControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreLocationControllerDelegate.h; sourceTree = "<group>"; };
+		7AA736EA147EFC5F00527AB0 /* CoreLocationControllerDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreLocationControllerDelegate.m; sourceTree = "<group>"; };
 		7ABABF871475C29F000EEA7B /* DayContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DayContainer.h; sourceTree = "<group>"; };
 		7ABABF881475C29F000EEA7B /* DayContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DayContainer.m; sourceTree = "<group>"; };
 		7ABABF891475C29F000EEA7B /* MasterDataHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterDataHandler.h; sourceTree = "<group>"; };
@@ -224,6 +227,8 @@
 				7ABABF8F1475C29F000EEA7B /* RingBuffer.m */,
 				D14137FA14770DE600019F8A /* DateRangeRequest.h */,
 				D14137FB14770DE600019F8A /* DateRangeRequest.m */,
+				7AA736E9147EFC5F00527AB0 /* CoreLocationControllerDelegate.h */,
+				7AA736EA147EFC5F00527AB0 /* CoreLocationControllerDelegate.m */,
 			);
 			name = "Model Classes";
 			sourceTree = "<group>";
@@ -514,6 +519,7 @@
 				7ABABF931475C29F000EEA7B /* RingBuffer.m in Sources */,
 				D142F6141475C84900852C07 /* SectionData.m in Sources */,
 				D14137FC14770DE600019F8A /* DateRangeRequest.m in Sources */,
+				7AA736EB147EFC5F00527AB0 /* CoreLocationControllerDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

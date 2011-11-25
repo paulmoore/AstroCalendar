@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>APIEndpoint</key>
-	<string>https://cisxserver1.okanagan.bc.ca/~astrocal/api.php</string>
+	<string>https://cisxserver1.okanagan.bc.ca/~astrocal/apiv2.php</string>
 	<key>Snapshot</key>
 	<dict>
 		<key>SunviewDate</key>
