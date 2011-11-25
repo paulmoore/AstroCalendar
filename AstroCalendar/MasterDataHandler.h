@@ -43,7 +43,11 @@ NSMutableDictionary *settingsDictionary;
 #pragma mark -
 #pragma mark Properties
     
-//@property(strong) NSMutableDictionary *dataCache;
+@property(strong) NSMutableDictionary *dataCache;
+
+@property(strong) RingBuffer *dataCacheIndexer;
+
+@property(strong) CoreLocationController *locationController;
 
 #pragma mark -
 #pragma mark Class Methods
@@ -59,12 +63,14 @@ NSMutableDictionary *settingsDictionary;
 #pragma mark -
 #pragma mark Instance Methods
 
+/*
 + (RingBuffer *)getDataCacheIndexer;
 + (void)setDataCacheIndexer:(RingBuffer *)dataCacheIndexer;
     
 + (NSMutableDictionary *)getDataCache;
 + (void)setDataCache:(NSMutableDictionary *)dictionary;
-
+*/
+ 
 /**
  * Queries the data handler for the specified date range.
  *
@@ -147,7 +153,7 @@ NSMutableDictionary *settingsDictionary;
 * Writes the month set of data for the given index to a
 * plist on the device.
 */
-- (void)writeCache: (NSDate*)date;
+- (void)writeCache:(NSDate*)date;
 
 /**
 * Reads in the entire cache from plists on disk, and puts

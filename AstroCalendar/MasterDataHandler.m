@@ -37,15 +37,15 @@
 
 @end
 
-static MasterDataHandler *sharedSingleton = nil;
+static __strong MasterDataHandler *sharedSingleton = nil;
 
-static RingBuffer *dataCacheIndexer;
-static NSMutableDictionary *dataCache;
-static CoreLocationController *locationController;
+//static RingBuffer *dataCacheIndexer;
+//static NSMutableDictionary *dataCache;
+//static CoreLocationController *locationController;
 
 @implementation MasterDataHandler
 
-//@synthesize dataCache;
+@synthesize dataCache, dataCacheIndexer, locationController;
 
 + (MasterDataHandler *)sharedManager
 {
@@ -57,39 +57,40 @@ static CoreLocationController *locationController;
         //Do this first to try and give the device time to get back
         //to use before firing off a data request. If it doesn't get
         //back in time, we'll use the cached values.
-        locationController = [[CoreLocationController alloc] init];
-		locationController.delegate = self;
-		[locationController.locationManager startUpdatingLocation];
+        sharedSingleton.locationController = [[CoreLocationController alloc] init];
+		sharedSingleton.locationController.delegate = self;
+		[sharedSingleton.locationController.locationManager startUpdatingLocation];
         
         [MasterDataHandler loadSettings];
         
         //Attempt to load the data cache from device - if it doesn't exist, then we start anew!
         @try 
         {
-    		[MasterDataHandler setDataCacheIndexer: [[RingBuffer alloc] initFromPList:@"cache_index.plist"]];
-            NSLog(@"Loading cached data index from dataCacheIndex.plist: %i months available, of %i months.", [dataCacheIndexer count], [dataCacheIndexer capacity]);
+    		sharedSingleton.dataCacheIndexer = [[RingBuffer alloc] initFromPList:@"cache_index.plist"];
+            NSLog(@"Loading cached data index from dataCacheIndex.plist: %i months available, of %i months.", [sharedSingleton.dataCacheIndexer count], [sharedSingleton.dataCacheIndexer capacity]);
             
             //Set up in-memory cache.
             //sharedSingleton.dataCache = [[NSMutableDictionary alloc]initWithCapacity:[dataCacheIndexer capacity]];
-            [MasterDataHandler setDataCache: [[NSMutableDictionary alloc]initWithCapacity:[dataCacheIndexer capacity]]];
+            sharedSingleton.dataCache = [[NSMutableDictionary alloc] initWithCapacity:[sharedSingleton.dataCacheIndexer capacity]];
             
             [sharedSingleton loadCache];
 		}
 		@catch (NSException *exception) 
         {
     		//Errored out - probably means that there isn't a data cache in existence.
-            [MasterDataHandler setDataCacheIndexer: [[RingBuffer alloc] initWithCapacity: 24]]; //Store 24 months worth of data.
+            sharedSingleton.dataCacheIndexer = [[RingBuffer alloc] initWithCapacity: 24]; //Store 24 months worth of data.
             NSLog(@"Could not load data cache index, starting fresh!");
             
             //Create new in-memory cache.
             //sharedSingleton.dataCache = [[NSMutableDictionary alloc]initWithCapacity:24];
-            [MasterDataHandler setDataCache: [[NSMutableDictionary alloc]initWithCapacity:24]];
+            sharedSingleton.dataCache = [[NSMutableDictionary alloc]initWithCapacity:24];
 		}
     }
     
     return sharedSingleton;
 }
 
+/*
 + (RingBuffer *)getDataCacheIndexer
 {
 	return dataCacheIndexer;
@@ -109,6 +110,7 @@ static CoreLocationController *locationController;
 {
 	dataCache = dictionary;
 }
+ */
 
 - (void)askApiForDates:(NSDate *)startDate endDate:(NSDate *)endDate delegate:(id<MasterDataHandlerDelegate>)delegate
 {
@@ -273,7 +275,7 @@ static CoreLocationController *locationController;
     return alerts;
 }
 
-- (void)unregisterAlert:(UILocalNotification *)alert
+- (void)deregisterAlert:(UILocalNotification *)alert
 {
 	[[UIApplication sharedApplication] cancelLocalNotification:alert];
 }
