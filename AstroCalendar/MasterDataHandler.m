@@ -118,8 +118,13 @@ static CoreLocationController *locationController;
     //Grab location info.
     NSDictionary *locationSettings = [settingsDictionary objectForKey:@"Location"];
     
+    //Get local timezone.
+    NSTimeZone* currentTimeZone = [NSTimeZone localTimeZone];
+    NSInteger currentGMTOffset = [currentTimeZone secondsFromGMT] / (60 * 60); //Divide to get hours.
+    
+    
 	//Builds up our URL request string.
-	NSString *urlString = [NSString stringWithFormat:@"%@?requestType=all&startDate=%@&endDate=%@&latitude=%@&longitude=%@altitude=%@&&GMTOffset=-8", [settingsDictionary valueForKey:@"APIEndpoint"], [dateFormatter stringFromDate:startDate], [dateFormatter stringFromDate:endDate], [locationSettings valueForKey:@"Latitude"], [locationSettings valueForKey:@"Longitude"], [locationSettings valueForKey:@"Altitude"]];
+	NSString *urlString = [NSString stringWithFormat:@"%@?requestType=all&startDate=%@&endDate=%@&latitude=%@&longitude=%@altitude=%@&&GMTOffset=%i", [settingsDictionary valueForKey:@"APIEndpoint"], [dateFormatter stringFromDate:startDate], [dateFormatter stringFromDate:endDate], [locationSettings valueForKey:@"Latitude"], [locationSettings valueForKey:@"Longitude"], [locationSettings valueForKey:@"Altitude"], currentGMTOffset];
     
     NSLog(urlString);
     
