@@ -165,7 +165,7 @@ static __strong MasterDataHandler *sharedSingleton = nil;
             NSLog(@"Moonset: %@", container.moonset);
             NSLog(@"Fortnight: %@", container.fortnight);
             NSLog(@"LunarMonth: %@\n", container.lunarMonth);
-            NSLog(@"Tithi: %@\n", container.tithi);
+            NSLog(@"Tithi: %@\n\n", container.tithi);
             
             [self addDayToCache:container];
 		}
