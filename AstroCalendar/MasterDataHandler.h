@@ -33,12 +33,12 @@
 #import "../../AFNetworking/AFNetworking/AFJSONRequestOperation.h"
 #import "DayContainer.h"
 #import "RingBuffer.h"
-#import "MonthDataIndexer.h"
 #import "MasterDataHandlerDelegate.h"
+#import "CoreLocationControllerDelegate.h"
 
 NSMutableDictionary *settingsDictionary;
 
-@interface MasterDataHandler : NSObject
+@interface MasterDataHandler : NSObject <CoreLocationControllerDelegate>
 {
     @private
     double longitude, latitude;
@@ -158,5 +158,19 @@ NSMutableDictionary *settingsDictionary;
      * them in to the in-memory cache.
      */
     -(void)loadCache;
+    
+    /**
+     * Responds to CoreLocation updates, caching the most recent
+     * latitude, longitude, and altitude for our user. This data
+     * is required to make API calls for date information.
+     */
+    +(void)locationUpdate:(CLLocation *)location;
+    
+    /**
+     * Responds to CoreLocation failed updates. This information
+     * is outputted to NSLog for debugging purposes, but is
+     * otherwise ignored (we keep the cached information around).
+     */
+    +(void)locationError:(NSError *)error;
     
 @end

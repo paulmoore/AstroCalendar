@@ -39,6 +39,7 @@ static MasterDataHandler *sharedSingleton = nil;
 
 static RingBuffer *dataCacheIndexer;
 static NSMutableDictionary *dataCache;
+static CoreLocationController *locationController;
 
 @implementation MasterDataHandler
 
@@ -74,6 +75,11 @@ static NSMutableDictionary *dataCache;
             //sharedSingleton.dataCache = [[NSMutableDictionary alloc]initWithCapacity:24];
             [MasterDataHandler setDataCache: [[NSMutableDictionary alloc]initWithCapacity:24]];
 		}
+        
+        //Begin getting location info!
+        locationController = [[CoreLocationController alloc] init];
+		locationController.delegate = self;
+		[locationController.locationManager startUpdatingLocation];
     }
     
     return sharedSingleton;
@@ -107,7 +113,7 @@ static NSMutableDictionary *dataCache;
     [dateFormatter setDateFormat:@"dd-MM-yyyy"];
 	
 	//Builds up our URL request string.
-	NSString *urlString = [NSString stringWithFormat:@"%@?requestType=all&startDate=%@&endDate=%@&latitude=%d&longitude=%d", [settingsDictionary valueForKey:@"APIEndpoint"], [dateFormatter stringFromDate:startDate], [dateFormatter stringFromDate:endDate], latitude, longitude];
+	NSString *urlString = [NSString stringWithFormat:@"%@?requestType=all&startDate=%@&endDate=%@&latitude=%d&longitude=%d&GMTOffset=-8", [settingsDictionary valueForKey:@"APIEndpoint"], [dateFormatter stringFromDate:startDate], [dateFormatter stringFromDate:endDate], latitude, longitude];
     
     NSLog(urlString);
     
@@ -130,21 +136,6 @@ static NSMutableDictionary *dataCache;
             NSLog(@"Moonset: %@", container.moonset);
             NSLog(@"Fortnight: %@", container.fortnight);
             NSLog(@"LunarMonth: %@\n", container.lunarMonth);
-            
-            container.tithi = @"LUNAR DAY";
-            container.lunarMonth = @"LUNAR MONTH";
-            //container.fortnight = @"FORTNIGHT";
-            
-            //TODO: Remove faked data. This is only done for demonstration
-            //		purposes while we wait for the API endpoint to
-            //		implement calculating this data.
-            NSDateComponents *dateComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] components: NSDayCalendarUnit | NSMonthCalendarUnit fromDate:container.date];
-            
-            if (([dateComponents month] == 11 && [dateComponents day] >= 24) || ([dateComponents month] == 12 &&[dateComponents day] <= 9))
-            	container.fortnight = @"Shukla";
-            else
-            	container.fortnight = @"Krishna";
-            	
             
             [self addDayToCache:container];
 		}
@@ -494,7 +485,9 @@ static NSMutableDictionary *dataCache;
     	NSMutableDictionary *tempData = (NSMutableDictionary*)[NSPropertyListSerialization propertyListFromData:plistXML mutabilityOption:NSPropertyListMutableContainersAndLeaves format:&format errorDescription:&errorDesc];
     
     	if (!tempData) 
+        {
     		NSLog(@"Unable to load cache data for month index %i: %@, format: %d",i, errorDesc, format);
+        }
         else
         {
         	//Create a new dictionary, decode all the items in tempData using the DayContainer helper method,
@@ -514,5 +507,15 @@ static NSMutableDictionary *dataCache;
         	[dataCache setObject:decodedMonthSet forKey:[[NSNumber numberWithInt:i] description]];
         }
     }
+}
+
++ (void)locationUpdate:(CLLocation *)location
+{
+    NSLog([NSString stringWithFormat: @"Location update: %@", [location description]]);
+}
+ 
++ (void)locationError:(NSError *)error 
+{
+	NSLog([NSString stringWithFormat: @"Location error: %@", [error description]]);
 }
 @end
