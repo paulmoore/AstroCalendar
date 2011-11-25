@@ -41,6 +41,8 @@ static RingBuffer *dataCacheIndexer;
 static NSMutableDictionary *dataCache;
 static CoreLocationController *locationController;
 
+static float longitude, latitude, altitude;
+
 @implementation MasterDataHandler
 
 //@synthesize dataCache;
@@ -50,6 +52,14 @@ static CoreLocationController *locationController;
     if (sharedSingleton == nil) 
     {
         sharedSingleton = [[super alloc] init];
+        
+        //Begin getting location info!
+        //Do this first to try and give the device time to get back
+        //to use before firing off a data request. If it doesn't get
+        //back in time, we'll use the cached values.
+        locationController = [[CoreLocationController alloc] init];
+		locationController.delegate = self;
+		[locationController.locationManager startUpdatingLocation];
         
         [sharedSingleton loadSettings];
         
@@ -75,11 +85,6 @@ static CoreLocationController *locationController;
             //sharedSingleton.dataCache = [[NSMutableDictionary alloc]initWithCapacity:24];
             [MasterDataHandler setDataCache: [[NSMutableDictionary alloc]initWithCapacity:24]];
 		}
-        
-        //Begin getting location info!
-        locationController = [[CoreLocationController alloc] init];
-		locationController.delegate = self;
-		[locationController.locationManager startUpdatingLocation];
     }
     
     return sharedSingleton;
@@ -113,7 +118,7 @@ static CoreLocationController *locationController;
     [dateFormatter setDateFormat:@"dd-MM-yyyy"];
 	
 	//Builds up our URL request string.
-	NSString *urlString = [NSString stringWithFormat:@"%@?requestType=all&startDate=%@&endDate=%@&latitude=%d&longitude=%d&GMTOffset=-8", [settingsDictionary valueForKey:@"APIEndpoint"], [dateFormatter stringFromDate:startDate], [dateFormatter stringFromDate:endDate], latitude, longitude];
+	NSString *urlString = [NSString stringWithFormat:@"%@?requestType=all&startDate=%@&endDate=%@&latitude=%f&longitude=%f&GMTOffset=-8", [settingsDictionary valueForKey:@"APIEndpoint"], [dateFormatter stringFromDate:startDate], [dateFormatter stringFromDate:endDate], latitude, longitude];
     
     NSLog(urlString);
     
@@ -511,7 +516,11 @@ static CoreLocationController *locationController;
 
 + (void)locationUpdate:(CLLocation *)location
 {
-    NSLog([NSString stringWithFormat: @"Location update: %@", [location description]]);
+    latitude = [location coordinate].latitude;
+    longitude = [location coordinate].longitude;
+    altitude = [location altitude];
+    
+    NSLog([NSString stringWithFormat: @"Location update [Latitude: %f, Longitude: %f, Altitude: %f]", latitude, longitude, altitude]);
 }
  
 + (void)locationError:(NSError *)error 

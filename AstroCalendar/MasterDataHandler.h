@@ -39,10 +39,6 @@
 NSMutableDictionary *settingsDictionary;
 
 @interface MasterDataHandler : NSObject <CoreLocationControllerDelegate>
-{
-    @private
-    double longitude, latitude;
-}
 
     #pragma mark -
     #pragma mark Properties
