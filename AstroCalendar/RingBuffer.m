@@ -3,7 +3,7 @@
 //  HTTPRequestTest
 //
 //  Created by Stephen Smithbower on 11-11-09.
-//  Copyright (c) 2011 University of British Columbia. All rights reserved.
+//  University of British Columbia.
 //  https://github.com/paulmoore/AstroCalendar
 /*
  Permission is hereby granted, free of charge, to any person
@@ -70,14 +70,14 @@
 
 ///////////////////////////////////////////////////////////
 //Capacity
--(int) capacity
+- (int)capacity
 {
 	return _capacity;
 }
 
 ///////////////////////////////////////////////////////////
 //Count
--(int) count
+- (int)count
 {
 	return _count;
 }
@@ -89,7 +89,7 @@
 
 ///////////////////////////////////////////////////////////
 //Add an element to the ringbuffer.
--(int) add:(id)element
+- (int)add:(id)element
 {
 	int oldIndex = _indexLast;
     
@@ -111,7 +111,7 @@
 
 ///////////////////////////////////////////////////////////
 //Return an array of elements contained in the ringbuffer.
--(NSArray*) elements
+- (NSArray *)elements
 {
 	NSMutableArray *tArray = [[NSMutableArray alloc] initWithCapacity:_count];
     
@@ -123,7 +123,7 @@
 
 ///////////////////////////////////////////////////////////
 //Serializes the contents of the ring buffer to a plist in the app's root directory, with the given filename.
--(void) writeToPList:(NSString *)filename
+- (void)writeToPList:(NSString *)filename
 {
     NSString *rootPath, *plistPath;
     NSString *errorDesc = nil;
@@ -156,7 +156,7 @@
 
 ///////////////////////////////////////////////////////////
 //Deserializes the contents of the ring buffer from a plist in the app's root directory.
--(void) loadFromPList:(NSString *)filename
+- (void)loadFromPList:(NSString *)filename
 {
 	NSString *plistPath;
     NSString *rootPath;
@@ -195,7 +195,7 @@
 
 ///////////////////////////////////////////////////////////
 //Removes all elements from the buffer and resets pointers.
--(void) clear
+- (void)clear
 {
     _elements = nil;
     _indexLast = 0;

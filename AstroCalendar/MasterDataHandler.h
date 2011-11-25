@@ -3,7 +3,7 @@
 //  HTTPRequestTest
 //
 //  Created by Stephen Smithbower on 11-11-01.
-//  Copyright (c) 2011 University of British Columbia. All rights reserved.
+//  University of British Columbia.
 //  https://github.com/paulmoore/AstroCalendar
 /*
  Permission is hereby granted, free of charge, to any person
@@ -40,151 +40,149 @@ NSMutableDictionary *settingsDictionary;
 
 @interface MasterDataHandler : NSObject <CoreLocationControllerDelegate>
 
-    #pragma mark -
-    #pragma mark Properties
+#pragma mark -
+#pragma mark Properties
     
-    //@property(strong) NSMutableDictionary *dataCache;
+//@property(strong) NSMutableDictionary *dataCache;
 
-    #pragma mark -
-    #pragma mark Class Methods
+#pragma mark -
+#pragma mark Class Methods
 
-    /**
-     * Singleton access method.
-     *
-     * @see: https://developer.apple.com/library/ios/#documentation/Cocoa/Conceptual/CocoaFundamentals/CocoaObjects/CocoaObjects.html#//apple_ref/doc/uid/TP40002974-CH4-SW32
-     * @return Returns the instance of this singleton.
-     */
-    +(MasterDataHandler *)sharedManager;
+/**
+ * Singleton access method.
+ *
+ * @see: https://developer.apple.com/library/ios/#documentation/Cocoa/Conceptual/CocoaFundamentals/CocoaObjects/CocoaObjects.html#//apple_ref/doc/uid/TP40002974-CH4-SW32
+ * @return Returns the instance of this singleton.
+ */
++ (MasterDataHandler *)sharedManager;
 
-    #pragma mark -
-    #pragma mark Instance Methods
+#pragma mark -
+#pragma mark Instance Methods
 
-	+(RingBuffer*) getDataCacheIndexer;
-    +(void) setDataCacheIndexer:(RingBuffer *)dataCacheIndexer;
++ (RingBuffer *)getDataCacheIndexer;
++ (void)setDataCacheIndexer:(RingBuffer *)dataCacheIndexer;
     
-    +(NSMutableDictionary*) getDataCache;
-    +(void) setDataCache:(NSMutableDictionary *)dictionary;
++ (NSMutableDictionary *)getDataCache;
++ (void)setDataCache:(NSMutableDictionary *)dictionary;
 
-    /**
-     * Queries the data handler for the specified date range.
-     *
-     * @param startDate The (inclusive) start date to begin polling information.
-     * @param endDate The (inclusive) end date to stop polling information.
-     */
-    -(void)askApiForDates:(NSDate *)startDate endDate:(NSDate *)endDate delegate:(id<MasterDataHandlerDelegate>)delegate;
+/**
+ * Queries the data handler for the specified date range.
+ *
+ * @param startDate The (inclusive) start date to begin polling information.
+ * @param endDate The (inclusive) end date to stop polling information.
+ */
+- (void)askApiForDates:(NSDate *)startDate endDate:(NSDate *)endDate delegate:(id<MasterDataHandlerDelegate>)delegate;
 	
-    /**
-     * Parses a JSON response from the API server to create a new
-     * Day dataset. Returns an array containing all the days in
-     * the JSON response.
-     *
-     * @return Returns an array of DayContainers representing the JSON response.
-     */
-    -(NSArray*)parseJSONDateRange: (id)json;
+/**
+ * Parses a JSON response from the API server to create a new
+ * Day dataset. Returns an array containing all the days in
+ * the JSON response.
+ *
+ * @return Returns an array of DayContainers representing the JSON response.
+ */
+- (NSArray *)parseJSONDateRange:(id)json;
     
-    /**
-     * Registers a customer alert (displaying the message) on the given
-     * date (includes time).
-     *
-     * @param date The date to register the alert to.
-     * @param message The message to register in the alert.
-     */
-    -(void)registerAlertOnDate: (NSDate*) date: (NSString*) message;
+/**
+ * Registers a customer alert (displaying the message) on the given
+ * date (includes time).
+ *
+ * @param date The date to register the alert to.
+ * @param message The message to register in the alert.
+ */
+- (void)registerAlertOnDate:(NSDate *)date withMessage:(NSString *)message;
 
-    /**
-     * Saves applications settings to a Settings.plist file.
-     */
-    +(void)saveSettings;
+/**
+ * Saves applications settings to a Settings.plist file.
+ */
++ (void)saveSettings;
 
-    /** 
-     * Loads application settings from a Settings.plist file.
-     */
-	+(void)loadSettings;
+/** 
+ * Loads application settings from a Settings.plist file.
+ */
++ (void)loadSettings;
     
-    /**
-     * Adds a given day dataset to the cache. If the specified
-     * month isn't already cached, it overrides the oldest cached
-     * month.
-     *
-     * @param data The Day to cache.
-     * @return Returns some unique identifier within the cache?
-     */
-	-(int)addDayToCache: (DayContainer*) data;
+/**
+ * Adds a given day dataset to the cache. If the specified
+ * month isn't already cached, it overrides the oldest cached
+ * month.
+ *
+ * @param data The Day to cache.
+ * @return Returns some unique identifier within the cache?
+*/
+- (int)addDayToCache:(DayContainer *)data;
 
-    /**
-     * Retrieves a dictionary of cached days for a given month if
-     * it exists, otherwise returns nil.
-     *
-     * @param date The month.
-     * @return Returns a dictionary of Days keyed to their dates.
-     */
-    -(NSMutableDictionary*)retrieveMonthSetFromCache: (NSDate*) date;
+/**
+ * Retrieves a dictionary of cached days for a given month if
+ * it exists, otherwise returns nil.
+ *
+ * @param date The month.
+ * @return Returns a dictionary of Days keyed to their dates.
+ */
+- (NSMutableDictionary *)retrieveMonthSetFromCache:(NSDate *)date;
 
-    /**
-     * Returns the cached information for a given date if it exists,
-     * otherwise returns nil.
-     *
-     * @param date The date to retrieve.
-     * @return Returns the DayContainer for the specified date.
-     */
-    -(DayContainer*)retrieveDayFromCache: (NSDate*) date;
+/**
+ * Returns the cached information for a given date if it exists,
+ * otherwise returns nil.
+ *
+ * @param date The date to retrieve.
+ * @return Returns the DayContainer for the specified date.
+ */
+- (DayContainer *)retrieveDayFromCache:(NSDate *)date;
 
-    /**
-     * Retrives the index for the specified month within the cache.
-     *
-     * @param date The month.
-     * @return Returns the index of the specified month within the cache.
-     */
-    -(int)retrieveMonthIndexFromCache:(NSDate*)date;
+/**
+ * Retrives the index for the specified month within the cache.
+ *
+ * @param date The month.
+ * @return Returns the index of the specified month within the cache.
+ */
+- (int)retrieveMonthIndexFromCache:(NSDate *)date;
 
-    /**
-     * Nuke the entire cash - we can leave plists, they'll get
-     * overridden anyway.
-     */
-    -(void)clearCache;
+/**
+ * Nuke the entire cash - we can leave plists, they'll get
+ * overridden anyway.
+ */
+- (void)clearCache;
     
-    /**
-     * Writes the month set of data for the given index to a
-     * plist on the device.
-     */
-    -(void)writeCache: (NSDate*)date;
+/**
+* Writes the month set of data for the given index to a
+* plist on the device.
+*/
+- (void)writeCache: (NSDate*)date;
 
-    /**
-     * Reads in the entire cache from plists on disk, and puts
-     * them in to the in-memory cache.
-     */
-    -(void)loadCache;
+/**
+* Reads in the entire cache from plists on disk, and puts
+* them in to the in-memory cache.
+*/
+- (void)loadCache;
     
-    /**
-     * Responds to CoreLocation updates, caching the most recent
-     * latitude, longitude, and altitude for our user. This data
-     * is required to make API calls for date information.
-     */
-    +(void)locationUpdate:(CLLocation *)location;
+/**
+* Responds to CoreLocation updates, caching the most recent
+* latitude, longitude, and altitude for our user. This data
+* is required to make API calls for date information.
+*/
++ (void)locationUpdate:(CLLocation *)location;
     
-    /**
-     * Responds to CoreLocation failed updates. This information
-     * is outputted to NSLog for debugging purposes, but is
-     * otherwise ignored (we keep the cached information around).
-     */
-    +(void)locationError:(NSError *)error;
+/**
+* Responds to CoreLocation failed updates. This information
+* is outputted to NSLog for debugging purposes, but is
+* otherwise ignored (we keep the cached information around).
+*/
++ (void)locationError:(NSError *)error;
     
-    /**
-     * Lists all the alerts that this application has registered
-     * on a particular date (unique Day, Month, Year).
-     *
-     * @param date The day/month/year on which to get the list of
-     *			   registered alerts.
-     * @return An array of alerts scheduled on the given date.
-     *		   This array might be empty if no alerts are scheduled.
-     */
-    -(NSArray*) getAlertsOnDate:(NSDate*) date;
+/**
+* Lists all the alerts that this application has registered
+* on a particular date (unique Day, Month, Year).
+*
+* @param date The day/month/year on which to get the list of registered alerts.
+* @return An array of alerts scheduled on the given date. This array might be empty if no alerts are scheduled.
+*/
+- (NSArray *)getAlertsOnDate:(NSDate *)date;
     
-    /**
-     * Unregisters the given alert.
-     *
-     * @param alert The local notification to unregister.
-     */
-    -(void) deregisterAlert: (UILocalNotification*) alert;
+/**
+ * Unregisters the given alert.
+ *
+ * @param alert The local notification to unregister.
+ */
+- (void)deregisterAlert:(UILocalNotification *)alert;
     
 @end

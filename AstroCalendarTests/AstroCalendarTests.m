@@ -3,7 +3,7 @@
 //  AstroCalendarTests
 //
 //  Created by Paul Moore on 11-10-19.
-//  Copyright (c) 2011 University of British Columbia. All rights reserved.
+//  University of British Columbia.
 //  https://github.com/paulmoore/AstroCalendar
 /*
  Permission is hereby granted, free of charge, to any person
@@ -51,7 +51,7 @@
 //////////////////////////////////////////////////////////
 // RING BUFFER TESTS									//
 //////////////////////////////////////////////////////////
--(void) testRBinit
+- (void)testRBinit
 {
 	RingBuffer *buffer = [[RingBuffer alloc] initWithCapacity:24];
     
@@ -59,7 +59,7 @@
     STAssertTrue([buffer count] == 0, @"RB count should be 0, as the RB should be empty.");
 }
 
--(void) testRBAdd
+- (void)testRBAdd
 {
 	RingBuffer *buffer = [[RingBuffer alloc] initWithCapacity:24];
     
@@ -87,7 +87,7 @@
     STAssertTrue([(NSString*)[elements objectAtIndex:0] compare: @"24"] == NSOrderedSame, [NSString stringWithFormat: @"Expected: 24, Actual: %@", [elements objectAtIndex:0]]);
 }
 
--(void) testRBElements
+- (void)testRBElements
 {
 	RingBuffer *buffer = [[RingBuffer alloc] initWithCapacity:5];
     
@@ -105,7 +105,7 @@
     }
 }
 
--(void) testRBSaveLoad
+- (void)testRBSaveLoad
 {
 	//Create some dummy data.
     RingBuffer *originalBuffer = [[RingBuffer alloc] initWithCapacity: 15];
@@ -144,7 +144,7 @@
 //////////////////////////////////////////////////////////
 // DAY DATA CACHING TESTS								//
 //////////////////////////////////////////////////////////
--(void) testCacheAddDay
+- (void)testCacheAddDay
 {
 	//Helps us out for conversion to NSDates.
     NSCalendar *helperCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
@@ -239,7 +239,7 @@
     [dataHandler clearCache];
 }
 
--(void) testCacheRetrieveDayFromCache
+- (void)testCacheRetrieveDayFromCache
 {
 	MasterDataHandler *dataHandler = [[MasterDataHandler alloc]init];
     
@@ -288,7 +288,7 @@
 	}
 }
 
--(void) testCacheWriteLoad
+- (void)testCacheWriteLoad
 {
 	MasterDataHandler *dataHandler = [[MasterDataHandler alloc]init];
     [dataHandler clearCache];
@@ -336,7 +336,7 @@
 //////////////////////////////////////////////////////////
 // DAYCONTAINER TESTS									//
 //////////////////////////////////////////////////////////
--(void)testDayContainerEncodeDecode
+- (void)testDayContainerEncodeDecode
 {
     //Helps us out for conversion to NSDates.
     NSCalendar *helperCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];

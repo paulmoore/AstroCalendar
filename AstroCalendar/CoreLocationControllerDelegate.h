@@ -3,7 +3,7 @@
 //  AstroCalendar
 //
 //  Created by Stephen Smithbower on 11-11-24.
-//  Copyright (c) 2011 University of British Columbia. All rights reserved.
+//  University of British Columbia.
 //
 //  https://github.com/paulmoore/AstroCalendar
 /*
@@ -39,11 +39,13 @@
  * locationUpdate is raised when new GPS data is availble.
  * locationError is raised when CoreLocation is unable to provide location information.
  */
-@protocol CoreLocationControllerDelegate 
-	@required
-	+(void)locationUpdate:(CLLocation *)location; // Our location updates are sent here
+@protocol CoreLocationControllerDelegate
+
+@required
++ (void)locationUpdate:(CLLocation *)location; // Our location updates are sent here
     
-	+(void)locationError:(NSError *)error; // Any errors are sent here
++ (void)locationError:(NSError *)error; // Any errors are sent here
+
 @end
 
 
@@ -57,7 +59,7 @@
 	id delegate;
 }
  
-	@property(nonatomic, retain, strong) CLLocationManager *locationManager;
-	@property(nonatomic, retain, strong) id delegate;
+@property(nonatomic, retain, strong) CLLocationManager *locationManager;
+@property(nonatomic, retain, strong) id delegate;
 
 @end

@@ -3,7 +3,7 @@
 //  HTTPRequestTest
 //
 //  Created by Stephen Smithbower on 11-11-01.
-//  Copyright (c) 2011 University of British Columbia. All rights reserved.
+//  University of British Columbia.
 //  https://github.com/paulmoore/AstroCalendar
 /*
  Permission is hereby granted, free of charge, to any person
@@ -32,41 +32,41 @@
 
 @implementation DayContainer
 
-	@synthesize date;
-    @synthesize sunrise;
-    @synthesize sunset;
-    @synthesize moonrise;
-    @synthesize moonset;
-    @synthesize tithi;
-    @synthesize fortnight;
-    @synthesize lunarMonth;
+@synthesize date;
+@synthesize sunrise;
+@synthesize sunset;
+@synthesize moonrise;
+@synthesize moonset;
+@synthesize tithi;
+@synthesize fortnight;
+@synthesize lunarMonth;
 
-	-(NSDictionary *)encodeAsDictionary
-	{
-    	NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+- (NSDictionary *)encodeAsDictionary
+{
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
         
-        [dict setValue:[self date] forKey:@"date"];
-        [dict setValue:[self sunrise] forKey:@"sunrise"];
-        [dict setValue:[self sunset] forKey:@"sunset"];
-        [dict setValue:[self moonrise] forKey:@"moonrise"];
-        [dict setValue:[self moonset] forKey:@"moonset"];
-        [dict setValue:[self tithi] forKey:@"tithi"];
-        [dict setValue:[self fortnight] forKey:@"fortnight"];
-        [dict setValue:[self lunarMonth] forKey:@"lunarmonth"];
+    [dict setValue:[self date] forKey:@"date"];
+    [dict setValue:[self sunrise] forKey:@"sunrise"];
+    [dict setValue:[self sunset] forKey:@"sunset"];
+    [dict setValue:[self moonrise] forKey:@"moonrise"];
+    [dict setValue:[self moonset] forKey:@"moonset"];
+    [dict setValue:[self tithi] forKey:@"tithi"];
+    [dict setValue:[self fortnight] forKey:@"fortnight"];
+    [dict setValue:[self lunarMonth] forKey:@"lunarmonth"];
         
-        return dict;
-	}
+    return dict;
+}
 
-	-(void)decodeFromDictionary:(NSDictionary *)dictionary
-    {
-    	self.date = [dictionary objectForKey:@"date"];
-        self.sunrise = [dictionary objectForKey:@"sunrise"];
-        self.sunset = [dictionary objectForKey:@"sunset"];
-        self.moonrise = [dictionary objectForKey:@"moonrise"];
-        self.moonset = [dictionary objectForKey:@"moonset"];
-        self.tithi = [dictionary objectForKey:@"tithi"];
-        self.fortnight = [dictionary objectForKey:@"fortnight"];
-        self.lunarMonth = [dictionary objectForKey:@"lunarmonth"];
-    }
+- (void)decodeFromDictionary:(NSDictionary *)dictionary
+{
+    self.date = [dictionary objectForKey:@"date"];
+    self.sunrise = [dictionary objectForKey:@"sunrise"];
+    self.sunset = [dictionary objectForKey:@"sunset"];
+    self.moonrise = [dictionary objectForKey:@"moonrise"];
+    self.moonset = [dictionary objectForKey:@"moonset"];
+    self.tithi = [dictionary objectForKey:@"tithi"];
+    self.fortnight = [dictionary objectForKey:@"fortnight"];
+    self.lunarMonth = [dictionary objectForKey:@"lunarmonth"];
+}
 
 @end

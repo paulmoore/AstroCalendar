@@ -3,7 +3,7 @@
 //  HTTPRequestTest
 //
 //  Created by Stephen Smithbower on 11-11-01.
-//  Copyright (c) 2011 University of British Columbia. All rights reserved.
+//  University of British Columbia.
 //  https://github.com/paulmoore/AstroCalendar
 /*
  Permission is hereby granted, free of charge, to any person
@@ -31,8 +31,10 @@
 #import "MasterDataHandler.h"
 
 @interface NSURLRequest (DummyInterface)
-	+ (BOOL)allowsAnyHTTPSCertificateForHost:(NSString*)host;
-	+ (void)setAllowsAnyHTTPSCertificate:(BOOL)allow forHost:(NSString*)host;
+
++ (BOOL)allowsAnyHTTPSCertificateForHost:(NSString *)host;
++ (void)setAllowsAnyHTTPSCertificate:(BOOL)allow forHost:(NSString *)host;
+
 @end
 
 static MasterDataHandler *sharedSingleton = nil;
@@ -45,7 +47,7 @@ static CoreLocationController *locationController;
 
 //@synthesize dataCache;
 
-+ (MasterDataHandler*)sharedManager
++ (MasterDataHandler *)sharedManager
 {
     if (sharedSingleton == nil) 
     {
@@ -88,27 +90,27 @@ static CoreLocationController *locationController;
     return sharedSingleton;
 }
 
-+(RingBuffer*) getDataCacheIndexer
++ (RingBuffer *)getDataCacheIndexer
 {
 	return dataCacheIndexer;
 }
 
-+(void) setDataCacheIndexer:(RingBuffer *)ringBuffer
++ (void)setDataCacheIndexer:(RingBuffer *)ringBuffer
 {
 	dataCacheIndexer = ringBuffer;
 }
 
-+(NSMutableDictionary*) getDataCache
++ (NSMutableDictionary *)getDataCache
 {
 	return dataCache;
 }
 
-+(void) setDataCache:(NSMutableDictionary*) dictionary
++ (void)setDataCache:(NSMutableDictionary *)dictionary
 {
 	dataCache = dictionary;
 }
 
--(void)askApiForDates:(NSDate*)startDate endDate:(NSDate*)endDate delegate:(id<MasterDataHandlerDelegate>)delegate
+- (void)askApiForDates:(NSDate *)startDate endDate:(NSDate *)endDate delegate:(id<MasterDataHandlerDelegate>)delegate
 {
 	//NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat: @"%@
 	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -165,7 +167,7 @@ static CoreLocationController *locationController;
     [queue addOperation:operation];
 }
 
--(NSArray*)parseJSONDateRange: (id)json
+- (NSArray *)parseJSONDateRange:(id)json
 {
 	int dayCount = [[json valueForKeyPath:@"count"] intValue];
     
@@ -222,7 +224,7 @@ static CoreLocationController *locationController;
     return dayContainers;
 }
 
--(void)registerAlertOnDate: (NSDate*) date: (NSString*) message
+- (void)registerAlertOnDate:(NSDate *)date withMessage:(NSString *)message
 {
 	/* Here we cancel all previously scheduled notifications */
 	UILocalNotification *localNotification = [[UILocalNotification alloc] init];
@@ -244,7 +246,7 @@ static CoreLocationController *locationController;
 	[[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
 }
 
--(NSArray*)getAlertsOnDate: (NSDate*) date
+- (NSArray *)getAlertsOnDate:(NSDate *)date
 {
 	NSMutableArray *alerts = [[NSMutableArray alloc]init];
     
@@ -271,12 +273,12 @@ static CoreLocationController *locationController;
     return alerts;
 }
 
--(void) unregisterAlert: (UILocalNotification*) alert
+- (void)unregisterAlert:(UILocalNotification *)alert
 {
 	[[UIApplication sharedApplication] cancelLocalNotification:alert];
 }
 
-+(void) saveSettings
++ (void)saveSettings
 {
 	NSString *plistPath;
     NSString *rootPath;
@@ -298,7 +300,7 @@ static CoreLocationController *locationController;
     }
 }
 
-+(void) loadSettings
++ (void)loadSettings
 {
 	NSString *plistPath;
     NSString *rootPath;
@@ -331,7 +333,7 @@ static CoreLocationController *locationController;
     NSLog(@"Settings: Altitude: %@", [[settingsDictionary objectForKey:@"Location"] objectForKey:@"Altitude"]);
 }
 
--(int)addDayToCache:(DayContainer *)data
+- (int)addDayToCache:(DayContainer *)data
 {
     int addedKey = -1;
 
@@ -371,7 +373,7 @@ static CoreLocationController *locationController;
     return addedKey;
 }
 
--(NSMutableDictionary*)retrieveMonthSetFromCache:(NSDate *)date
+- (NSMutableDictionary *)retrieveMonthSetFromCache:(NSDate *)date
 {
 	int monthIndex = -1;
     
@@ -405,7 +407,7 @@ static CoreLocationController *locationController;
     return nil;
 }
 
--(int)retrieveMonthIndexFromCache:(NSDate *)date
+- (int)retrieveMonthIndexFromCache:(NSDate *)date
 {
     NSDateComponents *dateComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] components:NSMonthCalendarUnit | NSYearCalendarUnit fromDate:date];
 
@@ -427,7 +429,7 @@ static CoreLocationController *locationController;
    	return -1;
 }
 
--(DayContainer*)retrieveDayFromCache:(NSDate *)date
+- (DayContainer *)retrieveDayFromCache:(NSDate *)date
 {
 	NSMutableDictionary *monthSet;
 
@@ -444,7 +446,7 @@ static CoreLocationController *locationController;
     }
 }
 
--(void)clearCache
+- (void)clearCache
 {    
     //Clear out the actual cache.
     for (int i = 0; i < [dataCacheIndexer capacity]; i++)
@@ -454,7 +456,7 @@ static CoreLocationController *locationController;
 	[dataCacheIndexer clear];
 }
 
--(void) writeCache: (NSDate*) date
+- (void) writeCache:(NSDate *)date
 {
 	NSString *plistPath;
     NSString *rootPath;
@@ -501,7 +503,7 @@ static CoreLocationController *locationController;
     }
 }
 
--(void) loadCache
+- (void)loadCache
 {
 	NSString *plistPath;
     NSString *rootPath;
@@ -580,4 +582,5 @@ static CoreLocationController *locationController;
 {
 	NSLog(@"Location error: %@", [error description]);
 }
+
 @end

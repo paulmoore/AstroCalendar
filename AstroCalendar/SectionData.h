@@ -3,7 +3,7 @@
 //  AstroCalendar
 //
 //  Created by Paul Moore on 11-11-16.
-//  Copyright (c) 2011 University of British Columbia. All rights reserved.
+//  University of British Columbia.
 //  https://github.com/paulmoore/AstroCalendar
 /*
  Permission is hereby granted, free of charge, to any person

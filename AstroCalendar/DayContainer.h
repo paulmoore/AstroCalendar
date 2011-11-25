@@ -3,7 +3,7 @@
 //  AstroCalendar
 //
 //  Created by Stephen Smithbower on 11-11-01.
-//  Copyright (c) 2011 University of British Columbia. All rights reserved.
+//  University of British Columbia.
 //  https://github.com/paulmoore/AstroCalendar
 /*
  Permission is hereby granted, free of charge, to any person
@@ -35,40 +35,38 @@
  */
 @interface DayContainer : NSObject
 
-    /** The date this container represents. */
-	@property(copy) NSDate *date;
-    /** The sunrise for this day. */
-	@property(copy) NSDate *sunrise;
-    /** The sunset for this day. */
-	@property(copy) NSDate *sunset;
-    /** The moonrise for this day. */
-	@property(copy) NSDate *moonrise;
-    /** The moonset for this day. */
-	@property(copy) NSDate *moonset;
-    /** The tithi (lunar day) of this day. */
-    @property(copy) NSString *tithi;
-    /** The fortnight (paksha) of this day. */
-    @property(copy) NSString *fortnight;
-    /** The lunar month (nakshatra) of this day. */
-    @property(copy) NSString *lunarMonth;
-    
-    
-    /**
-     * Encodes the properties of this instance as a NSDictionary,
-     * where the keys are the string names of the properties.
-     *
-     * @return An NSDictionary containing all the properties of
-     *		   this instance of DayContainer.
-     */
-    -(NSDictionary *)encodeAsDictionary;
-    
-    /**
-     * Populates this instance's properties with values from an
-     * NSDictionary. Each property name is a key in the dictionary.
-     *
-     * @param dictionary The NSDictionary containing the key-value
-     *					 representation of the DayContainer instance.
-     */
-    -(void)decodeFromDictionary: (NSDictionary *)dictionary;
+/** The date this container represents. */
+@property(copy) NSDate *date;
+/** The sunrise for this day. */
+@property(copy) NSDate *sunrise;
+/** The sunset for this day. */
+@property(copy) NSDate *sunset;
+/** The moonrise for this day. */
+@property(copy) NSDate *moonrise;
+/** The moonset for this day. */
+@property(copy) NSDate *moonset;
+/** The tithi (lunar day) of this day. */
+@property(copy) NSString *tithi;
+/** The fortnight (paksha) of this day. */
+@property(copy) NSString *fortnight;
+/** The lunar month (nakshatra) of this day. */
+@property(copy) NSString *lunarMonth;
+
+
+/**
+ * Encodes the properties of this instance as a NSDictionary,
+ * where the keys are the string names of the properties.
+ *
+ * @return An NSDictionary containing all the properties of this instance of DayContainer.
+ */
+- (NSDictionary *)encodeAsDictionary;
+
+/**
+ * Populates this instance's properties with values from an
+ * NSDictionary. Each property name is a key in the dictionary.
+ *
+ * @param dictionary The NSDictionary containing the key-value representation of the DayContainer instance.
+ */
+- (void)decodeFromDictionary: (NSDictionary *)dictionary;
     
 @end

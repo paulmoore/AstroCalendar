@@ -3,7 +3,7 @@
 //  HTTPRequestTest
 //
 //  Created by Stephen Smithbower on 11-11-09.
-//  Copyright (c) 2011 University of British Columbia. All rights reserved.
+//  University of British Columbia.
 //  https://github.com/paulmoore/AstroCalendar
 /*
  Permission is hereby granted, free of charge, to any person
@@ -50,7 +50,7 @@
 // Initalizes the ringbuffer with a fixed size			//
 // capacity.											//
 //////////////////////////////////////////////////////////
-- (id)initWithCapacity:(int) capacity;
+- (id)initWithCapacity:(int)capacity;
 
 //////////////////////////////////////////////////////////
 // Constructor											//
@@ -58,20 +58,20 @@
 // Initializes a new ringbuffer with the contents and	//
 // state of a ringbuffer that was serialized to a pfile.//
 //////////////////////////////////////////////////////////
-- (id)initFromPList:(NSString*) pFile;
+- (id)initFromPList:(NSString *)pFile;
 
 
 //Properties.
 //////////////////////////////////////////////////////////
 // Returns the total fixed capacity of the ringbuffer.	//
 //////////////////////////////////////////////////////////
--(int) capacity;
+- (int)capacity;
 
 //////////////////////////////////////////////////////////
 // Returns the number of elements currently in the		//
 // ringbuffer.											//
 //////////////////////////////////////////////////////////
--(int) count;
+- (int)count;
 
 
 //Methods.
@@ -80,28 +80,29 @@
 // overwrite the oldest element in the buffer, if the 	//
 // buffer is at capacity.								//
 //////////////////////////////////////////////////////////
--(int) add:(id) element;
+- (int)add:(id)element;
 
 //////////////////////////////////////////////////////////
 // Returns an array containing the elements in the 		//
 // ringbuffer.											//
 //////////////////////////////////////////////////////////
--(NSArray*) elements;
+- (NSArray *)elements;
 
 //////////////////////////////////////////////////////////
 // Serializes the ringbuffer into the given pfile.		//
 //////////////////////////////////////////////////////////
--(void) writeToPList:(NSString*) filename;
+- (void)writeToPList:(NSString *)filename;
 
 //////////////////////////////////////////////////////////
 // Deserializes and populates this ringbuffer from the	//
 // given pfile.											//
 //////////////////////////////////////////////////////////
--(void) loadFromPList:(NSString*) filename;
+- (void)loadFromPList:(NSString *)filename;
 
 //////////////////////////////////////////////////////////
 //Removes all elements from the buffer and resets index	//
 //pointers.												//
 //////////////////////////////////////////////////////////
--(void) clear;
+- (void)clear;
+
 @end
