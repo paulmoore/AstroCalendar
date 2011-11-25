@@ -143,6 +143,20 @@ static __strong MasterDataHandler *sharedSingleton = nil;
         
         for(DayContainer *container in decoded) 
         {
+        	//If we don't have data for something, let's make a human readable message.
+            if ([container.fortnight isEqualToString:@"(null)"])
+            	container.fortnight = @"(no data)";
+                
+            if ([container.lunarMonth isEqualToString:@"(null)"])
+            	container.lunarMonth = @"(no data)";
+                
+            if ([container.tithi isEqualToString:@"(null)"])
+            	container.tithi = @"(no data)";
+                
+            //If there isn't a tithi, format it nicely
+            if ([container.fortnight isEqualToString:@"noPaksha"])
+            	container.fortnight = @"(No Paksha)";
+        
     		NSLog(@"Date: %@", container.date);
             NSLog(@"Sunrise: %@", container.sunrise);
             NSLog(@"Sunset: %@", container.sunset);
@@ -150,6 +164,7 @@ static __strong MasterDataHandler *sharedSingleton = nil;
             NSLog(@"Moonset: %@", container.moonset);
             NSLog(@"Fortnight: %@", container.fortnight);
             NSLog(@"LunarMonth: %@\n", container.lunarMonth);
+            NSLog(@"Tithi: %@\n", container.tithi);
             
             [self addDayToCache:container];
 		}
