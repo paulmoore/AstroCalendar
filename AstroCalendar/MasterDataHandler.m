@@ -139,7 +139,8 @@ static __strong MasterDataHandler *sharedSingleton = nil;
     {
     	NSLog(@"Success!");
         
-        NSArray *decoded = [self parseJSONDateRange: JSON];
+        NSMutableArray *decoded = [self parseJSONDateRange: JSON];
+        [decoded sortUsingSelector:@selector(compare:)];
         
         for(DayContainer *container in decoded) 
         {
@@ -184,7 +185,7 @@ static __strong MasterDataHandler *sharedSingleton = nil;
     [queue addOperation:operation];
 }
 
-- (NSArray *)parseJSONDateRange:(id)json
+- (NSMutableArray *)parseJSONDateRange:(id)json
 {
 	int dayCount = [[json valueForKeyPath:@"count"] intValue];
     

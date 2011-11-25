@@ -68,5 +68,14 @@
  * @param dictionary The NSDictionary containing the key-value representation of the DayContainer instance.
  */
 - (void)decodeFromDictionary: (NSDictionary *)dictionary;
+
+/**
+ * Compares two DayContainers based on their date property.
+ * When sorting an array, the order will be oldest date to
+ * newest date (or, past -> future).
+ *
+ * @param container The container the compare this one to.
+ */
+-(NSComparisonResult)compare:(DayContainer *)container;
     
 @end

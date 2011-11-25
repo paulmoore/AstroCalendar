@@ -69,4 +69,9 @@
     self.lunarMonth = [dictionary objectForKey:@"lunarmonth"];
 }
 
+-(NSComparisonResult)compare:(DayContainer *)container 
+{    
+    return [self.date compare:container.date];
+}
+
 @end
