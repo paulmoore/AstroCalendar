@@ -62,7 +62,7 @@
 {
     // Display the cell data for the Moon Day.
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"MM/dd/yy h:m a"];
+    [formatter setDateFormat:@"MM/dd/yy hh:mm a"];
     dateLabel.text = [formatter stringFromDate:date];
     tithiLabel.text = tithi;
     fortnightLabel.text = fortnight;

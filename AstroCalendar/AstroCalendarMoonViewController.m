@@ -88,19 +88,22 @@
     NSMutableArray *sections = [NSMutableArray arrayWithCapacity:2];
     
     // Insert the appropriate sections based on the lunar months.
-    int numRows = 0;
+    int index = 0;
     NSString *currentMonth = nil;
+    SectionData *currentSection = nil;
     for (DayContainer *day in data)
     {
-        numRows++;
         NSString *nextMonth = day.lunarMonth;
+        // We need to add a new section if we have reached a new lunar month.
         if (!currentMonth || ![currentMonth isEqualToString:nextMonth])
         {
-            // Cache the number of rows for each section.
-            SectionData *newSection = [[SectionData alloc] initWithSectionNum:[sections count] monthName:day.lunarMonth monthYear:day.date rowCount:numRows];
-            [sections addObject:newSection];
-            numRows = 0;
+            currentSection = [[SectionData alloc] initWithSectionNum:[sections count] monthName:nextMonth monthYear:day.date startIndex:index];
+            [sections addObject:currentSection];
+            currentMonth = nextMonth;
         }
+        // Add a row to whatever the current section is.
+        [currentSection addRow];
+        index++;
     }
     self.sectionsData = sections;
     
@@ -206,11 +209,10 @@
     NSArray *sections = self.sectionsData;
     if (sections)
     {
-        NSLog(@"SectionData count: %d", [sections count]);
         return [sections count];
     }
-    // Return 0, the sections are added dynamically when the data is loaded.
-    return 0;
+    // Return 1, the sections are added dynamically when the data is loaded.
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -220,7 +222,6 @@
     if (sections)
     {
         SectionData *sectionData = [sections objectAtIndex:section];
-        NSLog(@"SectionData numRows: %d", sectionData.numRows);
         return sectionData.numRows;
     }
     // Approximate the number of days if a request has been been made.
@@ -256,7 +257,8 @@
     NSArray *data = self.lunarData;
     if (data)
     {
-        DayContainer *day = (DayContainer *)[data objectAtIndex:indexPath.section];
+        int dataIndex = ((SectionData *)[self.sectionsData objectAtIndex:indexPath.section]).startIndex + indexPath.row;
+        DayContainer *day = (DayContainer *)[data objectAtIndex:dataIndex];
         [cell configureWithDate:day.date tithi:day.tithi fortnight:day.fortnight];
     }
     
@@ -327,10 +329,9 @@
     if (sections)
     {
         SectionData *sectionData = [sections objectAtIndex:section];
-        NSLog(@"SectionData sectionName: %@", sectionData.sectionName);
         return sectionData.sectionName;
     }
-    return @"";
+    return @"(Loading...)";
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

@@ -34,7 +34,7 @@ static NSDateFormatter *formatter = nil;
 
 @implementation SectionData
 
-@synthesize numRows, sectionNum, sectionName;
+@synthesize numRows, sectionNum, sectionName, startIndex;
 
 + (void) initialize
 {
@@ -45,13 +45,14 @@ static NSDateFormatter *formatter = nil;
     }
 }
 
-- (id)initWithSectionNum:(int)index monthName:(NSString *)name monthYear:(NSDate *)year rowCount:(int)rows
+- (id)initWithSectionNum:(int)index monthName:(NSString *)name monthYear:(NSDate *)year startIndex:(int)start
 {
     self = [super init];
     if (self)
     {
         sectionNum = index;
-        numRows = rows;
+        startIndex = start;
+        numRows = 0;
         
         NSMutableString *tmpName = [NSMutableString stringWithCapacity:15];
         [tmpName appendString:name];
@@ -61,6 +62,11 @@ static NSDateFormatter *formatter = nil;
         sectionName = tmpName;
     }
     return self;
+}
+
+- (void)addRow
+{
+    numRows++;
 }
 
 @end

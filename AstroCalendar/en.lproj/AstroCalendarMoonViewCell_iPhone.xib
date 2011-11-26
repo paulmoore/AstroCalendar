@@ -43,7 +43,7 @@
 							<object class="IBUILabel" id="1028776145">
 								<reference key="NSNextResponder" ref="813869581"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{2, 2}, {122, 41}}</string>
+								<string key="NSFrame">{{2, 2}, {100, 41}}</string>
 								<reference key="NSSuperview" ref="813869581"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="1022478426"/>
@@ -53,7 +53,7 @@
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<string key="IBUIText">Date</string>
+								<string key="IBUIText">Start Date</string>
 								<object class="NSColor" key="IBUITextColor" id="146862709">
 									<int key="NSColorSpace">1</int>
 									<bytes key="NSRGB">MCAwIDAAA</bytes>
@@ -74,7 +74,7 @@
 							<object class="IBUILabel" id="1022478426">
 								<reference key="NSNextResponder" ref="813869581"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{132, 2}, {104, 41}}</string>
+								<string key="NSFrame">{{110, 2}, {126, 41}}</string>
 								<reference key="NSSuperview" ref="813869581"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="85236049"/>
@@ -106,7 +106,7 @@
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<string key="IBUIText">Fortnight</string>
+								<string key="IBUIText">Paksha</string>
 								<reference key="IBUITextColor" ref="146862709"/>
 								<nil key="IBUIHighlightedColor"/>
 								<int key="IBUIBaselineAdjustment">1</int>
@@ -118,7 +118,7 @@
 							<object class="IBUIActivityIndicatorView" id="85236049">
 								<reference key="NSNextResponder" ref="813869581"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{149, 2}, {20, 20}}</string>
+								<string key="NSFrame">{{132, 13}, {20, 20}}</string>
 								<reference key="NSSuperview" ref="813869581"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="795424246"/>

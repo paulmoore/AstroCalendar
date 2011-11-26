@@ -43,6 +43,8 @@
 /** The section number (lunar month). */
 @property (readonly) int sectionNum;
 
+@property (readonly) int startIndex;
+
 /** The section name (lunar month name + year). */
 @property (readonly, copy) NSString *sectionName;
 
@@ -55,6 +57,8 @@
  * @param rows The number of rows in this section.
  * @return An instance of SectionData initialized with the given information.
  */
-- (id)initWithSectionNum:(int)index monthName:(NSString *)name monthYear:(NSDate *)year rowCount:(int)rows;
+- (id)initWithSectionNum:(int)index monthName:(NSString *)name monthYear:(NSDate *)year startIndex:(int)start;
+
+- (void)addRow;
 
 @end
