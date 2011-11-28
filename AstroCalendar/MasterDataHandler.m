@@ -45,7 +45,7 @@ static __strong MasterDataHandler *sharedSingleton = nil;
 
 @implementation MasterDataHandler
 
-@synthesize settingsDictionary, dataCache, dataCacheIndexer, locationController;
+@synthesize settingsDictionary, dataCache, dataCacheIndexer, locationController, locationUpdated;
 
 + (MasterDataHandler *)sharedManager
 {
@@ -124,6 +124,7 @@ static __strong MasterDataHandler *sharedSingleton = nil;
     //down from the API (to keep the cache fresh).
     
     NSDate *workingDate = (NSDate *)[startDate copy];
+    NSDate *workingDatePlus = (NSDate *)[startDate copy];
     
     BOOL askApi = false;
     
@@ -131,15 +132,26 @@ static __strong MasterDataHandler *sharedSingleton = nil;
     {
     	NSLog([workingDate description]);
     	DayContainer *day = [self retrieveDayFromCache:workingDate];
+        
+        NSDateComponents *offsetExtra = [[NSDateComponents alloc]init];
+        	[offsetExtra setDay:1];
+        
+        workingDatePlus = [gregorian dateByAddingComponents: offsetExtra toDate: workingDate options:0];
+        
+        DayContainer *dayPlusOne = [self retrieveDayFromCache:workingDatePlus];
     
-    	if (!day)
+    	if (!day && !dayPlusOne)
         {
         	askApi = true;
+            NSLog(@"Unable to retrieve day %@ from cache!", workingDate);
             break;
         }
         else
         {
-        	[cachedDays addObject:day];
+        	if (day)
+            {
+        		[cachedDays addObject:day];
+            }
         
         	NSDateComponents *offset = [[NSDateComponents alloc]init];
         	[offset setDay:1];
@@ -188,37 +200,61 @@ static __strong MasterDataHandler *sharedSingleton = nil;
     {
     	NSLog(@"Success!");
         
-        NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+        NSCalendar *gregorian =  [NSCalendar currentCalendar];//[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
         
         NSMutableArray *decoded = [self parseJSONDateRange: JSON];
+        
+        NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+        formatter.dateFormat = @"dd-MM-yy-HH-mm";
+        [formatter setTimeZone: [NSTimeZone timeZoneForSecondsFromGMT: currentGMTOffset * 60 * 60]];//[NSTimeZone timeZoneForSecondsFromGMT:0]];
+        
         
         //Look for duplicated tithi's, which means split in to two objects.
         for (int i = 0; i < [decoded count]; i++)
         {
         	DayContainer *original = (DayContainer*)[decoded objectAtIndex:i];
         	NSArray *splitStringFornight = [original.fortnight componentsSeparatedByString: @"-"];
+            
+            NSLog(@"TITHI STARTTTTT: %@", original.tithiStart);
         	
+            //Handle case where there are two tithis in a single day.
             if ([splitStringFornight count] > 1)
             {
-            	NSDateComponents *dayComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] components:NSMonthCalendarUnit | NSYearCalendarUnit | NSDayCalendarUnit fromDate:original.date];
-                
-                NSDateComponents *timeComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] components:NSMonthCalendarUnit | NSYearCalendarUnit | NSDayCalendarUnit |NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit fromDate:original.tithiStart];
-                
-                [timeComponents setDay:[dayComponents day]];
-                [timeComponents setMonth:[dayComponents month]];
-                [timeComponents setYear:[dayComponents year]];
-            
+            	NSDateComponents *dayComponents = [gregorian components:NSMonthCalendarUnit | NSYearCalendarUnit | NSDayCalendarUnit fromDate:original.date];
             
             	NSArray *splitStringLunarmonth = [original.lunarMonth componentsSeparatedByString: @"-"];
                 NSArray *splitStringTithi = [original.tithi componentsSeparatedByString: @"-"];
+                NSArray *splitStringTithiStart = [original.tithiStart componentsSeparatedByString:@"-"];
+                
+                //Tithi start comes in format hh:mm, so must split on colon.
+                NSArray *tithiOne = [[splitStringTithiStart objectAtIndex:0]componentsSeparatedByString:@":"];
+                NSArray *tithiTwo = [[splitStringTithiStart objectAtIndex:1]componentsSeparatedByString:@":"];
+                
+                //Sometimes we don't get any tithi data.. so we handle that here.
+                if ([tithiOne count] > 1)
+                {
+                	[dayComponents setHour: [[tithiOne objectAtIndex:0] intValue]];
+                	[dayComponents setMinute: [[tithiOne objectAtIndex:1] intValue]];
+                }
                 
                 //Clean up original day.
                 original.fortnight = [splitStringFornight objectAtIndex:0];
                 original.lunarMonth = [splitStringLunarmonth objectAtIndex:0];
                 original.tithi = [splitStringTithi objectAtIndex:0];
+                //original.date = [gregorian dateFromComponents:dayComponents];
+                
+                original.date = [formatter dateFromString:[NSString stringWithFormat:@"%i-%i-%i-%i-%i", [dayComponents day], [dayComponents month], [dayComponents year], [[tithiOne objectAtIndex:0]intValue], [[tithiOne objectAtIndex:1]intValue]]];
+                
+                //Next day.
+                if ([tithiTwo count] > 1)
+                {
+                	dayComponents = [gregorian components:NSMonthCalendarUnit | NSYearCalendarUnit | NSDayCalendarUnit fromDate:original.date];
+                	[dayComponents setHour: [[tithiTwo objectAtIndex:0] intValue]];
+                	[dayComponents setMinute: [[tithiTwo objectAtIndex:1] intValue]];
+                }
                 
                 DayContainer *nextDay = [[DayContainer alloc]init];
-                nextDay.date = [gregorian dateFromComponents: timeComponents];
+                
                 nextDay.sunset = [original.sunset copy];
                 nextDay.sunrise = [original.sunrise copy];
                 nextDay.moonset = [original.moonset copy];
@@ -227,6 +263,21 @@ static __strong MasterDataHandler *sharedSingleton = nil;
                 nextDay.fortnight = [splitStringFornight objectAtIndex:1];
                 nextDay.lunarMonth = [splitStringLunarmonth objectAtIndex:1];
                 nextDay.tithi = [splitStringTithi objectAtIndex:1];
+
+
+                
+                nextDay.date = [formatter dateFromString:[NSString stringWithFormat:@"%i-%i-%i-%i-%i", [dayComponents day], [dayComponents month], [dayComponents year], [[tithiTwo objectAtIndex:0]intValue], [[tithiTwo objectAtIndex:1]intValue]]];
+                
+                
+                
+                NSLog(@"original: %@", original.date);
+                NSLog(@"date::: %@", nextDay.date);
+                
+                NSDateFormatter *corrected = [[NSDateFormatter alloc] init];
+                corrected.timeZone = currentTimeZone;
+                corrected.dateFormat = @"dd-MM-yy HH:mm";
+                
+                NSLog(@"Corrected date: %@", [corrected stringFromDate:nextDay.date]);
                 
                 [decoded insertObject:nextDay atIndex: i+1];
             }
@@ -235,13 +286,14 @@ static __strong MasterDataHandler *sharedSingleton = nil;
             	//Correct the tithi start time.
                 NSDateComponents *dayComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] components:NSMonthCalendarUnit | NSYearCalendarUnit | NSDayCalendarUnit fromDate:original.date];
                 
-                NSDateComponents *timeComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] components:NSMonthCalendarUnit | NSYearCalendarUnit | NSDayCalendarUnit |NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit fromDate:original.tithiStart];
-                
-                [timeComponents setDay:[dayComponents day]];
-                [timeComponents setMonth:[dayComponents month]];
-                [timeComponents setYear:[dayComponents year]];
+				//Tithi start comes in format hh:mm, so must split on colon.
+                NSArray *tithiOne = [original.tithiStart componentsSeparatedByString:@":"];
 
-				original.date = [gregorian dateFromComponents:timeComponents];
+				if ([tithiOne count] > 1)
+                {
+                	original.date = [formatter dateFromString:[NSString stringWithFormat:@"%i-%i-%i-%i-%i", [dayComponents day], [dayComponents month], [dayComponents year], [[tithiOne objectAtIndex:0]intValue], [[tithiOne objectAtIndex:1]intValue]]];
+                }
+
             }
         }
         
@@ -351,6 +403,8 @@ static __strong MasterDataHandler *sharedSingleton = nil;
         	newDay.fortnight = [NSString stringWithFormat:@"%@", [json valueForKeyPath:[NSString stringWithFormat:@"%i.payload.fortnight", i]]];
         
         	newDay.lunarMonth = [NSString stringWithFormat:@"%@", [json valueForKeyPath:[NSString stringWithFormat:@"%i.payload.lunarMonth", i]]];
+            
+            newDay.tithiStart = [NSString stringWithFormat:@"%@", [json valueForKeyPath:[NSString stringWithFormat:@"%i.payload.tithiStart", i]]];
     
     		[dayContainers addObject:newDay];
         }
@@ -427,9 +481,11 @@ static __strong MasterDataHandler *sharedSingleton = nil;
     NSString *rootPath;
     NSString *errorDesc = nil;
 
-	rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+	//rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     
-    plistPath = [rootPath stringByAppendingFormat:@"Settings.plist"]; 
+    //plistPath = [rootPath stringByAppendingFormat:@"Settings.plist"]; 
+    rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    plistPath = [rootPath stringByAppendingPathComponent:@"Settings.plist"];
     
     NSData *plistData = [NSPropertyListSerialization dataFromPropertyList:sharedSingleton.settingsDictionary format:NSPropertyListXMLFormat_v1_0 errorDescription:&errorDesc];
     
@@ -450,9 +506,12 @@ static __strong MasterDataHandler *sharedSingleton = nil;
     NSString *errorDesc = nil;
     NSPropertyListFormat format;
 
-	rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+	//rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     
-    plistPath = [rootPath stringByAppendingFormat:@"Settings.plist"]; 
+    //plistPath = [rootPath stringByAppendingFormat:@"Settings.plist"]; 
+    
+    rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    plistPath = [rootPath stringByAppendingPathComponent:@"Settings.plist"];
     
     if (![[NSFileManager defaultManager] fileExistsAtPath:plistPath]) 
     	plistPath = [[NSBundle mainBundle] pathForResource:@"Settings"ofType:@"plist"];
@@ -722,6 +781,8 @@ static __strong MasterDataHandler *sharedSingleton = nil;
     	[locationDictionary objectForKey:@"Latitude"],
         [locationDictionary objectForKey:@"Longitude"],
         [locationDictionary objectForKey:@"Altitude"]);
+        
+    sharedSingleton.locationUpdated = true;
 }
  
 + (void)locationError:(NSError *)error 
