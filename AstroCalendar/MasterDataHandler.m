@@ -230,6 +230,19 @@ static __strong MasterDataHandler *sharedSingleton = nil;
                 
                 [decoded insertObject:nextDay atIndex: i+1];
             }
+            else
+            {
+            	//Correct the tithi start time.
+                NSDateComponents *dayComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] components:NSMonthCalendarUnit | NSYearCalendarUnit | NSDayCalendarUnit fromDate:original.date];
+                
+                NSDateComponents *timeComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] components:NSMonthCalendarUnit | NSYearCalendarUnit | NSDayCalendarUnit |NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit fromDate:original.tithiStart];
+                
+                [timeComponents setDay:[dayComponents day]];
+                [timeComponents setMonth:[dayComponents month]];
+                [timeComponents setYear:[dayComponents year]];
+
+				original.date = [gregorian dateFromComponents:timeComponents];
+            }
         }
         
         //Sort everything by date - this is the only location we're guranteed that
@@ -259,7 +272,8 @@ static __strong MasterDataHandler *sharedSingleton = nil;
             NSLog(@"Moonset: %@", container.moonset);
             NSLog(@"Fortnight: %@", container.fortnight);
             NSLog(@"LunarMonth: %@\n", container.lunarMonth);
-            NSLog(@"Tithi: %@\n\n", container.tithi);
+            NSLog(@"Tithi: %@\n", container.tithi);
+            NSLog(@"TithiStart: %@\n\n", container.tithiStart);
             
             [self addDayToCache:container];
 		}
