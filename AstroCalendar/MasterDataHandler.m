@@ -67,7 +67,7 @@ static __strong MasterDataHandler *sharedSingleton = nil;
         @try 
         {
     		sharedSingleton.dataCacheIndexer = [[RingBuffer alloc] initFromPList:@"cache_index.plist"];
-            NSLog(@"Loading cached data index from dataCacheIndex.plist: %i months available, of %i months.", [sharedSingleton.dataCacheIndexer count], [sharedSingleton.dataCacheIndexer capacity]);
+            NSLog(@"Loading cached data index from cache_index.plist: %i months available, of %i months.", [sharedSingleton.dataCacheIndexer count], [sharedSingleton.dataCacheIndexer capacity]);
             
             //Set up in-memory cache.
             //sharedSingleton.dataCache = [[NSMutableDictionary alloc]initWithCapacity:[dataCacheIndexer capacity]];
@@ -112,6 +112,55 @@ static __strong MasterDataHandler *sharedSingleton = nil;
 }
  */
 
+- (void)getDates:(NSDate *)startDate endDate:(NSDate *)endDate delegate:(id<MasterDataHandlerDelegate>)delegate
+{
+	NSLog(@"Fielding request for dates...");
+
+	NSMutableArray *cachedDays = [[NSMutableArray alloc]init];
+    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    
+    //Scan through request date range and pull from cache. The instant we
+    //hit a date that isn't the cache, we're just going to pull ALL the dates
+    //down from the API (to keep the cache fresh).
+    
+    NSDate *workingDate = (NSDate *)[startDate copy];
+    
+    BOOL askApi = false;
+    
+    while ([endDate compare:workingDate] == NSOrderedDescending)
+    {
+    	NSLog([workingDate description]);
+    	DayContainer *day = [self retrieveDayFromCache:workingDate];
+    
+    	if (!day)
+        {
+        	askApi = true;
+            break;
+        }
+        else
+        {
+        	[cachedDays addObject:day];
+        
+        	NSDateComponents *offset = [[NSDateComponents alloc]init];
+        	[offset setDay:1];
+        
+        	workingDate = [gregorian dateByAddingComponents: offset toDate: workingDate options:0];
+            NSLog(@"Next date: %@", [workingDate description]);
+        }
+    }
+    
+    if (askApi)
+    {
+    	NSLog(@"Asking API for new data!");
+    	[self askApiForDates:startDate endDate:endDate delegate:delegate];
+    }
+    else
+    {	
+    	NSLog(@"Data retrieved from cache!");
+    	[delegate didRecieveData:cachedDays];
+    }
+}
+
 - (void)askApiForDates:(NSDate *)startDate endDate:(NSDate *)endDate delegate:(id<MasterDataHandlerDelegate>)delegate
 {
 	//NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat: @"%@
@@ -139,7 +188,52 @@ static __strong MasterDataHandler *sharedSingleton = nil;
     {
     	NSLog(@"Success!");
         
+        NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+        
         NSMutableArray *decoded = [self parseJSONDateRange: JSON];
+        
+        //Look for duplicated tithi's, which means split in to two objects.
+        for (int i = 0; i < [decoded count]; i++)
+        {
+        	DayContainer *original = (DayContainer*)[decoded objectAtIndex:i];
+        	NSArray *splitStringFornight = [original.fortnight componentsSeparatedByString: @"-"];
+        	
+            if ([splitStringFornight count] > 1)
+            {
+            	NSDateComponents *dayComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] components:NSMonthCalendarUnit | NSYearCalendarUnit | NSDayCalendarUnit fromDate:original.date];
+                
+                NSDateComponents *timeComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] components:NSMonthCalendarUnit | NSYearCalendarUnit | NSDayCalendarUnit |NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit fromDate:original.tithiStart];
+                
+                [timeComponents setDay:[dayComponents day]];
+                [timeComponents setMonth:[dayComponents month]];
+                [timeComponents setYear:[dayComponents year]];
+            
+            
+            	NSArray *splitStringLunarmonth = [original.lunarMonth componentsSeparatedByString: @"-"];
+                NSArray *splitStringTithi = [original.tithi componentsSeparatedByString: @"-"];
+                
+                //Clean up original day.
+                original.fortnight = [splitStringFornight objectAtIndex:0];
+                original.lunarMonth = [splitStringLunarmonth objectAtIndex:0];
+                original.tithi = [splitStringTithi objectAtIndex:0];
+                
+                DayContainer *nextDay = [[DayContainer alloc]init];
+                nextDay.date = [gregorian dateFromComponents: timeComponents];
+                nextDay.sunset = [original.sunset copy];
+                nextDay.sunrise = [original.sunrise copy];
+                nextDay.moonset = [original.moonset copy];
+                nextDay.moonrise = [original.moonrise copy];
+                
+                nextDay.fortnight = [splitStringFornight objectAtIndex:1];
+                nextDay.lunarMonth = [splitStringLunarmonth objectAtIndex:1];
+                nextDay.tithi = [splitStringTithi objectAtIndex:1];
+                
+                [decoded insertObject:nextDay atIndex: i+1];
+            }
+        }
+        
+        //Sort everything by date - this is the only location we're guranteed that
+        //the data is sorted.
         [decoded sortUsingSelector:@selector(compare:)];
         
         for(DayContainer *container in decoded) 
@@ -169,6 +263,23 @@ static __strong MasterDataHandler *sharedSingleton = nil;
             
             [self addDayToCache:container];
 		}
+        
+        //Loop through the days, and cache each month,
+        /*NSDate *testDate = ((DayContainer*)[decoded objectAtIndex:0]).date;
+        for (DayContainer *container in decoded)
+        {
+        	NSDateComponents *testComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] components:NSMonthCalendarUnit | NSYearCalendarUnit | NSDayCalendarUnit fromDate:testDate];
+        
+        	NSDateComponents *dateComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] components:NSMonthCalendarUnit | NSYearCalendarUnit | NSDayCalendarUnit fromDate:container.date];
+        
+        	if (testDate == ((DayContainer*)[decoded objectAtIndex:0]).date || [testComponents month] != [dateComponents month])
+            {
+            	testDate = container.date;
+                
+                [self writeCache:testDate];
+                NSLog(@"Updating hard cache: %@", [testDate description]);
+            }
+        }*/
         
         [delegate didRecieveData:decoded];
         
@@ -387,6 +498,7 @@ static __strong MasterDataHandler *sharedSingleton = nil;
     
     //Update disk cache.
     [dataCacheIndexer writeToPList:@"cache_index.plist"];
+    [self writeCache:data.date];
     
     return addedKey;
 }
@@ -487,8 +599,9 @@ static __strong MasterDataHandler *sharedSingleton = nil;
     	return; //Date doesn't exist in the cache, so we bail.
 
 	rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    plistPath = [rootPath stringByAppendingPathComponent:[NSString stringWithFormat:@"dataCache_%i.plist", monthIndex]];
     
-    plistPath = [rootPath stringByAppendingFormat:@"dataCache_%i.plist", monthIndex]; 
+    NSLog(@"PATH: %@", plistPath);
     
     NSDictionary *monthSet = [self retrieveMonthSetFromCache:date];
     NSMutableDictionary *encodedMonthSet = [[NSMutableDictionary alloc] init];
@@ -532,9 +645,9 @@ static __strong MasterDataHandler *sharedSingleton = nil;
     [self clearCache];
 	//Load index table first.
     [dataCacheIndexer loadFromPList:@"cache_index.plist"];
-    
 
-	rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+	//rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     
     //Loop over all the months that we might be caching, and attempt to deserialize them.
     //There's no gurantee that any given month will be cached (nothing says we've saved data out in
@@ -542,10 +655,11 @@ static __strong MasterDataHandler *sharedSingleton = nil;
     //failures and keep on truckin'.
     for (int i = 0; i < [dataCacheIndexer capacity]; i++)
     {
-    	plistPath = [rootPath stringByAppendingFormat:@"dataCache_%i.plist", i]; 
+    	//plistPath = [rootPath stringByAppendingFormat:@"dataCache_%i.plist", i]; 
+        plistPath = [rootPath stringByAppendingPathComponent:[NSString stringWithFormat:@"dataCache_%i.plist", i]];
     
-    	if (![[NSFileManager defaultManager] fileExistsAtPath:plistPath]) 
-    		plistPath = [[NSBundle mainBundle] pathForResource:[NSString stringWithFormat: @"dataCache_%i"]ofType:@"plist"];
+    	//if (![[NSFileManager defaultManager] fileExistsAtPath:plistPath]) 
+    		//plistPath = [[NSBundle mainBundle] pathForResource:[NSString stringWithFormat: @"dataCache_%i"]ofType:@"plist"];
     
     	NSData *plistXML = [[NSFileManager defaultManager] contentsAtPath:plistPath];
     

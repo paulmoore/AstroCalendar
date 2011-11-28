@@ -73,7 +73,7 @@
     if ([self isViewLoaded])
     {
         [self.tableView reloadData];
-        [[MasterDataHandler sharedManager] askApiForDates:request.startDate endDate:request.endDate delegate:self];
+        [[MasterDataHandler sharedManager] getDates:request.startDate endDate:request.endDate delegate:self];
     }
 }
 
@@ -163,7 +163,7 @@
     
     if (self.dateRequest)
     {
-        [[MasterDataHandler sharedManager] askApiForDates:self.dateRequest.startDate endDate:self.dateRequest.endDate delegate:self];
+        [[MasterDataHandler sharedManager] getDates:self.dateRequest.startDate endDate:self.dateRequest.endDate delegate:self];
     }
 }
 

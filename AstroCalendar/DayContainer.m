@@ -40,6 +40,7 @@
 @synthesize tithi;
 @synthesize fortnight;
 @synthesize lunarMonth;
+@synthesize tithiStart;
 
 - (NSDictionary *)encodeAsDictionary
 {
@@ -53,6 +54,7 @@
     [dict setValue:[self tithi] forKey:@"tithi"];
     [dict setValue:[self fortnight] forKey:@"fortnight"];
     [dict setValue:[self lunarMonth] forKey:@"lunarmonth"];
+    [dict setValue:[self tithiStart] forKey:@"tithistart"];
         
     return dict;
 }
@@ -67,6 +69,7 @@
     self.tithi = [dictionary objectForKey:@"tithi"];
     self.fortnight = [dictionary objectForKey:@"fortnight"];
     self.lunarMonth = [dictionary objectForKey:@"lunarmonth"];
+    self.tithiStart = [dictionary objectForKey:@"tithistart"];
 }
 
 -(NSComparisonResult)compare:(DayContainer *)container 

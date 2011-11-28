@@ -137,9 +137,10 @@
     
     
 
-	rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    plistPath = [rootPath stringByAppendingPathComponent:filename];
     
-    plistPath = [rootPath stringByAppendingFormat: filename]; 
+    NSLog(@"RING PATH: %@", plistPath);
     
     NSData *plistData = [NSPropertyListSerialization dataFromPropertyList:dataDictionary format:NSPropertyListXMLFormat_v1_0 errorDescription:&errorDesc];
     
@@ -163,9 +164,11 @@
     NSString *errorDesc = nil;
     NSPropertyListFormat format;
 
-	rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+	//rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     
-    plistPath = [rootPath stringByAppendingFormat: filename]; 
+    //plistPath = [rootPath stringByAppendingFormat: filename]; 
+    rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    plistPath = [rootPath stringByAppendingPathComponent:filename];
     
     @try
     {
