@@ -70,6 +70,8 @@
 + (NSMutableDictionary *)getDataCache;
 + (void)setDataCache:(NSMutableDictionary *)dictionary;
 */
+
+-(void) getDates:(NSDate *) startDate endDate:(NSDate *)endDate delegate:(id<MasterDataHandlerDelegate>)delegate;
  
 /**
  * Queries the data handler for the specified date range.
@@ -86,7 +88,7 @@
  *
  * @return Returns an array of DayContainers representing the JSON response.
  */
-- (NSArray *)parseJSONDateRange:(id)json;
+- (NSMutableArray *)parseJSONDateRange:(id)json;
     
 /**
  * Registers a customer alert (displaying the message) on the given
