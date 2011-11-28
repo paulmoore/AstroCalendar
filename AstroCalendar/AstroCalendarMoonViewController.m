@@ -66,10 +66,12 @@
 - (void)loadDates:(DateRangeRequest *)request
 {
     self.dateRequest = request;
+    self.lunarData = nil;
     
     // If the view has been loaded, make the request.
     if ([self isViewLoaded])
     {
+        [self.tableView reloadData];
         [[MasterDataHandler sharedManager] askApiForDates:request.startDate endDate:request.endDate delegate:self];
     }
 }

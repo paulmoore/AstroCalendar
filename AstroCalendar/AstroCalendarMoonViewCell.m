@@ -60,9 +60,13 @@
 
 - (void)configureWithDate:(NSDate *)date tithi:(NSString *)tithi fortnight:(NSString *)fortnight
 {
+    static dispatch_once_t pred = 0;
+    __strong static NSDateFormatter *formatter = nil;
+    dispatch_once(&pred, ^{
+        formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"MM/dd/yy hh:mm a"];
+    });
     // Display the cell data for the Moon Day.
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"MM/dd/yy hh:mm a"];
     dateLabel.text = [formatter stringFromDate:date];
     tithiLabel.text = tithi;
     fortnightLabel.text = fortnight;

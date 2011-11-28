@@ -50,14 +50,15 @@
     return self;
 }
 
-- (void)calendarMonthView:(TKCalendarMonthView*)monthView didSelectDate:(NSDate*)date
+- (void)calendarMonthView:(TKCalendarMonthView *)monthView didSelectDate:(NSDate *)date
 {
     // Avoid the View Controller being 'double pushed' if this event fires more than once.
     if (self.navController.visibleViewController == self)
     {
         if (! [self.navController pushUniqueControllerOfType:[AstroCalendarDayViewController class] animated:YES])
         {
-            UIViewController *dayController = [[AstroCalendarDayViewController alloc] initWithNavController:self.navController];
+            AstroCalendarDayViewController *dayController = [[AstroCalendarDayViewController alloc] initWithNavController:self.navController];
+            dayController.date = date;
             [self.navController pushViewController:dayController animated:YES];
         }
     }

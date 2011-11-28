@@ -30,14 +30,21 @@
 
 #import <UIKit/UIKit.h>
 
+#import "MasterDataHandlerDelegate.h"
+
 /**
  * View Controller for a specific day view.
  * Displays astrological sun day 'events'.
  */
-@interface AstroCalendarDayViewController : UIViewController
+@interface AstroCalendarDayViewController : UIViewController <MasterDataHandlerDelegate>
+{
+    IBOutlet UILabel *dateLabel, *sunriseLabel, *sunsetLabel, *moonriseLabel, *moonsetLabel;
+}
 
 /** The parent Navigation Controller. */
 @property (nonatomic, weak) UINavigationController *navController;
+
+@property (nonatomic, strong) NSDate *date;
 
 /**
  * Inits an AstroCalendarDayViewController with a given parent controller.

@@ -31,11 +31,12 @@
 #import "AstroCalendarDayViewController.h"
 #import "AstroCalendarMoonViewController.h"
 #import "AstroCalendarSunViewController.h"
+#import "MasterDataHandler.h"
 #import "UINavigationController+UniqueStack.h"
 
 @implementation AstroCalendarDayViewController
 
-@synthesize navController;
+@synthesize navController, date;
 
 - (id)initWithNavController:(UINavigationController *)controller
 {
@@ -99,6 +100,37 @@
     UIBarButtonItem *optionsButton = [[UIBarButtonItem alloc] initWithTitle:@"Options" style:UIBarButtonItemStyleBordered target:self action:@selector(didSelectOptionsFromToolbar)];
     NSArray *buttons = [NSArray arrayWithObjects:moonButton, sunButton, optionsButton, nil];
     [self setToolbarItems:buttons animated:YES];
+    
+    static dispatch_once_t pred = 0;
+    __strong static NSDateFormatter *formatter = nil;
+    dispatch_once(&pred, ^{
+        formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateStyle:NSDateFormatterMediumStyle];
+        [formatter setTimeStyle:NSDateFormatterNoStyle];
+    });
+    
+    dateLabel.text = [formatter stringFromDate:self.date];
+    
+    [[MasterDataHandler sharedManager] askApiForDates:self.date endDate:self.date delegate:self];
+}
+
+- (void)didRecieveData:(NSArray *)data
+{
+    static dispatch_once_t pred = 0;
+    __strong static NSDateFormatter *formatter = nil;
+    dispatch_once(&pred, ^{
+        formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"hh:mm a"];
+    });
+    
+    if ([self isViewLoaded])
+    {
+        DayContainer *day = (DayContainer *)[data firstObject];
+        sunriseLabel.text = [formatter stringFromDate:day.sunrise];
+        sunsetLabel.text = [formatter stringFromDate:day.sunset];
+        moonriseLabel.text = [formatter stringFromDate:day.moonrise];
+        moonsetLabel.text = [formatter stringFromDate:day.moonset];
+    }
 }
 
 - (void)viewDidUnload
@@ -108,6 +140,12 @@
     // e.g. self.myOutlet = nil;
     
     self.navController = nil;
+    self.date = nil;
+    sunsetLabel = nil;
+    sunriseLabel = nil;
+    moonsetLabel = nil;
+    moonriseLabel = nil;
+    dateLabel = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
