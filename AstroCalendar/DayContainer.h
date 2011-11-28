@@ -52,7 +52,7 @@
 /** The lunar month (nakshatra) of this day. */
 @property(copy) NSString *lunarMonth;
 /** The time when a second tithi starts (on the same day) **/
-@property(copy) NSDate *tithiStart;
+@property(copy) NSString *tithiStart;
 
 
 /**
