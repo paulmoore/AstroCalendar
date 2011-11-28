@@ -188,7 +188,52 @@ static __strong MasterDataHandler *sharedSingleton = nil;
     {
     	NSLog(@"Success!");
         
+        NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+        
         NSMutableArray *decoded = [self parseJSONDateRange: JSON];
+        
+        //Look for duplicated tithi's, which means split in to two objects.
+        for (int i = 0; i < [decoded count]; i++)
+        {
+        	DayContainer *original = (DayContainer*)[decoded objectAtIndex:i];
+        	NSArray *splitStringFornight = [original.fortnight componentsSeparatedByString: @"-"];
+        	
+            if ([splitStringFornight count] > 1)
+            {
+            	NSDateComponents *dayComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] components:NSMonthCalendarUnit | NSYearCalendarUnit | NSDayCalendarUnit fromDate:original.date];
+                
+                NSDateComponents *timeComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] components:NSMonthCalendarUnit | NSYearCalendarUnit | NSDayCalendarUnit |NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit fromDate:original.tithiStart];
+                
+                [timeComponents setDay:[dayComponents day]];
+                [timeComponents setMonth:[dayComponents month]];
+                [timeComponents setYear:[dayComponents year]];
+            
+            
+            	NSArray *splitStringLunarmonth = [original.lunarMonth componentsSeparatedByString: @"-"];
+                NSArray *splitStringTithi = [original.tithi componentsSeparatedByString: @"-"];
+                
+                //Clean up original day.
+                original.fortnight = [splitStringFornight objectAtIndex:0];
+                original.lunarMonth = [splitStringLunarmonth objectAtIndex:0];
+                original.tithi = [splitStringTithi objectAtIndex:0];
+                
+                DayContainer *nextDay = [[DayContainer alloc]init];
+                nextDay.date = [gregorian dateFromComponents: timeComponents];
+                nextDay.sunset = [original.sunset copy];
+                nextDay.sunrise = [original.sunrise copy];
+                nextDay.moonset = [original.moonset copy];
+                nextDay.moonrise = [original.moonrise copy];
+                
+                nextDay.fortnight = [splitStringFornight objectAtIndex:1];
+                nextDay.lunarMonth = [splitStringLunarmonth objectAtIndex:1];
+                nextDay.tithi = [splitStringTithi objectAtIndex:1];
+                
+                [decoded insertObject:nextDay atIndex: i+1];
+            }
+        }
+        
+        //Sort everything by date - this is the only location we're guranteed that
+        //the data is sorted.
         [decoded sortUsingSelector:@selector(compare:)];
         
         for(DayContainer *container in decoded) 
@@ -220,7 +265,7 @@ static __strong MasterDataHandler *sharedSingleton = nil;
 		}
         
         //Loop through the days, and cache each month,
-        NSDate *testDate = ((DayContainer*)[decoded objectAtIndex:0]).date;
+        /*NSDate *testDate = ((DayContainer*)[decoded objectAtIndex:0]).date;
         for (DayContainer *container in decoded)
         {
         	NSDateComponents *testComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] components:NSMonthCalendarUnit | NSYearCalendarUnit | NSDayCalendarUnit fromDate:testDate];
@@ -234,7 +279,7 @@ static __strong MasterDataHandler *sharedSingleton = nil;
                 [self writeCache:testDate];
                 NSLog(@"Updating hard cache: %@", [testDate description]);
             }
-        }
+        }*/
         
         [delegate didRecieveData:decoded];
         
