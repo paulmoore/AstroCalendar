@@ -31,6 +31,7 @@
 #import "AstroCalendarSunViewController.h"
 #import "AstroCalendarDayViewController.h"
 #import "AstroCalendarMoonViewController.h"
+#import "AstroCalendarHelpViewController.h"
 #import "AstroCalendarSelectDateViewController.h"
 #import "UINavigationController+UniqueStack.h"
 
@@ -92,9 +93,13 @@
     }
 }
 
-- (void)didSelectOptionsFromToolbar
+- (void)didSelectHelpFromToolbar
 {
-    // TODO Go to options menu.
+    if (! [self.navController pushUniqueControllerOfType:[AstroCalendarHelpViewController class] animated:YES])
+    {
+        UIViewController *helpController = [[AstroCalendarHelpViewController alloc] initWithNavController:self.navController];
+        [self.navController pushViewController:helpController animated:YES];
+    }
 }
 
 #pragma mark - View lifecycle
@@ -109,8 +114,8 @@
     
     UIBarButtonItem *moonButton = [[UIBarButtonItem alloc] initWithTitle:@"Moon Calendar" style:UIBarButtonItemStyleBordered target:self action:@selector(didSelectMoonCalendarFromToolbar)];
     UIBarButtonItem *selectDatesButton = [[UIBarButtonItem alloc] initWithTitle:@"Select Dates" style:UIBarButtonItemStyleBordered target:self action:@selector(didSelectSelectDatesFromToolbar)];
-    UIBarButtonItem *optionsButton = [[UIBarButtonItem alloc] initWithTitle:@"Options" style:UIBarButtonItemStyleBordered target:self action:@selector(didSelectOptionsFromToolbar)];
-    NSArray *buttons = [NSArray arrayWithObjects:moonButton, selectDatesButton, optionsButton, nil];
+    UIBarButtonItem *helpButton = [[UIBarButtonItem alloc] initWithTitle:@"Help" style:UIBarButtonItemStyleBordered target:self action:@selector(didSelectHelpFromToolbar)];
+    NSArray *buttons = [NSArray arrayWithObjects:moonButton, selectDatesButton, helpButton, nil];
     [self setToolbarItems:buttons animated:YES];
 }
 

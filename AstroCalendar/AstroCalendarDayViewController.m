@@ -31,6 +31,8 @@
 #import "AstroCalendarDayViewController.h"
 #import "AstroCalendarMoonViewController.h"
 #import "AstroCalendarSunViewController.h"
+#import "AstroCalendarHelpViewController.h"
+#import "AstroCalendarSelectDateViewController.h"
 #import "MasterDataHandler.h"
 #import "UINavigationController+UniqueStack.h"
 
@@ -83,9 +85,22 @@
     }
 }
 
-- (void)didSelectOptionsFromToolbar
+- (void)didSelectHelpFromToolbar
 {
-    // TODO Show options.
+    if (! [self.navController pushUniqueControllerOfType:[AstroCalendarHelpViewController class] animated:YES])
+    {
+        UIViewController *helpController = [[AstroCalendarHelpViewController alloc] initWithNavController:self.navController];
+        [self.navController pushViewController:helpController animated:YES];
+    }
+}
+
+- (void)didSelectSelectDatesFromToolbar
+{
+    if (! [self.navController pushUniqueControllerOfType:[AstroCalendarSelectDateViewController class] animated:YES])
+    {
+        UIViewController *selectController = [[AstroCalendarSelectDateViewController alloc] initWithNavController:self.navController andIsEndDate:NO];
+        [self.navController pushViewController:selectController animated:YES];
+    }
 }
 
 #pragma mark - View lifecycle
@@ -97,8 +112,9 @@
     
     UIBarButtonItem *moonButton = [[UIBarButtonItem alloc] initWithTitle:@"Moon Calendar" style:UIBarButtonItemStyleBordered target:self action:@selector(didSelectMoonCalendarFromToolbar)];
     UIBarButtonItem *sunButton = [[UIBarButtonItem alloc] initWithTitle:@"Sun Calendar" style:UIBarButtonItemStyleBordered target:self action:@selector(didSelectSunCalendarFromToolbar)];
-    UIBarButtonItem *optionsButton = [[UIBarButtonItem alloc] initWithTitle:@"Options" style:UIBarButtonItemStyleBordered target:self action:@selector(didSelectOptionsFromToolbar)];
-    NSArray *buttons = [NSArray arrayWithObjects:moonButton, sunButton, optionsButton, nil];
+    UIBarButtonItem *selectButton = [[UIBarButtonItem alloc] initWithTitle:@"Select Dates" style:UIBarButtonItemStyleBordered target:self action:@selector(didSelectSelectDatesFromToolbar)];
+    UIBarButtonItem *helpButton = [[UIBarButtonItem alloc] initWithTitle:@"Help" style:UIBarButtonItemStyleBordered target:self action:@selector(didSelectHelpFromToolbar)];
+    NSArray *buttons = [NSArray arrayWithObjects:moonButton, sunButton, selectButton, helpButton, nil];
     [self setToolbarItems:buttons animated:YES];
     
     static dispatch_once_t pred = 0;

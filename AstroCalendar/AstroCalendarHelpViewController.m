@@ -1,8 +1,8 @@
 //
-//  AstroCalendarSelectDateViewController.m
+//  AstroCalendarHelpViewController.m
 //  AstroCalendar
 //
-//  Created by Paul Moore on 11-10-28.
+//  Created by Paul Moore on 11-11-27.
 //  University of British Columbia.
 //  https://github.com/paulmoore/AstroCalendar
 /*
@@ -28,40 +28,30 @@
  OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#import "AstroCalendarSelectDateViewController.h"
+#import "AstroCalendarHelpViewController.h"
 #import "AstroCalendarMoonViewController.h"
 #import "AstroCalendarSunViewController.h"
-#import "AstroCalendarHelpViewController.h"
-#import "MasterDataHandler.h"
-#import "DateRangeRequest.h"
+#import "AstroCalendarSelectDateViewController.h"
 #import "UINavigationController+UniqueStack.h"
 
-@implementation AstroCalendarSelectDateViewController
+@implementation AstroCalendarHelpViewController
 
-@synthesize navController, startDate;
+@synthesize navController;
 
-- (id)initWithNavController:(UINavigationController *)controller andIsEndDate:(BOOL)isEndDate
+- (id)initWithNavController:(UINavigationController *)controller
 {
     if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
     {
-        self = [super initWithNibName:@"AstroCalendarSelectDateViewController_iPhone" bundle:nil];
+        self = [super initWithNibName:@"AstroCalendarHelpViewController_iPhone" bundle:nil];
     }
     else
     {
-        self = [super initWithNibName:@"AstroCalendarSelectDateViewController_iPad" bundle:nil];
+        self = [super initWithNibName:@"AstroCalendarHelpViewController_iPad" bundle:nil];
     }
     if (self)
     {
-        isSelectEnd = isEndDate;
-        if (isEndDate)
-        {
-            self.title = @"Select End Date";
-        }
-        else
-        {
-            self.title = @"Select Start Date";
-        }
         self.navController = controller;
+        self.title = @"Help Section";
     }
     return self;
 }
@@ -72,37 +62,6 @@
     [super didReceiveMemoryWarning];
     
     // Release any cached data, images, etc that aren't in use.
-}
-
-#pragma mark - IBAction listeners
-
-- (IBAction)didSelectNext:(id)sender
-{
-    if (isSelectEnd)
-    {
-        // Display the Moon Calendar, and make a request for the selected data.
-        AstroCalendarMoonViewController *moonController = (AstroCalendarMoonViewController *)[self.navController pushUniqueControllerOfType:[AstroCalendarMoonViewController class] animated:YES];
-        if (!moonController)
-        {
-            moonController = [[AstroCalendarMoonViewController alloc] init];
-            [self.navController pushViewController:moonController animated:YES];
-        }
-        // Make the Date request: start date -> end date.
-        DateRangeRequest *request = [[DateRangeRequest alloc] initWithStartDate:self.startDate endDate:[datePicker date]];
-        // Don't attempt to load a 'backwards' time interval.
-        if ([request numDays] > 0)
-        {
-            [moonController loadDates:request];
-        }
-    }
-    else
-    {
-        // We don't want to check if a select date controller is already in the nav stack, because there should be one for each date in the interval.
-        AstroCalendarSelectDateViewController *selectEndDate = [[AstroCalendarSelectDateViewController alloc] initWithNavController:self.navController andIsEndDate:YES];
-        [self.navController pushViewController:selectEndDate animated:YES];
-        // Let the end date selector know what start date was selected.
-        selectEndDate.startDate = [datePicker date];
-    }
 }
 
 #pragma mark - Toolbar Button Actions
@@ -125,12 +84,12 @@
     }
 }
 
-- (void)didSelectHelpFromToolbar
+- (void)didSelectSelectDatesFromToolbar
 {
-    if (! [self.navController pushUniqueControllerOfType:[AstroCalendarHelpViewController class] animated:YES])
+    if (! [self.navController pushUniqueControllerOfType:[AstroCalendarSelectDateViewController class] animated:YES])
     {
-        UIViewController *helpController = [[AstroCalendarHelpViewController alloc] initWithNavController:self.navController];
-        [self.navController pushViewController:helpController animated:YES];
+        UIViewController *selectController = [[AstroCalendarSelectDateViewController alloc] initWithNavController:self.navController andIsEndDate:NO];
+        [self.navController pushViewController:selectController animated:YES];
     }
 }
 
@@ -141,20 +100,11 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    if (isSelectEnd)
-    {
-        [nextButton setTitle:@"View Calendar" forState:UIControlStateNormal];
-    }
-    else
-    {
-        [nextButton setTitle:@"Select End Date" forState:UIControlStateNormal];
-    }
-    
     UIBarButtonItem *moonButton = [[UIBarButtonItem alloc] initWithTitle:@"Moon Calendar" style:UIBarButtonItemStyleBordered target:self action:@selector(didSelectMoonCalendarFromToolbar)];
     UIBarButtonItem *sunButton = [[UIBarButtonItem alloc] initWithTitle:@"Sun Calendar" style:UIBarButtonItemStyleBordered target:self action:@selector(didSelectSunCalendarFromToolbar)];
-    UIBarButtonItem *helpButton = [[UIBarButtonItem alloc] initWithTitle:@"Help" style:UIBarButtonItemStyleBordered target:self action:@selector(didSelectHelpFromToolbar)];
-    NSArray *barButtons = [NSArray arrayWithObjects:moonButton, sunButton, helpButton, nil];
-    [self setToolbarItems:barButtons animated:YES];
+    UIBarButtonItem *selectButton = [[UIBarButtonItem alloc] initWithTitle:@"Select Dates" style:UIBarButtonItemStyleBordered target:self action:@selector(didSelectSelectDatesFromToolbar)];
+    NSArray *buttons = [NSArray arrayWithObjects:moonButton, sunButton, selectButton, nil];
+    [self setToolbarItems:buttons animated:YES];
 }
 
 - (void)viewDidUnload
@@ -162,9 +112,9 @@
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
+    
     self.navController = nil;
-    datePicker = nil;
-    nextButton = nil;
+    helpTextView = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

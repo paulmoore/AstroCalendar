@@ -69,9 +69,9 @@
 - (void)didSelectSelectDatesFromToolbar;
 
 /**
- * Selector for when the 'Option's button is taped from the Toolbar.
- * Transitions to Options (not yet implemented).
+ * Selector for when the 'Help' button is taped from the Toolbar.
+ * Transitions to Help.
  */
-- (void)didSelectOptionsFromToolbar;
+- (void)didSelectHelpFromToolbar;
 
 @end

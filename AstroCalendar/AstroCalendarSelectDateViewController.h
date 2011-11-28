@@ -78,9 +78,9 @@
 - (void)didSelectMoonCalendarFromToolbar;
 
 /**
- * Selector for when the 'Options' Toolbar button is tapped.
- * Transitions to Options (not yet implemented).
+ * Selector for when the 'Help' Toolbar button is tapped.
+ * Transitions to Help (not yet implemented).
  */
-- (void)didSelectOptionsFromToolbar;
+- (void)didSelectHelpFromToolbar;
 
 @end

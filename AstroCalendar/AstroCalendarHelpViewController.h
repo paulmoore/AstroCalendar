@@ -1,8 +1,8 @@
 //
-//  AstroCalendarDayViewController.h
+//  AstroCalendarHelpViewController.h
 //  AstroCalendar
 //
-//  Created by Paul Moore on 11-11-02.
+//  Created by Paul Moore on 11-11-27.
 //  University of British Columbia.
 //  https://github.com/paulmoore/AstroCalendar
 /*
@@ -30,47 +30,18 @@
 
 #import <UIKit/UIKit.h>
 
-#import "MasterDataHandlerDelegate.h"
-
-/**
- * View Controller for a specific day view.
- * Displays astrological sun day 'events'.
- */
-@interface AstroCalendarDayViewController : UIViewController <MasterDataHandlerDelegate>
+@interface AstroCalendarHelpViewController : UIViewController
 {
-    IBOutlet UILabel *dateLabel, *sunriseLabel, *sunsetLabel, *moonriseLabel, *moonsetLabel;
+    IBOutlet UITextView *helpTextView;
 }
 
-/** The parent Navigation Controller. */
 @property (nonatomic, weak) UINavigationController *navController;
 
-@property (nonatomic, strong) NSDate *date;
-
-/**
- * Inits an AstroCalendarDayViewController with a given parent controller.
- *
- * @param controller The parent Navigation Controller.
- * @return An instance of AstroCalendarDayViewController.
- */
 - (id)initWithNavController:(UINavigationController *)controller;
 
-/**
- * Selector for when the 'Sun Calendar' Toolbar button is tapped.
- * Transitions to the AstroCalendarSunViewController.
- */
 - (void)didSelectSunCalendarFromToolbar;
 
-/**
- * Selector for when the 'Moon Calendar' Toolbar button is tapped.
- * Transitions to the AstroCalendarMoonViewController.
- */
 - (void)didSelectMoonCalendarFromToolbar;
-
-/**
- * Selector for when the 'Help' Toolbar button is tapped.
- * Transitions to Help (not yet implemented).
- */
-- (void)didSelectHelpFromToolbar;
 
 /**
  * Selector for when the 'Select Dates' Toolbar button is tapped.
