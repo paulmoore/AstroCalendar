@@ -70,7 +70,7 @@
     // If the view has been loaded, make the request.
     if ([self isViewLoaded])
     {
-        [[MasterDataHandler sharedManager] askApiForDates:request.startDate endDate:request.endDate delegate:self];
+        [[MasterDataHandler sharedManager] getDates:request.startDate endDate:request.endDate delegate:self];
     }
 }
 
@@ -153,7 +153,7 @@
     
     if (self.dateRequest)
     {
-        [[MasterDataHandler sharedManager] askApiForDates:self.dateRequest.startDate endDate:self.dateRequest.endDate delegate:self];
+        [[MasterDataHandler sharedManager] getDates:self.dateRequest.startDate endDate:self.dateRequest.endDate delegate:self];
     }
 }
 
