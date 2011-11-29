@@ -347,8 +347,15 @@ static __strong MasterDataHandler *sharedSingleton = nil;
     {
         NSLog(@"Failure: %@ With Response: %@", error, [response description]);
         
+        NSString *usrMsg;
+        
+        if ([[error localizedDescription] isEqual: @"The Internet connection appears to be offline."])
+        	usrMsg = @"The Internet connection appears to be offline.";
+        else
+        	usrMsg = @"API server internal error.";
+        
         //Alert the user!
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Network Error" message:@"API server failed to respond." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Network Error" message:usrMsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
     
     
     	[alert show];
