@@ -218,8 +218,6 @@ static __strong MasterDataHandler *sharedSingleton = nil;
         {
         	DayContainer *original = (DayContainer*)[decoded objectAtIndex:i];
         	NSArray *splitStringFornight = [original.fortnight componentsSeparatedByString: @"-"];
-            
-            NSLog(@"TITHI STARTTTTT: %@", original.tithiStart);
         	
             //Handle case where there are two tithis in a single day.
             if ([splitStringFornight count] > 1)
@@ -272,16 +270,6 @@ static __strong MasterDataHandler *sharedSingleton = nil;
                 
                 nextDay.date = [formatter dateFromString:[NSString stringWithFormat:@"%i-%i-%i-%i-%i", [dayComponents day], [dayComponents month], [dayComponents year], [[tithiTwo objectAtIndex:0]intValue], [[tithiTwo objectAtIndex:1]intValue]]];
                 
-                
-                
-                NSLog(@"original: %@", original.date);
-                NSLog(@"date::: %@", nextDay.date);
-                
-                NSDateFormatter *corrected = [[NSDateFormatter alloc] init];
-                corrected.timeZone = currentTimeZone;
-                corrected.dateFormat = @"dd-MM-yy HH:mm";
-                
-                NSLog(@"Corrected date: %@", [corrected stringFromDate:nextDay.date]);
                 
                 [decoded insertObject:nextDay atIndex: i+1];
             }
@@ -358,6 +346,12 @@ static __strong MasterDataHandler *sharedSingleton = nil;
     failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) 
     {
         NSLog(@"Failure: %@ With Response: %@", error, [response description]);
+        
+        //Alert the user!
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Network Error" message:@"API server failed to respond." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+    
+    
+    	[alert show];
     }];
     
     
