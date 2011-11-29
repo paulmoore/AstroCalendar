@@ -105,8 +105,8 @@
             {
                 currentSection = [[SectionData alloc] initWithSectionNum:[sections count] monthName:nextMonth monthYear:day.date startIndex:index];
                 [sections addObject:currentSection];
+                currentMonth = nextMonth;
             }
-            currentMonth = nextMonth;
         }
         // Add a row to whatever the current section is.
         if (!noMonth)
