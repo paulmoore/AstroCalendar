@@ -36,7 +36,11 @@
 
 + (CGFloat)cellHeight
 {
-    return 44.0;
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
+    {
+        return 44.0;
+    }
+    return 88.0;
 }
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier

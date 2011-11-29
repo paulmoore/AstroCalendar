@@ -53,6 +53,14 @@
 		D151845A1475C94100AA0A41 /* Settings.plist in Resources */ = {isa = PBXBuildFile; fileRef = D15184591475C94100AA0A41 /* Settings.plist */; };
 		D151845B1475C94100AA0A41 /* Settings.plist in Resources */ = {isa = PBXBuildFile; fileRef = D15184591475C94100AA0A41 /* Settings.plist */; };
 		D1AD7A171464ABE100B45C94 /* UINavigationController+UniqueStack.m in Sources */ = {isa = PBXBuildFile; fileRef = D1AD7A161464ABE100B45C94 /* UINavigationController+UniqueStack.m */; };
+		D1C120FB148452FE00213C49 /* AstroCalendarMoonViewCell_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = D1C120F9148452FE00213C49 /* AstroCalendarMoonViewCell_iPad.xib */; };
+		D1C120FC148452FE00213C49 /* AstroCalendarMoonViewCell_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = D1C120F9148452FE00213C49 /* AstroCalendarMoonViewCell_iPad.xib */; };
+		D1C1210314845A7D00213C49 /* AstroCalendarSelectDateViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = D1C1210114845A7D00213C49 /* AstroCalendarSelectDateViewController_iPad.xib */; };
+		D1C1210414845A7D00213C49 /* AstroCalendarSelectDateViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = D1C1210114845A7D00213C49 /* AstroCalendarSelectDateViewController_iPad.xib */; };
+		D1C1210714845C0500213C49 /* AstroCalendarDayViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = D1C1210514845C0500213C49 /* AstroCalendarDayViewController_iPad.xib */; };
+		D1C1210814845C0500213C49 /* AstroCalendarDayViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = D1C1210514845C0500213C49 /* AstroCalendarDayViewController_iPad.xib */; };
+		D1C1210B14845D5100213C49 /* AstroCalendarHelpViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = D1C1210914845D5100213C49 /* AstroCalendarHelpViewController_iPad.xib */; };
+		D1C1210C14845D5100213C49 /* AstroCalendarHelpViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = D1C1210914845D5100213C49 /* AstroCalendarHelpViewController_iPad.xib */; };
 		D1ED08A31483155A003D2F15 /* AstroCalendarHelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D1ED08A11483155A003D2F15 /* AstroCalendarHelpViewController.m */; };
 		D1ED08A41483155A003D2F15 /* AstroCalendarHelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D1ED08A11483155A003D2F15 /* AstroCalendarHelpViewController.m */; };
 		D1ED08A51483155A003D2F15 /* AstroCalendarHelpViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = D1ED08A21483155A003D2F15 /* AstroCalendarHelpViewController_iPhone.xib */; };
@@ -152,6 +160,10 @@
 		D15184591475C94100AA0A41 /* Settings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Settings.plist; sourceTree = "<group>"; };
 		D1AD7A151464ABE100B45C94 /* UINavigationController+UniqueStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+UniqueStack.h"; sourceTree = "<group>"; };
 		D1AD7A161464ABE100B45C94 /* UINavigationController+UniqueStack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+UniqueStack.m"; sourceTree = "<group>"; };
+		D1C120FA148452FE00213C49 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/AstroCalendarMoonViewCell_iPad.xib; sourceTree = "<group>"; };
+		D1C1210214845A7D00213C49 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/AstroCalendarSelectDateViewController_iPad.xib; sourceTree = "<group>"; };
+		D1C1210614845C0500213C49 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/AstroCalendarDayViewController_iPad.xib; sourceTree = "<group>"; };
+		D1C1210A14845D5100213C49 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/AstroCalendarHelpViewController_iPad.xib; sourceTree = "<group>"; };
 		D1ED08A01483155A003D2F15 /* AstroCalendarHelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AstroCalendarHelpViewController.h; sourceTree = "<group>"; };
 		D1ED08A11483155A003D2F15 /* AstroCalendarHelpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AstroCalendarHelpViewController.m; sourceTree = "<group>"; };
 		D1ED08A21483155A003D2F15 /* AstroCalendarHelpViewController_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AstroCalendarHelpViewController_iPhone.xib; path = en.lproj/AstroCalendarHelpViewController_iPhone.xib; sourceTree = "<group>"; };
@@ -249,6 +261,10 @@
 				D10D64FC1461C4A70053B016 /* AstroCalendarDayViewController_iPhone.xib */,
 				D10D64E91460A4660053B016 /* AstroCalendarMoonViewCell_iPhone.xib */,
 				D13ED633145B656300E0731F /* AstroCalendarSelectDateViewController_iPhone.xib */,
+				D1C120F9148452FE00213C49 /* AstroCalendarMoonViewCell_iPad.xib */,
+				D1C1210114845A7D00213C49 /* AstroCalendarSelectDateViewController_iPad.xib */,
+				D1C1210514845C0500213C49 /* AstroCalendarDayViewController_iPad.xib */,
+				D1C1210914845D5100213C49 /* AstroCalendarHelpViewController_iPad.xib */,
 			);
 			name = NIBs;
 			sourceTree = "<group>";
@@ -471,6 +487,10 @@
 				D10D64FE1461C4A70053B016 /* AstroCalendarDayViewController_iPhone.xib in Resources */,
 				D151845A1475C94100AA0A41 /* Settings.plist in Resources */,
 				D1ED08A51483155A003D2F15 /* AstroCalendarHelpViewController_iPhone.xib in Resources */,
+				D1C120FB148452FE00213C49 /* AstroCalendarMoonViewCell_iPad.xib in Resources */,
+				D1C1210314845A7D00213C49 /* AstroCalendarSelectDateViewController_iPad.xib in Resources */,
+				D1C1210714845C0500213C49 /* AstroCalendarDayViewController_iPad.xib in Resources */,
+				D1C1210B14845D5100213C49 /* AstroCalendarHelpViewController_iPad.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -481,6 +501,10 @@
 				D139FBB0144FE003006D0797 /* InfoPlist.strings in Resources */,
 				D151845B1475C94100AA0A41 /* Settings.plist in Resources */,
 				D1ED08A61483155A003D2F15 /* AstroCalendarHelpViewController_iPhone.xib in Resources */,
+				D1C120FC148452FE00213C49 /* AstroCalendarMoonViewCell_iPad.xib in Resources */,
+				D1C1210414845A7D00213C49 /* AstroCalendarSelectDateViewController_iPad.xib in Resources */,
+				D1C1210814845C0500213C49 /* AstroCalendarDayViewController_iPad.xib in Resources */,
+				D1C1210C14845D5100213C49 /* AstroCalendarHelpViewController_iPad.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -577,6 +601,38 @@
 				D139FBAF144FE003006D0797 /* en */,
 			);
 			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		D1C120F9148452FE00213C49 /* AstroCalendarMoonViewCell_iPad.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D1C120FA148452FE00213C49 /* en */,
+			);
+			name = AstroCalendarMoonViewCell_iPad.xib;
+			sourceTree = "<group>";
+		};
+		D1C1210114845A7D00213C49 /* AstroCalendarSelectDateViewController_iPad.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D1C1210214845A7D00213C49 /* en */,
+			);
+			name = AstroCalendarSelectDateViewController_iPad.xib;
+			sourceTree = "<group>";
+		};
+		D1C1210514845C0500213C49 /* AstroCalendarDayViewController_iPad.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D1C1210614845C0500213C49 /* en */,
+			);
+			name = AstroCalendarDayViewController_iPad.xib;
+			sourceTree = "<group>";
+		};
+		D1C1210914845D5100213C49 /* AstroCalendarHelpViewController_iPad.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D1C1210A14845D5100213C49 /* en */,
+			);
+			name = AstroCalendarHelpViewController_iPad.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
