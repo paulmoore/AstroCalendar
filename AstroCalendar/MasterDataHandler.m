@@ -123,6 +123,8 @@ static __strong MasterDataHandler *sharedSingleton = nil;
     //hit a date that isn't the cache, we're just going to pull ALL the dates
     //down from the API (to keep the cache fresh).
     
+    NSDateComponents *endComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] components:NSMonthCalendarUnit | NSYearCalendarUnit | NSDayCalendarUnit fromDate:endDate];
+    
     NSDate *workingDate = (NSDate *)[startDate copy];
     NSDate *workingDatePlus = (NSDate *)[startDate copy];
     
@@ -140,7 +142,9 @@ static __strong MasterDataHandler *sharedSingleton = nil;
         
         DayContainer *dayPlusOne = [self retrieveDayFromCache:workingDatePlus];
     
-    	if (!day && !dayPlusOne)
+    	NSDateComponents *workingComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] components:NSMonthCalendarUnit | NSYearCalendarUnit | NSDayCalendarUnit fromDate:workingDate];
+    
+    	if ((!day && !dayPlusOne) || (!day && [workingComponents year] == [endComponents year] && [workingComponents month] == [endComponents month] && [workingComponents day] == [endComponents day]))
         {
         	askApi = true;
             NSLog(@"Unable to retrieve day %@ from cache!", workingDate);
