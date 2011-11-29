@@ -49,6 +49,9 @@
 
 @property(strong) NSMutableDictionary *settingsDictionary;
 
+@property BOOL locationUpdated;
+
+
 #pragma mark -
 #pragma mark Class Methods
 
