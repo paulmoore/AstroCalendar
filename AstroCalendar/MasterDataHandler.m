@@ -309,7 +309,7 @@ static __strong MasterDataHandler *sharedSingleton = nil;
             if ([container.fortnight isEqualToString:@"noPaksha"])
             	container.fortnight = @"(No Paksha)";
         
-    		NSLog(@"Date: %@", container.date);
+    		/*NSLog(@"Date: %@", container.date);
             NSLog(@"Sunrise: %@", container.sunrise);
             NSLog(@"Sunset: %@", container.sunset);
             NSLog(@"Moonrise: %@", container.moonrise);
@@ -317,7 +317,7 @@ static __strong MasterDataHandler *sharedSingleton = nil;
             NSLog(@"Fortnight: %@", container.fortnight);
             NSLog(@"LunarMonth: %@\n", container.lunarMonth);
             NSLog(@"Tithi: %@\n", container.tithi);
-            NSLog(@"TithiStart: %@\n\n", container.tithiStart);
+            NSLog(@"TithiStart: %@\n\n", container.tithiStart);*/
             
             [self addDayToCache:container];
 		}
@@ -679,7 +679,7 @@ static __strong MasterDataHandler *sharedSingleton = nil;
 	rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     plistPath = [rootPath stringByAppendingPathComponent:[NSString stringWithFormat:@"dataCache_%i.plist", monthIndex]];
     
-    NSLog(@"PATH: %@", plistPath);
+    //NSLog(@"PATH: %@", plistPath);
     
     NSDictionary *monthSet = [self retrieveMonthSetFromCache:date];
     NSMutableDictionary *encodedMonthSet = [[NSMutableDictionary alloc] init];

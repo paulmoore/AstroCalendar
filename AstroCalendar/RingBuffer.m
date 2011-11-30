@@ -140,7 +140,7 @@
     rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     plistPath = [rootPath stringByAppendingPathComponent:filename];
     
-    NSLog(@"RING PATH: %@", plistPath);
+    //NSLog(@"RING PATH: %@", plistPath);
     
     NSData *plistData = [NSPropertyListSerialization dataFromPropertyList:dataDictionary format:NSPropertyListXMLFormat_v1_0 errorDescription:&errorDesc];
     
