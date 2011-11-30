@@ -276,9 +276,7 @@ static __strong MasterDataHandler *sharedSingleton = nil;
             }
         }
         
-        //Sort everything by date - this is the only location we're guranteed that
-        //the data is sorted.
-        [decoded sortUsingSelector:@selector(compare:)];
+        NSMutableArray *toRemove = [[NSMutableArray alloc]init];
         
         for(DayContainer *container in decoded) 
         {
@@ -295,6 +293,11 @@ static __strong MasterDataHandler *sharedSingleton = nil;
             //If there isn't a tithi, format it nicely
             if ([container.fortnight isEqualToString:@"noPaksha"])
             	container.fortnight = @"(No Paksha)";
+                
+            if ([container.fortnight isEqualToString:@"none"])
+            	[toRemove addObject:container];
+            else
+            	[self addDayToCache:container];
         
     		/*NSLog(@"Date: %@", container.date);
             NSLog(@"Sunrise: %@", container.sunrise);
@@ -305,9 +308,15 @@ static __strong MasterDataHandler *sharedSingleton = nil;
             NSLog(@"LunarMonth: %@\n", container.lunarMonth);
             NSLog(@"Tithi: %@\n", container.tithi);
             NSLog(@"TithiStart: %@\n\n", container.tithiStart);*/
-            
-            [self addDayToCache:container];
 		}
+        
+        //Remove any days that contain "none"!
+        for (DayContainer *containerToRemove in toRemove)
+        	[decoded removeObject:containerToRemove];
+        
+        //Sort everything by date - this is the only location we're guranteed that
+        //the data is sorted.
+        [decoded sortUsingSelector:@selector(compare:)];
         
         //Loop through the days, and cache each month,
         /*NSDate *testDate = ((DayContainer*)[decoded objectAtIndex:0]).date;
