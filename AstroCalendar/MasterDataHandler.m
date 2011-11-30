@@ -93,28 +93,6 @@ static __strong MasterDataHandler *sharedSingleton = nil;
     return sharedSingleton;
 }
 
-/*
-+ (RingBuffer *)getDataCacheIndexer
-{
-	return dataCacheIndexer;
-}
-
-+ (void)setDataCacheIndexer:(RingBuffer *)ringBuffer
-{
-	dataCacheIndexer = ringBuffer;
-}
-
-+ (NSMutableDictionary *)getDataCache
-{
-	return dataCache;
-}
-
-+ (void)setDataCache:(NSMutableDictionary *)dictionary
-{
-	dataCache = dictionary;
-}
- */
-
 - (void)getDates:(NSDate *)startDate endDate:(NSDate *)endDate delegate:(id<MasterDataHandlerDelegate>)delegate
 {
 	NSLog(@"Fielding request for dates...");
@@ -141,12 +119,15 @@ static __strong MasterDataHandler *sharedSingleton = nil;
         NSDateComponents *offsetExtra = [[NSDateComponents alloc]init];
         	[offsetExtra setDay:1];
         
+        //Move forward a day.
         workingDatePlus = [gregorian dateByAddingComponents: offsetExtra toDate: workingDate options:0];
         
         DayContainer *dayPlusOne = [self retrieveDayFromCache:workingDatePlus];
     
     	NSDateComponents *workingComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] components:NSMonthCalendarUnit | NSYearCalendarUnit | NSDayCalendarUnit fromDate:workingDate];
     
+    	//If we miss two days in a row (sometimes no tithi starts on an individual day, so missing a day can happen. Can't skip a 48 hour period though)
+        //or the end date is missing, then we need to pull from the cache.
     	if ((!day && !dayPlusOne) || (!day && [workingComponents year] == [endComponents year] && [workingComponents month] == [endComponents month] && [workingComponents day] == [endComponents day]))
         {
         	askApi = true;
@@ -171,12 +152,12 @@ static __strong MasterDataHandler *sharedSingleton = nil;
     if (askApi)
     {
     	NSLog(@"Asking API for new data!");
-    	[self askApiForDates:startDate endDate:endDate delegate:delegate];
+    	[self askApiForDates:startDate endDate:endDate delegate:delegate]; //Ask api for data.
     }
     else
     {	
     	NSLog(@"Data retrieved from cache!");
-    	[delegate didRecieveData:cachedDays];
+    	[delegate didRecieveData:cachedDays]; //Return cached data.
     }
 }
 
@@ -199,6 +180,9 @@ static __strong MasterDataHandler *sharedSingleton = nil;
     
     NSLog(urlString);
     
+    //WARNING! This is a hack used to ignore security certs over https. Bad news bears, but we
+    //needed it because our dev server gave out invalid certs, and normally ios doesn't
+    //allow us to connect.
 	[NSURLRequest setAllowsAnyHTTPSCertificate:YES forHost:@"cisxserver1.okanagan.bc.ca"];
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
     
@@ -270,7 +254,7 @@ static __strong MasterDataHandler *sharedSingleton = nil;
                 nextDay.tithi = [splitStringTithi objectAtIndex:1];
 
 
-                
+                //Make sure we format the dates correctly.
                 nextDay.date = [formatter dateFromString:[NSString stringWithFormat:@"%i-%i-%i-%i-%i", [dayComponents day], [dayComponents month], [dayComponents year], [[tithiTwo objectAtIndex:0]intValue], [[tithiTwo objectAtIndex:1]intValue]]];
                 
                 
