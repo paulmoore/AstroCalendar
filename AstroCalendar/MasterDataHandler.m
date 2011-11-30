@@ -30,6 +30,9 @@
 
 #import "MasterDataHandler.h"
 
+// This is a hack to allow for invalid ssh certs. to be ignored.
+// Was done because our development server gave out bad certs,
+// and we didn't have the ability to fix that.
 @interface NSURLRequest (DummyInterface)
 
 + (BOOL)allowsAnyHTTPSCertificateForHost:(NSString *)host;
@@ -45,7 +48,7 @@ static __strong MasterDataHandler *sharedSingleton = nil;
 
 @implementation MasterDataHandler
 
-@synthesize settingsDictionary, dataCache, dataCacheIndexer, locationController, locationUpdated;
+@synthesize settingsDictionary, dataCache, dataCacheIndexer, locationController;
 
 + (MasterDataHandler *)sharedManager
 {
@@ -800,8 +803,6 @@ static __strong MasterDataHandler *sharedSingleton = nil;
     	[locationDictionary objectForKey:@"Latitude"],
         [locationDictionary objectForKey:@"Longitude"],
         [locationDictionary objectForKey:@"Altitude"]);
-        
-    sharedSingleton.locationUpdated = true;
 }
  
 + (void)locationError:(NSError *)error 

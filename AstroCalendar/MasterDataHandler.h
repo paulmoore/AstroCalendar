@@ -40,17 +40,21 @@
 
 #pragma mark -
 #pragma mark Properties
-    
+
+/** Stores a key-value index of all cached months. Each month is
+	itself a dictionary. */    
 @property(strong) NSMutableDictionary *dataCache;
 
+/** Maintains an index into the dataCache for a particular month,
+	so that a fixed number of months can be maintained at any 
+    given time. */
 @property(strong) RingBuffer *dataCacheIndexer;
 
+/** Manages callbacks from CoreLocationServices for GPS updates. */
 @property(strong) CoreLocationController *locationController;
 
+/** Stores all global settings as a key-value pairing. */
 @property(strong) NSMutableDictionary *settingsDictionary;
-
-@property BOOL locationUpdated;
-
 
 #pragma mark -
 #pragma mark Class Methods
@@ -63,24 +67,49 @@
  */
 + (MasterDataHandler *)sharedManager;
 
+/**
+ * Saves applications settings to a Settings.plist file.
+ */
++ (void)saveSettings;
+
+/** 
+ * Loads application settings from a Settings.plist file.
+ */
++ (void)loadSettings;
+
+/**
+* Responds to CoreLocation updates, caching the most recent
+* latitude, longitude, and altitude for our user. This data
+* is required to make API calls for date information.
+*/
++ (void)locationUpdate:(CLLocation *)location;
+    
+/**
+* Responds to CoreLocation failed updates. This information
+* is outputted to NSLog for debugging purposes, but is
+* otherwise ignored (we keep the cached information around).
+*/
++ (void)locationError:(NSError *)error;
+
 #pragma mark -
 #pragma mark Instance Methods
 
-/*
-+ (RingBuffer *)getDataCacheIndexer;
-+ (void)setDataCacheIndexer:(RingBuffer *)dataCacheIndexer;
-    
-+ (NSMutableDictionary *)getDataCache;
-+ (void)setDataCache:(NSMutableDictionary *)dictionary;
-*/
 
+/**
+ * Queries the data handler for the specified date range.
+ * This method decides whether data can be retrived from the
+ * cache or needs to be pulled fresh from the API.
+ *
+ * @param startDate The (inclusive) date to begin polling information.
+ * @param endDate The (inclusive) date to stop polling information.
+ */
 -(void) getDates:(NSDate *) startDate endDate:(NSDate *)endDate delegate:(id<MasterDataHandlerDelegate>)delegate;
  
 /**
- * Queries the data handler for the specified date range.
+ * Queries the API for the specified date range.
  *
- * @param startDate The (inclusive) start date to begin polling information.
- * @param endDate The (inclusive) end date to stop polling information.
+ * @param startDate The (inclusive) date to begin polling information.
+ * @param endDate The (inclusive) date to stop polling information.
  */
 - (void)askApiForDates:(NSDate *)startDate endDate:(NSDate *)endDate delegate:(id<MasterDataHandlerDelegate>)delegate;
 	
@@ -102,15 +131,6 @@
  */
 - (void)registerAlertOnDate:(NSDate *)date withMessage:(NSString *)message;
 
-/**
- * Saves applications settings to a Settings.plist file.
- */
-+ (void)saveSettings;
-
-/** 
- * Loads application settings from a Settings.plist file.
- */
-+ (void)loadSettings;
     
 /**
  * Adds a given day dataset to the cache. If the specified
@@ -119,7 +139,7 @@
  *
  * @param data The Day to cache.
  * @return Returns some unique identifier within the cache?
-*/
+ */
 - (int)addDayToCache:(DayContainer *)data;
 
 /**
@@ -165,20 +185,6 @@
 * them in to the in-memory cache.
 */
 - (void)loadCache;
-    
-/**
-* Responds to CoreLocation updates, caching the most recent
-* latitude, longitude, and altitude for our user. This data
-* is required to make API calls for date information.
-*/
-+ (void)locationUpdate:(CLLocation *)location;
-    
-/**
-* Responds to CoreLocation failed updates. This information
-* is outputted to NSLog for debugging purposes, but is
-* otherwise ignored (we keep the cached information around).
-*/
-+ (void)locationError:(NSError *)error;
     
 /**
 * Lists all the alerts that this application has registered
