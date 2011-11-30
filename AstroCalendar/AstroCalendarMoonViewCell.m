@@ -59,6 +59,8 @@
     tithiLabel.text = @"";
     fortnightLabel.text = @"";
     
+    self.backgroundColor = [UIColor whiteColor];
+    
     [self.activityIndicator startAnimating];
 }
 
@@ -74,6 +76,17 @@
     dateLabel.text = [formatter stringFromDate:date];
     tithiLabel.text = tithi;
     fortnightLabel.text = fortnight;
+    
+    if ([fortnight isEqualToString:@"Full Moon"])
+    {
+        NSLog(@"Configured with: Full Moon");
+        self.contentView.backgroundColor = [UIColor redColor];
+    }
+    else if ([fortnight isEqualToString:@"New Moon"])
+    {
+        NSLog(@"Configured with: New Moon");
+        self.contentView.backgroundColor = [UIColor greenColor];
+    }
     
     // Stop the Activity Indicator from animating, the data has been loaded.
     [self.activityIndicator stopAnimating];

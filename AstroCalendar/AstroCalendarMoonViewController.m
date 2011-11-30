@@ -85,9 +85,6 @@
         return;
     }
     
-    // Set the data we recieved from the data handler.
-    self.lunarData = data;
-    
     NSMutableArray *sections = [NSMutableArray arrayWithCapacity:2];
     
     // Insert the appropriate sections based on the lunar months.
@@ -97,25 +94,24 @@
     for (DayContainer *day in data)
     {
         NSString *nextMonth = day.lunarMonth;
-        BOOL noData = [nextMonth isEqualToString:@"none"] || [day.tithi isEqualToString:@"none"];
         // We need to add a new section if we have reached a new lunar month.
         if (!currentMonth || ![currentMonth isEqualToString:nextMonth])
         {
-            if (!noData)
-            {
-                currentSection = [[SectionData alloc] initWithSectionNum:[sections count] monthName:nextMonth monthYear:day.date startIndex:index];
-                [sections addObject:currentSection];
-                currentMonth = nextMonth;
-            }
+            currentSection = [[SectionData alloc] initWithSectionNum:[sections count] monthName:nextMonth monthYear:day.date startIndex:index];
+            [sections addObject:currentSection];
+            currentMonth = nextMonth;
         }
         // Add a row to whatever the current section is.
-        if (!noData)
-        {
-            [currentSection addRow];
-        }
+        [currentSection addRow];
         index++;
     }
     self.sectionsData = sections;
+    
+    [self.dateRequest clear];
+    self.dateRequest = nil;
+    
+    // Set the data we recieved from the data handler.
+    self.lunarData = data;
     
     [self.tableView reloadData];
 }
@@ -149,6 +145,15 @@
     }
 }
 
+- (void)didSelectRefreshFromToolbar
+{
+    [[MasterDataHandler sharedManager] clearCache];
+    NSDate *today = [NSDate date];
+    NSDate *oneMonthFromToday = [today dateByAddingDays:31];
+    DateRangeRequest *request = [[DateRangeRequest alloc] initWithStartDate:today endDate:oneMonthFromToday];
+    [self loadDates:request];
+}
+
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad
@@ -167,6 +172,9 @@
     UIBarButtonItem *selectDatesButton = [[UIBarButtonItem alloc] initWithTitle:@"Select Dates" style:UIBarButtonItemStyleBordered target:self action:@selector(didSelectSelectDatesFromToolbar)];
     NSArray *barButtons = [NSArray arrayWithObjects:sunButton, selectDatesButton, helpButton, nil];
     [self setToolbarItems:barButtons animated:YES];
+    
+    UIBarButtonItem *refreshButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(didSelectRefreshFromToolbar)];
+    self.navigationItem.rightBarButtonItem = refreshButton;
     
     if (self.dateRequest)
     {

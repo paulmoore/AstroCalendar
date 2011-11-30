@@ -28,6 +28,8 @@
  OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#import <TapkuLibrary/TapkuLibrary.h>
+
 #import "AstroCalendarAppDelegate.h"
 #import "AstroCalendarMoonViewController.h"
 #import "MasterDataHandler.h"
@@ -58,7 +60,7 @@
     
     // Make the initial month request.
     NSDate *today = [NSDate date];
-    NSDate *oneMonthFromToday = [NSDate dateWithTimeInterval:(31*24*60*60) sinceDate:today];
+    NSDate *oneMonthFromToday = [today dateByAddingDays:31];
     DateRangeRequest *request = [[DateRangeRequest alloc] initWithStartDate:today endDate:oneMonthFromToday];
     [rootController loadDates:request];
     
