@@ -89,7 +89,7 @@
 {
     if (! [self.navController pushUniqueControllerOfType:[AstroCalendarSelectDateViewController class] animated:YES])
     {
-        UIViewController *selectController = [[AstroCalendarSelectDateViewController alloc] initWithNavController:self.navController andIsEndDate:NO];
+        UIViewController *selectController = [[AstroCalendarSelectDateViewController alloc] initWithNavController:self.navController andIsEndDate:NO givenStartDate:nil];
         [self.navController pushViewController:selectController animated:YES];
     }
 }

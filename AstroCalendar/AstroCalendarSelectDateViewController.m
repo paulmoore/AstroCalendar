@@ -40,7 +40,7 @@
 
 @synthesize navController, startDate;
 
-- (id)initWithNavController:(UINavigationController *)controller andIsEndDate:(BOOL)isEndDate
+- (id)initWithNavController:(UINavigationController *)controller andIsEndDate:(BOOL)isEndDate givenStartDate:(NSDate*)givenStartDate
 {
     if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
     {
@@ -56,6 +56,7 @@
         if (isEndDate)
         {
             self.title = @"Select End Date";
+            self.startDate = givenStartDate;
         }
         else
         {
@@ -98,10 +99,10 @@
     else
     {
         // We don't want to check if a select date controller is already in the nav stack, because there should be one for each date in the interval.
-        AstroCalendarSelectDateViewController *selectEndDate = [[AstroCalendarSelectDateViewController alloc] initWithNavController:self.navController andIsEndDate:YES];
+        AstroCalendarSelectDateViewController *selectEndDate = [[AstroCalendarSelectDateViewController alloc] initWithNavController:self.navController andIsEndDate:YES givenStartDate:[datePicker date]];
         [self.navController pushViewController:selectEndDate animated:YES];
         // Let the end date selector know what start date was selected.
-        selectEndDate.startDate = [datePicker date];
+        //selectEndDate.startDate = [datePicker date];
     }
 }
 
@@ -144,6 +145,14 @@
     if (isSelectEnd)
     {
         [nextButton setTitle:@"View Calendar" forState:UIControlStateNormal];
+        
+        NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+        NSDateComponents *maximumDateOffset = [[NSDateComponents alloc]init];
+        
+        //Due to an API limitation, we can only successfuly retrieve an interval of 3 months.
+        [maximumDateOffset setMonth: 3];
+        [datePicker setMaximumDate: [gregorian dateByAddingComponents: maximumDateOffset toDate: startDate options:0]];
+        [datePicker setMinimumDate: startDate]; //We don't want to count backwards in time!
     }
     else
     {

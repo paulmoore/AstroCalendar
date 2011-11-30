@@ -31,78 +31,104 @@
 #import <Foundation/Foundation.h>
 
 /**
- * A Queue (sort of).
+ * A ringbuffer is a fixed-length array that overwrites the oldest
+ * item in the array when and element is added that would exceed
+ * capacity. This implementation supports serialization to/from
+ * pLists.
  */
 @interface RingBuffer : NSObject
 {
+#pragma mark -
+#pragma mark Instance Data
 
 	@private
-    int _capacity; //The total fixed capacity of the ringbuffer.
-    int _count; //The number of elements currently in the ringbuffer.
-    int _indexLast; //The index to the last element in the ringbuffer.
+    /** The fixed maximum number of elements that can be stored simultaniously
+    	in the ringbuffer. */
+    int _capacity;
     
-    NSMutableArray *_elements; //Array containing the elements of the ring buffer.
+    /** The number of elements currently stored in the ringbuffer. */
+    int _count;
+    
+    /** The index of the latest element added to the ringbuffer. */
+    int _indexLast;
+    
+    /** Array containing the elements that are stored in the ringbuffer. */
+    NSMutableArray *_elements;
 }
 
-//////////////////////////////////////////////////////////
-// Constructor											//
-//														//
-// Initalizes the ringbuffer with a fixed size			//
-// capacity.											//
-//////////////////////////////////////////////////////////
+#pragma mark -
+#pragma mark Instance Methods
+
+/**
+ * Initializes the ringbuffer with a fixed maximum capacity.
+ *
+ * @param capacity The maximum number of elements that can
+                   exist in the ringbuffer. If capacity + 1
+                   elements are added, the extra element
+                   will overwrite the oldest element.
+ */
 - (id)initWithCapacity:(int)capacity;
 
-//////////////////////////////////////////////////////////
-// Constructor											//
-//														//
-// Initializes a new ringbuffer with the contents and	//
-// state of a ringbuffer that was serialized to a pfile.//
-//////////////////////////////////////////////////////////
-- (id)initFromPList:(NSString *)pFile;
+/**
+ * Initializes the ringbuffer by loading state and contents
+ * from a pList that was previously written by a ringbuffer
+ * instance.
+ *
+ * @param filename The path and name of the plist to read.
+ */
+- (id)initFromPList:(NSString *)filename;
 
-
-//Properties.
-//////////////////////////////////////////////////////////
-// Returns the total fixed capacity of the ringbuffer.	//
-//////////////////////////////////////////////////////////
-- (int)capacity;
-
-//////////////////////////////////////////////////////////
-// Returns the number of elements currently in the		//
-// ringbuffer.											//
-//////////////////////////////////////////////////////////
-- (int)count;
-
-
-//Methods.
-//////////////////////////////////////////////////////////
-// Adds the given element to the ringbuffer. This will	//
-// overwrite the oldest element in the buffer, if the 	//
-// buffer is at capacity.								//
-//////////////////////////////////////////////////////////
-- (int)add:(id)element;
-
-//////////////////////////////////////////////////////////
-// Returns an array containing the elements in the 		//
-// ringbuffer.											//
-//////////////////////////////////////////////////////////
-- (NSArray *)elements;
-
-//////////////////////////////////////////////////////////
-// Serializes the ringbuffer into the given pfile.		//
-//////////////////////////////////////////////////////////
+/**
+ * Serializes the ringbuffer to a property list.
+ *
+ * @param filename The name of the plist to write to.
+ */
 - (void)writeToPList:(NSString *)filename;
 
-//////////////////////////////////////////////////////////
-// Deserializes and populates this ringbuffer from the	//
-// given pfile.											//
-//////////////////////////////////////////////////////////
+/**
+ * Deserializes and populates the current ringbuffer
+ * instance by loading state and contents from a pList
+ * that was previously written by another ringbuffer
+ * instance.
+ */
 - (void)loadFromPList:(NSString *)filename;
 
-//////////////////////////////////////////////////////////
-//Removes all elements from the buffer and resets index	//
-//pointers.												//
-//////////////////////////////////////////////////////////
+/**
+ * Removes all elements from the ringbuffer and resets
+ * index pointers.
+ */
 - (void)clear;
+
+/**
+ * Adds an element to the ringbuffer. If this causes the
+ * number of contained elements to exceed the capacity of
+ * the ringbuffer, the oldest element is replaced instead.
+ *
+ * @param element The element to add to the ringbuffer.
+ * @return The index that the element has been stored at.
+ */
+- (int)add:(id)element;
+
+/**
+ * Returns an array containing all the elements in the
+ * ringbuffer.
+ */
+- (NSArray *)elements;
+
+
+#pragma mark -
+#pragma mark Properties
+
+/**
+ * Returns the total fixed number of elements that can
+ * be held by the ringbuffer.
+ */
+- (int)capacity;
+
+/**
+ * Returns the number of elements currently in the
+ * ringbuffer.
+ */
+- (int)count;
 
 @end

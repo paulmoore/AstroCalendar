@@ -30,6 +30,9 @@
 
 #import "MasterDataHandler.h"
 
+// This is a hack to allow for invalid ssh certs. to be ignored.
+// Was done because our development server gave out bad certs,
+// and we didn't have the ability to fix that.
 @interface NSURLRequest (DummyInterface)
 
 + (BOOL)allowsAnyHTTPSCertificateForHost:(NSString *)host;
@@ -45,7 +48,7 @@ static __strong MasterDataHandler *sharedSingleton = nil;
 
 @implementation MasterDataHandler
 
-@synthesize settingsDictionary, dataCache, dataCacheIndexer, locationController, locationUpdated;
+@synthesize settingsDictionary, dataCache, dataCacheIndexer, locationController;
 
 + (MasterDataHandler *)sharedManager
 {
@@ -90,28 +93,6 @@ static __strong MasterDataHandler *sharedSingleton = nil;
     return sharedSingleton;
 }
 
-/*
-+ (RingBuffer *)getDataCacheIndexer
-{
-	return dataCacheIndexer;
-}
-
-+ (void)setDataCacheIndexer:(RingBuffer *)ringBuffer
-{
-	dataCacheIndexer = ringBuffer;
-}
-
-+ (NSMutableDictionary *)getDataCache
-{
-	return dataCache;
-}
-
-+ (void)setDataCache:(NSMutableDictionary *)dictionary
-{
-	dataCache = dictionary;
-}
- */
-
 - (void)getDates:(NSDate *)startDate endDate:(NSDate *)endDate delegate:(id<MasterDataHandlerDelegate>)delegate
 {
 	NSLog(@"Fielding request for dates...");
@@ -138,12 +119,15 @@ static __strong MasterDataHandler *sharedSingleton = nil;
         NSDateComponents *offsetExtra = [[NSDateComponents alloc]init];
         	[offsetExtra setDay:1];
         
+        //Move forward a day.
         workingDatePlus = [gregorian dateByAddingComponents: offsetExtra toDate: workingDate options:0];
         
         DayContainer *dayPlusOne = [self retrieveDayFromCache:workingDatePlus];
     
     	NSDateComponents *workingComponents = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] components:NSMonthCalendarUnit | NSYearCalendarUnit | NSDayCalendarUnit fromDate:workingDate];
     
+    	//If we miss two days in a row (sometimes no tithi starts on an individual day, so missing a day can happen. Can't skip a 48 hour period though)
+        //or the end date is missing, then we need to pull from the cache.
     	if ((!day && !dayPlusOne) || (!day && [workingComponents year] == [endComponents year] && [workingComponents month] == [endComponents month] && [workingComponents day] == [endComponents day]))
         {
         	askApi = true;
@@ -168,12 +152,12 @@ static __strong MasterDataHandler *sharedSingleton = nil;
     if (askApi)
     {
     	NSLog(@"Asking API for new data!");
-    	[self askApiForDates:startDate endDate:endDate delegate:delegate];
+    	[self askApiForDates:startDate endDate:endDate delegate:delegate]; //Ask api for data.
     }
     else
     {	
     	NSLog(@"Data retrieved from cache!");
-    	[delegate didRecieveData:cachedDays];
+    	[delegate didRecieveData:cachedDays]; //Return cached data.
     }
 }
 
@@ -196,6 +180,9 @@ static __strong MasterDataHandler *sharedSingleton = nil;
     
     NSLog(urlString);
     
+    //WARNING! This is a hack used to ignore security certs over https. Bad news bears, but we
+    //needed it because our dev server gave out invalid certs, and normally ios doesn't
+    //allow us to connect.
 	[NSURLRequest setAllowsAnyHTTPSCertificate:YES forHost:@"cisxserver1.okanagan.bc.ca"];
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
     
@@ -218,8 +205,6 @@ static __strong MasterDataHandler *sharedSingleton = nil;
         {
         	DayContainer *original = (DayContainer*)[decoded objectAtIndex:i];
         	NSArray *splitStringFornight = [original.fortnight componentsSeparatedByString: @"-"];
-            
-            NSLog(@"TITHI STARTTTTT: %@", original.tithiStart);
         	
             //Handle case where there are two tithis in a single day.
             if ([splitStringFornight count] > 1)
@@ -269,19 +254,9 @@ static __strong MasterDataHandler *sharedSingleton = nil;
                 nextDay.tithi = [splitStringTithi objectAtIndex:1];
 
 
-                
+                //Make sure we format the dates correctly.
                 nextDay.date = [formatter dateFromString:[NSString stringWithFormat:@"%i-%i-%i-%i-%i", [dayComponents day], [dayComponents month], [dayComponents year], [[tithiTwo objectAtIndex:0]intValue], [[tithiTwo objectAtIndex:1]intValue]]];
                 
-                
-                
-                NSLog(@"original: %@", original.date);
-                NSLog(@"date::: %@", nextDay.date);
-                
-                NSDateFormatter *corrected = [[NSDateFormatter alloc] init];
-                corrected.timeZone = currentTimeZone;
-                corrected.dateFormat = @"dd-MM-yy HH:mm";
-                
-                NSLog(@"Corrected date: %@", [corrected stringFromDate:nextDay.date]);
                 
                 [decoded insertObject:nextDay atIndex: i+1];
             }
@@ -321,7 +296,7 @@ static __strong MasterDataHandler *sharedSingleton = nil;
             if ([container.fortnight isEqualToString:@"noPaksha"])
             	container.fortnight = @"(No Paksha)";
         
-    		NSLog(@"Date: %@", container.date);
+    		/*NSLog(@"Date: %@", container.date);
             NSLog(@"Sunrise: %@", container.sunrise);
             NSLog(@"Sunset: %@", container.sunset);
             NSLog(@"Moonrise: %@", container.moonrise);
@@ -329,7 +304,7 @@ static __strong MasterDataHandler *sharedSingleton = nil;
             NSLog(@"Fortnight: %@", container.fortnight);
             NSLog(@"LunarMonth: %@\n", container.lunarMonth);
             NSLog(@"Tithi: %@\n", container.tithi);
-            NSLog(@"TithiStart: %@\n\n", container.tithiStart);
+            NSLog(@"TithiStart: %@\n\n", container.tithiStart);*/
             
             [self addDayToCache:container];
 		}
@@ -358,6 +333,19 @@ static __strong MasterDataHandler *sharedSingleton = nil;
     failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) 
     {
         NSLog(@"Failure: %@ With Response: %@", error, [response description]);
+        
+        NSString *usrMsg;
+        
+        if ([[error localizedDescription] isEqual: @"The Internet connection appears to be offline."])
+        	usrMsg = @"The Internet connection appears to be offline.";
+        else
+        	usrMsg = @"API server internal error.";
+        
+        //Alert the user!
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Network Error" message:usrMsg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+    
+    
+    	[alert show];
     }];
     
     
@@ -678,7 +666,7 @@ static __strong MasterDataHandler *sharedSingleton = nil;
 	rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     plistPath = [rootPath stringByAppendingPathComponent:[NSString stringWithFormat:@"dataCache_%i.plist", monthIndex]];
     
-    NSLog(@"PATH: %@", plistPath);
+    //NSLog(@"PATH: %@", plistPath);
     
     NSDictionary *monthSet = [self retrieveMonthSetFromCache:date];
     NSMutableDictionary *encodedMonthSet = [[NSMutableDictionary alloc] init];
@@ -775,6 +763,20 @@ static __strong MasterDataHandler *sharedSingleton = nil;
     
     NSMutableDictionary *locationDictionary = [sharedSingleton.settingsDictionary objectForKey:@"Location"];
     
+    //Check to see if there's a major change between the current location and the previous location.
+    //If there's a major jump (this can happen if the app is closed, and then opened up say, after
+    //a flight) then we alert the user that they have stale data.
+    if (abs([[locationDictionary objectForKey: @"Latitude"] floatValue] - [location coordinate].latitude) > 2 ||
+    	abs([[locationDictionary objectForKey: @"Longitude"] floatValue] - [location coordinate].longitude) > 2 ||
+        abs([[locationDictionary objectForKey: @"Altitude"] floatValue] - [location altitude]) > 100)
+        {
+        	//Alert the user!
+        	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location changed!" message:@"It seems that you've moved a fair bit since the last time you used the app. Your data might be outdated." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+    
+    		[alert show];
+        }
+    
+    
     [locationDictionary setValue:[NSNumber numberWithDouble:[location coordinate].latitude] forKey:@"Latitude"];
     [locationDictionary setValue:[NSNumber numberWithDouble:[location coordinate].longitude] forKey:@"Longitude"];
     [locationDictionary setValue:[NSNumber numberWithDouble:[location altitude]] forKey:@"Altitude"];
@@ -785,8 +787,6 @@ static __strong MasterDataHandler *sharedSingleton = nil;
     	[locationDictionary objectForKey:@"Latitude"],
         [locationDictionary objectForKey:@"Longitude"],
         [locationDictionary objectForKey:@"Altitude"]);
-        
-    sharedSingleton.locationUpdated = true;
 }
  
 + (void)locationError:(NSError *)error 

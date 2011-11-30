@@ -68,15 +68,11 @@
 // Properties											//
 //////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////
-//Capacity
 - (int)capacity
 {
 	return _capacity;
 }
 
-///////////////////////////////////////////////////////////
-//Count
 - (int)count
 {
 	return _count;
@@ -87,8 +83,6 @@
 // Instance Methods										//
 //////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////
-//Add an element to the ringbuffer.
 - (int)add:(id)element
 {
 	int oldIndex = _indexLast;
@@ -108,9 +102,6 @@
     return oldIndex;
 }
 
-
-///////////////////////////////////////////////////////////
-//Return an array of elements contained in the ringbuffer.
 - (NSArray *)elements
 {
 	NSMutableArray *tArray = [[NSMutableArray alloc] initWithCapacity:_count];
@@ -121,8 +112,6 @@
     return [[NSArray alloc]initWithArray:tArray];
 }
 
-///////////////////////////////////////////////////////////
-//Serializes the contents of the ring buffer to a plist in the app's root directory, with the given filename.
 - (void)writeToPList:(NSString *)filename
 {
     NSString *rootPath, *plistPath;
@@ -140,7 +129,7 @@
     rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     plistPath = [rootPath stringByAppendingPathComponent:filename];
     
-    NSLog(@"RING PATH: %@", plistPath);
+    //NSLog(@"RING PATH: %@", plistPath);
     
     NSData *plistData = [NSPropertyListSerialization dataFromPropertyList:dataDictionary format:NSPropertyListXMLFormat_v1_0 errorDescription:&errorDesc];
     
@@ -155,8 +144,6 @@
 
 }
 
-///////////////////////////////////////////////////////////
-//Deserializes the contents of the ring buffer from a plist in the app's root directory.
 - (void)loadFromPList:(NSString *)filename
 {
 	NSString *plistPath;
@@ -196,8 +183,6 @@
     }
 }
 
-///////////////////////////////////////////////////////////
-//Removes all elements from the buffer and resets pointers.
 - (void)clear
 {
     _elements = nil;

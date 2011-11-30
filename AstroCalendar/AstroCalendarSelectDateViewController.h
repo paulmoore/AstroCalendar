@@ -53,9 +53,11 @@
  *
  * @param controller The parent Navigation Controller.
  * @param isEndDate Wether or not this view represents selecting an 'end date'.
+ * @param givenStartDate Used as a starting point for the maximum and minimum date that
+ *		  can be selected if this view represents selecting an 'end date'.
  * @return An instance of AstroCalendarSelectDateViewController.
  */
-- (id)initWithNavController:(UINavigationController *)controller andIsEndDate:(BOOL)isEndDate;
+- (id)initWithNavController:(UINavigationController *)controller andIsEndDate:(BOOL)isEndDate givenStartDate:(NSDate*)givenStartDate;
 
 /**
  * Selector for when the user selects the the 'Next' button.
