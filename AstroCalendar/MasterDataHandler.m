@@ -776,6 +776,20 @@ static __strong MasterDataHandler *sharedSingleton = nil;
     
     NSMutableDictionary *locationDictionary = [sharedSingleton.settingsDictionary objectForKey:@"Location"];
     
+    //Check to see if there's a major change between the current location and the previous location.
+    //If there's a major jump (this can happen if the app is closed, and then opened up say, after
+    //a flight) then we alert the user that they have stale data.
+    if (abs([[locationDictionary objectForKey: @"Latitude"] floatValue] - [location coordinate].latitude) > 2 ||
+    	abs([[locationDictionary objectForKey: @"Longitude"] floatValue] - [location coordinate].longitude) > 2 ||
+        abs([[locationDictionary objectForKey: @"Altitude"] floatValue] - [location altitude]) > 100)
+        {
+        	//Alert the user!
+        	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location changed!" message:@"It seems that you've moved a fair bit since the last time you used the app. Your data might be outdated." delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+    
+    		[alert show];
+        }
+    
+    
     [locationDictionary setValue:[NSNumber numberWithDouble:[location coordinate].latitude] forKey:@"Latitude"];
     [locationDictionary setValue:[NSNumber numberWithDouble:[location coordinate].longitude] forKey:@"Longitude"];
     [locationDictionary setValue:[NSNumber numberWithDouble:[location altitude]] forKey:@"Altitude"];
