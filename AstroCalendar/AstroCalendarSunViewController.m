@@ -59,8 +59,9 @@
         if (! [self.navController pushUniqueControllerOfType:[AstroCalendarDayViewController class] animated:YES])
         {
             AstroCalendarDayViewController *dayController = [[AstroCalendarDayViewController alloc] initWithNavController:self.navController];
-            dayController.date = date;
             [self.navController pushViewController:dayController animated:YES];
+            // FIX the date returned to this method is one day behind.  Here we construct a new date object that is one day ahead.
+            [dayController displayDate:[date dateByAddingDays:1]];
         }
     }
 }

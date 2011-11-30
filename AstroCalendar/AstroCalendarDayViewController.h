@@ -77,4 +77,6 @@
  */
 - (void)didSelectSelectDatesFromToolbar;
 
+- (void)displayDate:(NSDate *)theDate;
+
 @end

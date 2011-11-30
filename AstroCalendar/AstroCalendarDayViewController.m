@@ -36,6 +36,9 @@
 #import "MasterDataHandler.h"
 #import "UINavigationController+UniqueStack.h"
 
+static dispatch_once_t pred = 0;
+__strong static NSDateFormatter *formatter = nil;
+
 @implementation AstroCalendarDayViewController
 
 @synthesize navController, date;
@@ -63,6 +66,15 @@
     [super didReceiveMemoryWarning];
     
     // Release any cached data, images, etc that aren't in use.
+}
+
+- (void)displayDate:(NSDate *)theDate
+{
+    self.date = theDate;
+    if ([self isViewLoaded])
+    {
+        [[MasterDataHandler sharedManager] askApiForDates:self.date endDate:self.date delegate:self];
+    }
 }
 
 #pragma mark - Toolbar Button Actions
@@ -117,36 +129,34 @@
     NSArray *buttons = [NSArray arrayWithObjects:moonButton, sunButton, selectButton, helpButton, nil];
     [self setToolbarItems:buttons animated:YES];
     
-    static dispatch_once_t pred = 0;
-    __strong static NSDateFormatter *formatter = nil;
-    dispatch_once(&pred, ^{
-        formatter = [[NSDateFormatter alloc] init];
-        [formatter setDateStyle:NSDateFormatterMediumStyle];
-        [formatter setTimeStyle:NSDateFormatterNoStyle];
-    });
-    
-    dateLabel.text = [formatter stringFromDate:self.date];
-    
-    [[MasterDataHandler sharedManager] askApiForDates:self.date endDate:self.date delegate:self];
+    if (self.date)
+    {
+        [[MasterDataHandler sharedManager] askApiForDates:self.date endDate:self.date delegate:self];
+    }
 }
 
 - (void)didRecieveData:(NSArray *)data
 {
-    static dispatch_once_t pred = 0;
-    __strong static NSDateFormatter *formatter = nil;
     dispatch_once(&pred, ^{
         formatter = [[NSDateFormatter alloc] init];
         [formatter setDateFormat:@"hh:mm a"];
     });
-    
-    if ([self isViewLoaded])
-    {
-        DayContainer *day = (DayContainer *)[data firstObject];
-        sunriseLabel.text = [formatter stringFromDate:day.sunrise];
-        sunsetLabel.text = [formatter stringFromDate:day.sunset];
-        moonriseLabel.text = [formatter stringFromDate:day.moonrise];
-        moonsetLabel.text = [formatter stringFromDate:day.moonset];
-    }
+        
+    DayContainer *day = (DayContainer *)[data firstObject];
+    sunriseLabel.text = [formatter stringFromDate:day.sunrise];
+    sunsetLabel.text = [formatter stringFromDate:day.sunset];
+    moonriseLabel.text = [formatter stringFromDate:day.moonrise];
+    moonsetLabel.text = [formatter stringFromDate:day.moonset];
+
+    static dispatch_once_t pred2 = 0;
+    __strong static NSDateFormatter *titleFormatter = nil;
+    dispatch_once(&pred2, ^{
+        titleFormatter = [[NSDateFormatter alloc] init];
+        [titleFormatter setDateStyle:NSDateFormatterMediumStyle];
+        [titleFormatter setTimeStyle:NSDateFormatterNoStyle];
+    });
+    dateLabel.text = [titleFormatter stringFromDate:self.date];
+    self.date = nil;
 }
 
 - (void)viewDidUnload

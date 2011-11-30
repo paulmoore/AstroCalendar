@@ -97,11 +97,11 @@
     for (DayContainer *day in data)
     {
         NSString *nextMonth = day.lunarMonth;
-        BOOL noMonth = [nextMonth isEqualToString:@"none"];
+        BOOL noData = [nextMonth isEqualToString:@"none"] || [day.tithi isEqualToString:@"none"];
         // We need to add a new section if we have reached a new lunar month.
         if (!currentMonth || ![currentMonth isEqualToString:nextMonth])
         {
-            if (!noMonth)
+            if (!noData)
             {
                 currentSection = [[SectionData alloc] initWithSectionNum:[sections count] monthName:nextMonth monthYear:day.date startIndex:index];
                 [sections addObject:currentSection];
@@ -109,7 +109,7 @@
             }
         }
         // Add a row to whatever the current section is.
-        if (!noMonth)
+        if (!noData)
         {
             [currentSection addRow];
         }
