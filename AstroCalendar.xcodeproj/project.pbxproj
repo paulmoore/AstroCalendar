@@ -769,6 +769,11 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AstroCalendar/AstroCalendar-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					../JSONKit,
+					../AFNetworking/AFNetworking,
+					../Tapku/src,
+				);
 				INFOPLIST_FILE = "AstroCalendarTests/AstroCalendarTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
@@ -786,6 +791,11 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AstroCalendar/AstroCalendar-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					../JSONKit,
+					../AFNetworking/AFNetworking,
+					../Tapku/src,
+				);
 				INFOPLIST_FILE = "AstroCalendarTests/AstroCalendarTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";

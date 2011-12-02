@@ -31,13 +31,17 @@
 #import <UIKit/UIKit.h>
 #import <TapkuLibrary/TapkuLibrary.h>
 
+#import "MasterDataHandlerDelegate.h"
+
 /**
  * View Controller for the Sun Calendar.
  */
-@interface AstroCalendarSunViewController : TKCalendarMonthViewController
+@interface AstroCalendarSunViewController : TKCalendarMonthViewController <MasterDataHandlerDelegate>
 
 /** The Navigation Controller recieved from it's parent. */
 @property (nonatomic, weak) UINavigationController *navController;
+
+@property (strong) NSDictionary *specialDates;
 
 /**
  * Inits an AstroCalendarSunViewController with a given parent Navigation Controller.

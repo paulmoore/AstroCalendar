@@ -33,11 +33,13 @@
 #import "AstroCalendarMoonViewController.h"
 #import "AstroCalendarHelpViewController.h"
 #import "AstroCalendarSelectDateViewController.h"
+#import "MasterDataHandler.h"
+#import "DayContainer.h"
 #import "UINavigationController+UniqueStack.h"
 
 @implementation AstroCalendarSunViewController
 
-@synthesize navController;
+@synthesize navController, specialDates;
 
 - (id)initWithNavController:(UINavigationController *)controller
 {
@@ -64,6 +66,10 @@
             [dayController displayDate:[date dateByAddingDays:1]];
         }
     }
+}
+
+- (void)didRecieveData:(NSArray *)data
+{
 }
 
 - (void)didReceiveMemoryWarning

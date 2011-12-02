@@ -107,9 +107,6 @@
     }
     self.sectionsData = sections;
     
-    [self.dateRequest clear];
-    self.dateRequest = nil;
-    
     // Set the data we recieved from the data handler.
     self.lunarData = data;
     
@@ -148,10 +145,17 @@
 - (void)didSelectRefreshFromToolbar
 {
     [[MasterDataHandler sharedManager] clearCache];
-    NSDate *today = [NSDate date];
-    NSDate *oneMonthFromToday = [today dateByAddingDays:31];
-    DateRangeRequest *request = [[DateRangeRequest alloc] initWithStartDate:today endDate:oneMonthFromToday];
-    [self loadDates:request];
+    if (self.dateRequest)
+    {
+        [self loadDates:self.dateRequest];
+    }
+    else
+    {
+        NSDate *today = [NSDate date];
+        NSDate *oneMonthFromToday = [today dateByAddingDays:31];
+        DateRangeRequest *request = [[DateRangeRequest alloc] initWithStartDate:today endDate:oneMonthFromToday];
+        [self loadDates:request];
+    }
 }
 
 #pragma mark - View lifecycle

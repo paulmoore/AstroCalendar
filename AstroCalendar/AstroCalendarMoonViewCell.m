@@ -79,12 +79,10 @@
     
     if ([fortnight isEqualToString:@"Full Moon"])
     {
-        NSLog(@"Configured with: Full Moon");
         self.contentView.backgroundColor = [UIColor redColor];
     }
     else if ([fortnight isEqualToString:@"New Moon"])
     {
-        NSLog(@"Configured with: New Moon");
         self.contentView.backgroundColor = [UIColor greenColor];
     }
     
